@@ -1,0 +1,50 @@
+/**
+ * All of the CSS for your admin-specific functionality should be included in this file.
+ *
+ * The file is enqueued from inc/admin/class-admin.php.
+ */
+
+#createevent input[type=text] {
+    width: 25em;
+}
+
+#kr-list-table-events tr.current {
+    background-color: #c2e1ee;
+}
+
+table.tl-pairs {
+
+}
+table.tl-pairs tr th {
+    width: 10em;
+    text-align: left;
+}
+table.tl-pairs tr div {
+    padding: 1em;
+    background-color: aqua;
+}
+
+table.tl-pairs tr div.pair-cook {
+    padding: 1em;
+    background-color: cornflowerblue;
+}
+
+table.tl-pairs tr div.pair-guest1 {
+    border-bottom: 1px solid black;
+    border-top: 1px solid black;
+    cursor: pointer;
+}
+
+table.tl-pairs tr div.pair-guest2 {
+    cursor: pointer;
+}
+
+table.tl-pairs tr div.checked-1 {
+    border: 3px dashed  #121864;
+    cursor: pointer;
+}
+
+table.tl-pairs tr div.checked-2 {
+    border: 3px dashed  #121864;
+    cursor: pointer;
+}
