@@ -11,8 +11,8 @@
 	 */
 	$('.pair-guest').on("click", function () {
 
-		let check1 = $('.checked-1');
-		let check2 = $('.checked-2');
+		let check1 = $(".checked-1");
+		let check2 = $(".checked-2");
 
 		if ($(this).hasClass('checked-1')) { // remove check from a guest
 			if (check2.length > 0) { check2.addClass('checked-1').removeClass('checked-2') }
@@ -22,7 +22,7 @@
 		} else { // add a check to a guest
 			if (check1.length > 0) {
 				if (haveSameClass(check1, $(this), 'appetizer') || haveSameClass(check1, $(this), 'main-course') || haveSameClass(check1, $(this), 'dessert')) {
-					// wenn nächster check in der gleichen Reihe ist
+					// if next check is in same row (course)
 					if (check2.length > 0) {check2.removeClass('checked-2');}
 					check1.addClass('checked-2').removeClass('checked-1');
 				} else {

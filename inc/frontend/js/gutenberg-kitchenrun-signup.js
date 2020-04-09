@@ -1,4 +1,7 @@
-( function( blocks, i18n, element ) {
+/**
+ * Will be used later for Kitchen Run Gutenberg Block
+ */
+/**( function( blocks, i18n, element ) {
     var el = element.createElement;
     var __ = i18n.__;
 
@@ -28,4 +31,4 @@
             );
         },
     } );
-} )( window.wp.blocks, window.wp.i18n, window.wp.element );
+} )( window.wp.blocks, window.wp.i18n, window.wp.element ); **/

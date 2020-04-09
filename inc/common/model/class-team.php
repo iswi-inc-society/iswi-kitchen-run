@@ -221,17 +221,6 @@ class Team
      */
     private $dessert;
 
-    /**
-     * Information about the role of the team. If it is a dummy team, then it was created to fill the algorithm.
-     * Those teams have to be filled until the start of the event. NOT IN DATABASE YET.
-     *
-     * @TODO    save dummy information in database
-     * @since   1.0.0
-     * @access  private
-     * @var     bool    $dummy
-     */
-    private $dummy = false;
-
 
     /**
      * Get Team ID.
@@ -248,7 +237,7 @@ class Team
      * @return  Event   Event Object of the participating Event
      */
     public function getEvent() {
-        return Event::findbyId($this->event);
+        return isset($this->event) ? Event::findbyId($this->event) : null;
     }
 
     /**
@@ -692,7 +681,22 @@ class Team
         $this->dessert = $dessert;
     }
 
+    /**
+     * Find a Team in the Database through the id.
+     *
+     * @since   1.0.0
+     * @param   int     $id     Team ID
+     * @return  Team    $team   Team Object
+     */
+    static function findById($id) {
+        $db = new Database();
 
+        $result = $db->findBy(Database::DB_TEAM_NAME, 'id', $id, true);
+
+        $team = Team::resultToObject($result);
+
+        return $team;
+    }
 
     /**
      * Find a list of Teams in the Database through the event, where they participate.
@@ -702,101 +706,19 @@ class Team
      * @return  Team[]  $teams  Array of Team Objects
      */
     static function findByEvent($event) {
-        $id = $event->getId();
+        $event_id = $event->getId();
 
-        global $wpdb;
+        $db = new Database();
 
-        $table = self::TABLE_NAME;
-        $databaseName =  DB_NAME;
-        $prefix = $wpdb->prefix;
-
-        // sql query find row with id
-        $sql = "
-            SELECT * FROM $databaseName.$prefix$table WHERE event='$id';
-        ";
-
-        $results = $wpdb->get_results($sql); // execute sql query
+        $results = $db->findBy(Database::DB_TEAM_NAME, 'event', $event_id, false);
 
         $teams = array();
 
-        foreach ($results as $row) {
-            $team = new team();
-            //create team object
-            $team->id = $row->id;
-            $team->setName($row->name);
-            $team->setMember1($row->member1);
-            $team->setMember2($row->member2);
-            $team->setAddress($row->address);
-            $team->setCity($row->city);
-            $team->setPhone($row->telephone);
-            $team->setEmail($row->email);
-            $team->setVegan($row->vegan);
-            $team->setVegetarian($row->vegetarian);
-            $team->setHalal($row->halal);
-            $team->setKosher($row->kosher);
-            $team->setFoodRequest($row->food_requests);
-            $team->setFindPlace($row->find_place);
-            $team->setAppetizer($row->appetizer);
-            $team->setMainCourse($row->main_course);
-            $team->setDessert($row->dessert);
-            $team->setComments($row->comments);
-            $team->event = $row->event;
-
-            $teams[] = $team;
+        foreach ($results as $result) {
+            $teams[] = Team::resultToObject($result);
         }
 
-
         return $teams;
-
-    }
-
-    /**
-     * Find a Team in the Database through the id.
-     *
-     * @since   1.0.0
-     * @param   int     $id     Team ID
-     * @return  Team    $team   Team Object
-     */
-    static function findById($id) {
-
-        global $wpdb;
-
-        $table = self::TABLE_NAME;
-        $databaseName =  DB_NAME;
-        $prefix = $wpdb->prefix;
-
-        // sql query find row with id
-        $sql = "
-            SELECT * FROM $databaseName.$prefix$table WHERE id='$id';
-        ";
-
-        $team = new team();
-
-        $row = $wpdb->get_row($sql); // execute sql query
-
-        //create team object
-        $team->id = $row->id;
-        $team->setName($row->name);
-        $team->setMember1($row->member1);
-        $team->setMember2($row->member2);
-        $team->setAddress($row->address);
-        $team->setCity($row->city);
-        $team->setPhone($row->telephone);
-        $team->setEmail($row->email);
-        $team->setVegan($row->vegan);
-        $team->setVegetarian($row->vegetarian);
-        $team->setHalal($row->halal);
-        $team->setKosher($row->kosher);
-        $team->setFoodRequest($row->food_requests);
-        $team->setFindPlace($row->find_place);
-        $team->setAppetizer($row->appetizer);
-        $team->setMainCourse($row->main_course);
-        $team->setDessert($row->dessert);
-        $team->setComments($row->comments);
-        $team->event = $row->event;
-
-
-        return $team;
     }
 
     /**
@@ -805,46 +727,16 @@ class Team
      * @return Team[]   $teams  Array of Team Objects
      */
     static function findAll() {
-        global $wpdb;
 
-        $table = self::TABLE_NAME;
-        $databaseName =  DB_NAME;
-        $prefix = $wpdb->prefix;
+        $db = new Database();
 
-        // sql query
-        $sql = "
-            SELECT * FROM $databaseName.$prefix$table ;
-        ";
-
-        $results = $wpdb->get_results($sql); // execute sql query
+        $results = $db->findAll(Database::DB_TEAM_NAME);
 
         $teams = array();
 
         // create each team object
         foreach ($results as $row) {
-            $team = new team();
-            $team->id = $row->id;
-            $team->setName($row->name);
-            $team->setMember1($row->member1);
-            $team->setMember2($row->member2);
-            $team->setAddress($row->address);
-            $team->setCity($row->city);
-            $team->setPhone($row->telephone);
-            $team->setEmail($row->email);
-            $team->setVegan($row->vegan);
-            $team->setVegetarian($row->vegetarian);
-            $team->setHalal($row->halal);
-            $team->setKosher($row->kosher);
-            $team->setFoodRequest($row->food_requests);
-            $team->setFindPlace($row->find_place);
-            $team->setAppetizer($row->appetizer);
-            $team->setMainCourse($row->main_course);
-            $team->setDessert($row->dessert);
-            $team->setComments($row->comments);
-            $team->event = $row->event;
-
-            $teams[] = $team;
-
+            $teams[] = Team::resultToObject($row);
         }
 
         return $teams;
@@ -856,12 +748,10 @@ class Team
      * @since 1.0.0
      */
     public function save() {
-        global $wpdb;
 
-        // wp_kr_team
-        $table_name = $wpdb->prefix . Database::DB_TEAM_NAME;
+        $db = new Database();
 
-        $col = array(
+        $row = array(
             'name' => $this->getName(),
             'member1' => $this->getMember1(),
             'member2' => $this->getMember2(),
@@ -904,21 +794,7 @@ class Team
             '%d',
         );
 
-        if ($this->id !== NULL) { // is id already set
-            $col['id'] = $this->id;
-            $format[] = '%d';
-
-            $wpdb->replace($table_name, $col, $format);
-
-        } else {
-
-            // save team in database
-            $wpdb->insert(
-                $table_name,
-                $col,
-                $format
-            );
-        }
+        $db->saveRow(Database::DB_TEAM_NAME, $row, $format, $this->id);
 
     }
 
@@ -935,4 +811,36 @@ class Team
         $wpdb->delete( $table_name, array( 'id' => $this->id ) );
     }
 
+    /**
+     * Creates a Team Object through a database row object. The row object is created through the Database class.
+     *
+     * @since   1.0.0
+     * @param   object  $row    Row Object from Database
+     * @return  Team    $team   Team Object
+     */
+    private static function resultToObject($row) {
+
+        $team = new Team();
+        $team->id = $row->id;
+        $team->setName($row->name);
+        $team->setMember1($row->member1);
+        $team->setMember2($row->member2);
+        $team->setAddress($row->address);
+        $team->setCity($row->city);
+        $team->setPhone($row->telephone);
+        $team->setEmail($row->email);
+        $team->setVegan($row->vegan);
+        $team->setVegetarian($row->vegetarian);
+        $team->setHalal($row->halal);
+        $team->setKosher($row->kosher);
+        $team->setFoodRequest($row->food_requests);
+        $team->setFindPlace($row->find_place);
+        $team->setAppetizer($row->appetizer);
+        $team->setMainCourse($row->main_course);
+        $team->setDessert($row->dessert);
+        $team->setComments($row->comments);
+        $team->event = $row->event;
+
+        return $team;
+    }
 }

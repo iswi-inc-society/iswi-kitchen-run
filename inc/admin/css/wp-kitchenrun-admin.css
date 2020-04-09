@@ -4,7 +4,7 @@
  * The file is enqueued from inc/admin/class-admin.php.
  */
 
-#createevent input[type=text] {
+#create_event input[type=text] {
     width: 25em;
 }
 

@@ -39,6 +39,103 @@ class Database {
     const DB_EVENT_NAME = "kr_event";
 
     /**
+     * Search for a single row or several rows in Database.
+     *
+     * e.g. search for a team by id -> findBy('kr_team', 'id', $id)
+     *
+     * @since   1.0.0
+     * @param   string  $table    Name of Table in DB
+     * @param   string  $column   Name of column in the table where we search
+     * @param   string  $value    Value that is searched for in that column
+     * @param   bool    $single   Search for a single row (or multiple rows, then false)
+     * @return  array|object|void|null   Array with Output of searched row in database table
+     */
+    public function findBy($table, $column, $value, $single = true) {
+
+        global $wpdb; // wordpress database object
+
+        $databaseName =  DB_NAME;
+        $prefix = $wpdb->prefix;
+
+        // sql query find row with id
+        $sql = sprintf("SELECT * FROM %s.%s%s WHERE %s=%s;", $databaseName, $prefix, $table, $column, $value);
+
+        if ($single) { return $wpdb->get_row($sql); } // query for a single row
+        else { return $wpdb->get_results($sql); } // query for several rows
+
+
+    }
+
+    /**
+     * Searches for all rows in a DB table.
+     *
+     * @since   1.0.0
+     * @param   string  $table      Name of Table in DB
+     * @return  array|object|null   Array with Output of all rows of the table
+     */
+    public function findAll($table) {
+
+        global $wpdb; // wordpress database object
+
+        $databaseName =  DB_NAME;
+        $prefix = $wpdb->prefix;
+
+        // sql query find row with id
+        $sql = sprintf("SELECT * FROM %s.%s%s", $databaseName, $prefix, $table);
+
+        return $wpdb->get_results($sql);  // query for several rows
+
+    }
+
+    /**
+     * Deletes a specific Row by ID in a table in DB
+     *
+     * @since   1.0.0
+     * @param   string  $table  Table Name where row should be deleted
+     * @param   int     $id     ID of row that will be deleted
+     */
+    public function deleteRow($table, $id) {
+        global $wpdb;
+
+        $table_name = $wpdb->prefix . $table;
+
+        $wpdb->delete( $table_name, array( 'id' => $id ) );
+    }
+
+    /**
+     * Save Row in DB
+     *
+     * Saves a row in Database Table either as new row or update old row. If existing row should be updated add the row
+     * id in the function constructor as $id and not in the row.
+     *
+     * @since   1.0.0
+     * @param   string  $table  Table Name where row should be saved
+     * @param   array   $row    Array with all columns of the table and values of the row (NO ID, see $id)
+     * @param   array   $format Array with formats for each columns (%d for digits and %s for strings)
+     * @param   int     $id     ID of existing row to update it (DON'T ADD IT TO THE ROW)
+     */
+    public function saveRow($table, $row, $format, $id) {
+        global $wpdb;
+
+        $table_name = $wpdb->prefix . $table;
+
+        if ($id !== NULL) { // edit old row
+            $row["id"] = $id;
+            $format[] = '%d';
+
+            $wpdb->replace($table_name, $row, $format);
+
+        } else {
+            // save in database as new row
+            $wpdb->insert(
+                $table_name,
+                $row,
+                $format
+            );
+        }
+    }
+
+    /**
      * Creates a Database Table for all kitchen run teams with an SQL Query.
      *
      * @since 1.0.0

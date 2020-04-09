@@ -48,10 +48,11 @@ class Event_List_Table extends WP_List_Table
     /**
      * Initialize the class and set its properties.
      *
+     * @param string $plugin_name The name of this plugin.
+     * @param string $version The version of this plugin.
+     * @param string $plugin_text_domain The text domain of this plugin.
+     * @param array  $args
      * @since       1.0.0
-     * @param       string $plugin_name        The name of this plugin.
-     * @param       string $version            The version of this plugin.
-     * @param       string $plugin_text_domain The text domain of this plugin.
      */
     public function __construct( $plugin_name, $version, $plugin_text_domain, $args = array() ) {
 
@@ -119,7 +120,7 @@ class Event_List_Table extends WP_List_Table
                 'closing_date'  => $event->getClosingDate()->format('d.m.Y H:m'),
                 'event_date'    => $event->getEventDate()->format('d.m.Y H:m'),
                 'manager'       => $event->getManager()->display_name,
-                'paired'        => $event->getPaired() ? sprintf('<img src="%s" alt="%s" />', $image_dir.'checked.png', 'tick') : sprintf('<img src="%s" alt="%s" />', $image_dir.'cancel.png', 'cross'),
+                'paired'        => $event->getPaired() ? '<img src="'.$image_dir.'checked.png'.'" alt="tick" />' : '<img src="'.$image_dir.'cancel.png'.'" alt="cross" />',
             );
         }
 

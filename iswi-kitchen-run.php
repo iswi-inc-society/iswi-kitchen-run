@@ -1,34 +1,4 @@
 <?php
-
-
-/*
-
-// Database Class
-use KitchenRun\Backend\KrAdminMenu;
-use KitchenRun\Database\KrDatabase;
-use KitchenRun\Frontend\KrSignup;
-
-require_once(__DIR__ . "/include/KrDatabase.php");
-require_once(__DIR__ . "/include/KrSignup.php");
-require_once(__DIR__ . "/include/KrAdminMenu.php");
-
-// creates the tables in db when plugin is activated (wp hook)
-register_activation_hook( __FILE__, 'createDatabases' );
-//register_deactivation_hook(__FILE__, 'dropDatabases');
-
-register_uninstall_hook(__FILE__, 'dropDatabases');
-
-add_shortcode( 'kitchenrun', 'createSignUpForm' );
-
-//load admin menu
-$admin_menu = new KrAdminMenu();
-
-function createSignUpForm() {
-    $signup = new KrSignup();
-    return $signup->render();
-}
-*/
-
 /**
  * The plugin bootstrap file
  *
@@ -37,6 +7,9 @@ function createSignUpForm() {
  * registers the activation and deactivation functions, and defines a function
  * that starts the plugin.
  *
+ * Based on Plugin Boilerplate for Wordpress Plugin Creation from "@source".
+ * @source https://github.com/karannagupta/WordPress-Plugin-Boilerplate
+ *
  * @since      1.0.0
  * @author     Niklas Loos <niklas.loos@live.com>
  *
@@ -44,7 +17,7 @@ function createSignUpForm() {
  * Plugin Name:       Kitchen Run
  * Plugin URI:        https://github.com/XRayLP/iswi-kitchen-run
  * Description:       Kitchen Run Plugin for Wordpress
- * Version:           0.0.1
+ * Version:           1.0.0
  * Requires at least: 5.2
  * Requires PHP:      7.2
  * Author:            Niklas Loos
@@ -69,24 +42,25 @@ if (!defined('WPINC')) {
 
 define(__NAMESPACE__ . '\NS', __NAMESPACE__ . '\\');
 
-define(NS . 'PLUGIN_NAME', 'kitchenrun');
+define(__NAMESPACE__. '\\' . 'PLUGIN_NAME', 'kitchenrun');
 
-define(NS . 'PLUGIN_VERSION', '1.0.0');
+define(__NAMESPACE__. '\\' . 'PLUGIN_VERSION', '1.0.0');
 
-define(NS . 'PLUGIN_NAME_DIR', plugin_dir_path(__FILE__));
+define(__NAMESPACE__. '\\' . 'PLUGIN_NAME_DIR', plugin_dir_path(__FILE__));
 
-define(NS . 'PLUGIN_NAME_URL', plugin_dir_url(__FILE__));
+define(__NAMESPACE__. '\\' . 'PLUGIN_NAME_URL', plugin_dir_url(__FILE__));
 
-define(NS . 'PLUGIN_BASENAME', plugin_basename(__FILE__));
+define(__NAMESPACE__. '\\' . 'PLUGIN_BASENAME', plugin_basename(__FILE__));
 
-define(NS . 'PLUGIN_TEXT_DOMAIN', 'kitchenrun');
+define(__NAMESPACE__. '\\' . 'PLUGIN_TEXT_DOMAIN', 'kitchenrun');
 
 
 /**
  * Autoload Classes
  */
 
-require_once(PLUGIN_NAME_DIR . 'inc/libraries/autoloader.php');
+require_once(__DIR__ . '/inc/libraries/autoloader.php');
+require(__DIR__ . '/vendor/autoload.php');
 
 /**
  * Register Activation and Deactivation Hooks
@@ -112,7 +86,6 @@ register_deactivation_hook(__FILE__, array(NS . 'Inc\Core\Deactivator', 'deactiv
  */
 class KitchenRun
 {
-
     /**
      * The instance of the plugin.
      *

@@ -4,7 +4,10 @@
 namespace KitchenRun\Inc\Admin;
 
 
+use DateTime;
+use Exception;
 use KitchenRun\Inc\Common\Model\Event;
+use League\Plates\Engine;
 
 /**
  * Class Event_Page
@@ -43,16 +46,6 @@ class Event_Page
      */
     private $plugin_text_domain;
 
-
-    /**
-     * Event Object for updating or deleting events
-     *
-     * @since   1.0.0
-     * @access  private
-     * @var     Event   $event  Event Object
-     */
-    private $event;
-
     /**
      * Event List Object to create the list of events
      *
@@ -63,9 +56,13 @@ class Event_Page
     private $event_table;
 
     /**
-     * @var string[]
+     * Templating Engine Plates
+     *
+     * @since   1.0.0
+     * @access  private
+     * @var     Engine  $templates
      */
-    private $messages = array();
+    private $templates;
 
 
     /**
@@ -82,10 +79,12 @@ class Event_Page
         $this->version = $version;
         $this->plugin_text_domain = $plugin_text_domain;
 
+        $this->templates = new Engine(__DIR__ . '/views');
+
     }
 
     /**
-     * Initialization Method that is called after the page is choosen.
+     * Initialization Method that is called after the page is chosen.
      * Called by add_plugin_admin_menu() in Class Admin.
      *
      * @since 1.0.0
@@ -138,8 +137,19 @@ class Event_Page
         // query, filter, and sort the data
         $this->event_table->prepare_items();
 
-        // render the List Table
-        include_once('views/html-event-list.php');
+        ob_start(); // create variable with html of table
+
+        $this->event_table->display();
+
+        $table = ob_get_clean();
+
+        // Render a template
+        echo $this->templates->render('html-event-list', [
+            'title' => __('Kitchen Run Events', $this->plugin_text_domain),
+            'link'  => $this->event_table->get_new_event_link(),
+            'new'   => __('Add New', $this->plugin_text_domain),
+            'table' => $table,
+        ]);
     }
 
     /**
@@ -166,24 +176,24 @@ class Event_Page
                 // process form data
                 if (isset($_POST['opening_date']) && isset($_POST['opening_time'])) {
                     $opening_date = $_POST['opening_date'] . ' ' . $_POST['opening_time'] . ':00';
-                }
+                } else { $opening_date = 0; }
 
                 if (isset($_POST['closing_date']) && isset($_POST['closing_time'])) {
                     $closing_date = $_POST['closing_date'] . ' ' . $_POST['closing_time'] . ':00';
-                }
+                } else { $closing_date = 0; }
                 if (isset($_POST['event_date']) && isset($_POST['event_time'])) {
                     $event_date = $_POST['event_date'] . ' ' . $_POST['event_time'] . ':00';
-                }
+                } else { $event_date = 0; }
 
                 try { // testing date format and create date objects
-                    $opening_date = new \DateTime($opening_date);
-                    $closing_date = new \DateTime($closing_date);
-                    $event_date = new \DateTime($event_date);
-                } catch (\Exception $e) {
+                    $opening_date = new DateTime($opening_date);
+                    $closing_date = new DateTime($closing_date);
+                    $event_date = new DateTime($event_date);
+                } catch (Exception $e) {
                     echo 'Datetime has false Format';
                 }
 
-                // is opening date befor closing date?
+                // is opening date before closing date?
                 if (($opening_date->getTimestamp() < $closing_date->getTimestamp()) && ($closing_date->getTimestamp() <= $event_date->getTimestamp())) {
                     $event->setEventDate($event_date);
                     $event->setOpeningDate($opening_date);
@@ -209,17 +219,25 @@ class Event_Page
 
                     $event->save();
 
-                    include_once('views/html-event-referer.php');
+                    echo $this->templates->render('html-event-referer'); // render views/html-event-referer.php
 
-                } else { // render form
-                    $event = Event::findbyId($_GET['event']); // needed in view
-                    include_once('views/html-event-update-form.php');
                 }
             }
-        } else { // render form
-            $event = Event::findbyId($_GET['event']); // needed in view
-            include_once('views/html-event-update-form.php');
         }
+
+        $event = Event::findbyId($_GET['event']);
+        echo $this->templates->render('html-event-update-form',[ // render views/html-event-update-form.php
+            'title'         => __('Update Kitchen Run Event', $this->plugin_text_domain),
+            'event'         => $event,
+            'date_format'   => 'Y-m-d',
+            'hour_format'   => 'H:m',
+            'event_name'    => __('Event Name', $this->plugin_text_domain),
+            'opening_date'  => __('Opening Date', $this->plugin_text_domain),
+            'closing_date'  => __('Closing Date', $this->plugin_text_domain),
+            'event_date'    => __('Event Date', $this->plugin_text_domain),
+            'current'       => __('Current Event', $this->plugin_text_domain),
+            'submit'        => __('Update Event', $this->plugin_text_domain),
+        ]);
     }
 
     /**
@@ -251,11 +269,17 @@ class Event_Page
                     $event = Event::findbyId($_POST['event']);
                     $event->delete();
 
-                    include_once('views/html-event-referer.php');
+                    echo $this->templates->render('html-event-referer'); // render views/html-event-referer.php
                 }
             } else { // ask: do you really want to delete the event
+
                 $event = Event::findbyId($_GET['event']);
-                include_once('views/html-event-delete.php');
+                echo $this->templates->render('html-event-delete',[ // render views/html-event-delete.php
+                    'title'         => __('Delete Kitchen Run Event', $this->plugin_text_domain),
+                    'event'         => $event,
+                    'confirm_delete'=> __('You have specified this event for deletion: ', $this->plugin_text_domain),
+                    'submit'        => __('Confirm Deletion', $this->plugin_text_domain),
+                ]);
             }
         }
     }

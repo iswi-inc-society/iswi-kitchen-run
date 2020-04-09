@@ -3,6 +3,7 @@
 namespace KitchenRun\Inc\Frontend;
 
 use DateTime;
+use League\Plates\Engine;
 
 /**
  * The public-facing functionality of the plugin.
@@ -46,6 +47,15 @@ class Frontend {
 	 */
 	private $plugin_text_domain;
 
+    /**
+     * Templating Engine Plates
+     *
+     * @since   1.0.0
+     * @access  private
+     * @var     Engine  $templates
+     */
+    private $templates;
+
 	/**
 	 * Initialize the class and set its properties.
 	 *
@@ -59,6 +69,8 @@ class Frontend {
 		$this->plugin_name = $plugin_name;
 		$this->version = $version;
 		$this->plugin_text_domain = $plugin_text_domain;
+
+        $this->templates = new Engine(__DIR__ . '/views');
 
 	}
 
@@ -118,11 +130,11 @@ class Frontend {
      */
 	public function signup_page()
     {
-        $signup = new Signup();
+        $signup = new Signup($this->plugin_name, $this->version, $this->plugin_text_domain);
         $event = $signup->getEvent();
 
-        if ($signup->isSuccessfull()) { // successfull sign up
-            $message = __('Your Sign Up was succesfull. You will get more information per e-mail soon. For questions, please contact kitchenrun@iswi.org',
+        if ($signup->isSuccessful()) { // successful sign up
+            $message = __('Your Sign Up was successful. You will get more information per e-mail soon. For questions, please contact kitchenrun@iswi.org',
                 $this->plugin_text_domain);
             $su = false;
         } else if (isset($event)) { // current event exists
@@ -164,7 +176,10 @@ class Frontend {
             $su = false;
         }
 
-	    include_once('views/html-kitchenrun-info.php'); // render messsage
+        echo $this->templates->render('html-kitchenrun-info', [ // render views/html-kitchenrun-info.php
+                'message'  =>   $message,
+        ]);
+
         if ($su) $signup->render(); // render sign up form
     }
 

@@ -1,5 +1,9 @@
-(function( $ ) {
-	'use strict';
+/**
+ * Not Used YET;
+ */
+
+//(function( $ ) {
+//	'use strict';
 
 	/**
 	 * All of the code for your public-facing JavaScript source
@@ -32,4 +36,4 @@
 	 */
 
 
-})( jQuery );
+//})( jQuery );

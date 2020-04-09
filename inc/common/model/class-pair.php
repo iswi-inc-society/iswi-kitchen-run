@@ -210,48 +210,6 @@ class Pair
     }
 
     /**
-     * Find a list of Pairs in the Database through the event, where they take place.
-     *
-     * @since   1.0.0
-     * @param   Event   $event  Event Object
-     * @return  Pair[]  $pairs  Array of Pair Objects
-     */
-    public static function findByEvent(Event $event) {
-        $id = $event->getId();
-
-        global $wpdb;
-
-        $table = self::TABLE_NAME;
-        $databaseName =  DB_NAME;
-        $prefix = $wpdb->prefix;
-
-        // sql query find row with id
-        $sql = "
-            SELECT * FROM $databaseName.$prefix$table WHERE event='$id';
-        ";
-
-        $results = $wpdb->get_results($sql); // execute sql query
-
-        $pairs = array();
-
-        foreach ($results as $row) {
-            $pair = new Pair();
-            $pair->id = $row->id;
-            $pair->event = $row->event;
-            $pair->guest1 = $row->guest1;
-            $pair->guest2 = $row->guest2;
-            $pair->cook = $row->cook;
-            $pair->setCourse($row->course);
-
-            $pairs[] = $pair;
-        }
-
-
-        return $pairs;
-
-    }
-
-    /**
      * Find a Pair in the Database through the id.
      *
      * @since   1.0.0
@@ -260,30 +218,39 @@ class Pair
      */
     static function findById($id) {
 
-        global $wpdb;
+        $db = new Database();
 
-        $table = self::TABLE_NAME;
-        $databaseName =  DB_NAME;
-        $prefix = $wpdb->prefix;
+        $result = $db->findBy(Database::DB_PAIR_NAME, 'id', $id, true);
 
-        // sql query find row with id
-        $sql = "
-            SELECT * FROM $databaseName.$prefix$table WHERE id='$id';
-        ";
-
-        $pair = new Pair();
-
-        $row = $wpdb->get_row($sql); // execute sql query
-
-        $pair->id = $row->id;
-        $pair->event = $row->event;
-        $pair->guest1 = $row->guest1;
-        $pair->guest2 = $row->guest2;
-        $pair->cook = $row->cook;
-        $pair->setCourse($row->course);
-
+        $pair = Pair::resultToObject($result);
 
         return $pair;
+    }
+
+
+    /**
+     * Find a list of Pairs in the Database through the event, where they take place.
+     *
+     * @since   1.0.0
+     * @param   Event   $event  Event Object
+     * @return  Pair[]  $pairs  Array of Pair Objects
+     */
+    public static function findByEvent(Event $event) {
+
+        $event_id = $event->getId();
+
+        $db = new Database();
+
+        $results = $db->findBy(Database::DB_PAIR_NAME, 'event', $event_id, false);
+
+        $pairs = array();
+
+        foreach ($results as $result) {
+            $pairs[] = Pair::resultToObject($result);
+        }
+
+        return $pairs;
+
     }
 
     /**
@@ -292,12 +259,10 @@ class Pair
      * @since 1.0.0
      */
     public function save() {
-        global $wpdb;
 
-        // wp_kr_team
-        $table_name = $wpdb->prefix . Database::DB_PAIR_NAME;
+        $db = new Database();
 
-        $col = array(
+        $row = array(
             'event'     => $this->event,
             'course'    => $this->course,
             'cook'      => $this->cook,
@@ -314,21 +279,40 @@ class Pair
             '%d',
         );
 
-        if ($this->id !== NULL) { // is id already set
-            $col['id'] = $this->id;
-            $format[] = '%d';
+        $db->saveRow(Database::DB_PAIR_NAME, $row, $format, $this->id);
 
-            $wpdb->replace($table_name, $col, $format);
 
-        } else {
+    }
 
-            // save team in database
-            $wpdb->insert(
-                $table_name,
-                $col,
-                $format
-            );
-        }
+    /**
+     * Deletes object from database.
+     *
+     * @since 1.0.0
+     */
+    public function delete()
+    {
+        $db = new Database();
+        $db->deleteRow(Database::DB_PAIR_NAME, $this->id);
+    }
+
+    /**
+     * Creates a Pair Object through a database row object. The row object is created through the Database class.
+     *
+     * @since   1.0.0
+     * @param   object  $row    Row Object from Database
+     * @return  Pair    $pair   Pair Object
+     */
+    private static function resultToObject($row) {
+
+        $pair = new Pair();
+        $pair->id = $row->id;
+        $pair->event = $row->event;
+        $pair->guest1 = $row->guest1;
+        $pair->guest2 = $row->guest2;
+        $pair->cook = $row->cook;
+        $pair->setCourse($row->course);
+
+        return $pair;
     }
 
 

@@ -1,7 +1,7 @@
 <?php
 
-use KitchenRun\Inc\Admin\Team_Page;
 use KitchenRun\Inc\Common\Model\Team;
+use League\Plates\Template\Template;
 
 /**
  * View to render a form to confirm that the user wants to delete a team.
@@ -10,8 +10,11 @@ use KitchenRun\Inc\Common\Model\Team;
  *
  * @author  Niklas Loos <niklas.loos@live.com>
  *
- * @var     Team        $team   Team Object that will be deleted.
- * @var     Team_Page   $this   Team_Page Object that has the needed plugin_text_domain variable.
+ * @var       Team      $team               Team Object that will be edited.
+ * @var       Template  $this               Event Page Object has the needed Event_Table_List object as property.
+ * @var       string    $title              Title of the Page
+ * @var       string    $plugin_text_domain Language Domain
+ * @var       string    $submit             Translation of Confirm Deletion
  */
 
 ?>
@@ -19,9 +22,9 @@ use KitchenRun\Inc\Common\Model\Team;
 <!-- This file should primarily consist of HTML with a little bit of PHP. -->
 
 <div class="wrap">
-    <h1 class="wp-heading-inline"><?php _e('Kitchen Run Events', $this->plugin_text_domain); ?></h1>
+    <h1 class="wp-heading-inline"><?= $this->e($title) ?></h1>
 
-    <p><?php _e('You have specified this team for deletion: ', $this->plugin_text_domain); ?></p>
+    <p><?php _e('You have specified this team for deletion: ', $plugin_text_domain); ?></p>
 
 
 
@@ -35,6 +38,6 @@ use KitchenRun\Inc\Common\Model\Team;
         <input type="hidden" name="delete_option" value="delete">
         <input type="hidden" name="action" value="dodelete">
 
-        <p class="submit"><input type="submit" name="submit" id="submit" class="button button-primary" value="Confirm Deletion"></p>
+        <p class="submit"><input type="submit" name="submit" id="submit" class="button button-primary" value="<?= $submit ?>"></p>
     </form>
 </div>

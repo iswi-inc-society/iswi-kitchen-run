@@ -4,7 +4,8 @@ namespace KitchenRun\Inc\Common\Model;
 
 
 use DateTime;
-use WP_User;
+use Exception;
+use WP_User as WP_User;
 
 /**
  * Class Event
@@ -55,7 +56,7 @@ class Event
     private $current;
 
     /**
-     * Date on which the singup form will be opened.
+     * Date on which the signup form will be opened.
      * Format: See DATE_FORMAT.
      *
      * @since   1.0.0
@@ -65,7 +66,7 @@ class Event
     private $opening_date;
 
     /**
-     * Date on which the singup form will be closed.
+     * Date on which the signup form will be closed.
      * Format: See DATE_FORMAT.
      *
      * @since   1.0.0
@@ -169,13 +170,14 @@ class Event
      * Get the Opening Date for the sign up.
      *
      * @since   1.0.0
-     * @return  DateTime
+     * @return  DateTime|null   NULL shouldn't be reached!
      */
     public function getOpeningDate()
     {
         try {
-            return new \DateTime($this->opening_date);
-        } catch (\Exception $e) {
+            return new DateTime($this->opening_date);
+        } catch (Exception $e) {
+            return NULL;
         }
     }
 
@@ -187,7 +189,7 @@ class Event
      */
     public function setOpeningDate($opening_date)
     {
-        if ($opening_date instanceof \DateTime) {
+        if ($opening_date instanceof DateTime) {
             $this->opening_date = $opening_date->format(self::DATE_FORMAT);
         } else {
             $this->opening_date = $opening_date;
@@ -198,14 +200,15 @@ class Event
      * Get the Closing Date for the sign up.
      *
      * @since   1.0.0
-     * @return  DateTime
+     * @return  DateTime|null   NULL shouldn't be reached!
      */
     public function getClosingDate()
     {
 
         try {
-            return new \DateTime($this->closing_date);
-        } catch (\Exception $e) {
+            return new DateTime($this->closing_date);
+        } catch (Exception $e) {
+            return NULL;
         }
     }
 
@@ -217,7 +220,7 @@ class Event
      */
     public function setClosingDate($closing_date)
     {
-        if ($closing_date instanceof \DateTime) {
+        if ($closing_date instanceof DateTime) {
             $this->closing_date = $closing_date->format(self::DATE_FORMAT);
         } else {
             $this->closing_date = $closing_date;
@@ -228,13 +231,14 @@ class Event
      * Get the Date of the event.
      *
      * @since   1.0.0
-     * @return  DateTime
+     * @return  DateTime|null   NULL shouldn't be reached!
      */
     public function getEventDate()
     {
         try {
-            return new \DateTime($this->event_date);
-        } catch (\Exception $e) {
+            return new DateTime($this->event_date);
+        } catch (Exception $e) {
+            return NULL;
         }
     }
 
@@ -246,7 +250,7 @@ class Event
      */
     public function setEventDate($event_date)
     {
-        if ($event_date instanceof \DateTime) {
+        if ($event_date instanceof DateTime) {
             $this->event_date = $event_date->format(self::DATE_FORMAT);
         } else {
             $this->event_date = $event_date;
@@ -256,8 +260,8 @@ class Event
     /**
      * Get Manager of the Event as Wordpress User.
      *
-     * @since   1.0.0
      * @return  WP_User
+     *@since   1.0.0
      */
     public function getManager()
     {
@@ -270,8 +274,8 @@ class Event
     /**
      * Set Manager of the Event, should be Wordpress User.
      *
-     * @since   1.0.0
      * @param   WP_User $manager
+     * @since   1.0.0
      */
     public function setManager($manager)
     {
@@ -312,30 +316,11 @@ class Event
      */
     public static function findbyId($id)
     {
-        global $wpdb;
+        $db = new Database();
 
-        $table = Database::DB_EVENT_NAME;
-        $databaseName =  DB_NAME;
-        $prefix = $wpdb->prefix;
+        $result = $db->findBy(Database::DB_EVENT_NAME, 'id', $id, true);
 
-        // sql query find row with id
-        $sql = "
-        SELECT * FROM $databaseName.$prefix$table WHERE id='$id';
-    ";
-
-        $event = new Event();
-
-        $row = $wpdb->get_row($sql); // execute sql query
-
-        //create team object
-        $event->id = $row->id;
-        $event->setName($row->name);
-        $event->setCurrent($row->current);
-        $event->setOpeningDate($row->opening_date);
-        $event->setClosingDate($row->closing_date);
-        $event->setEventDate($row->event_date);
-        $event->setManager(WP_User::get_data_by( 'ID', $row->manager ));
-        $event->setPaired($row->paired);
+        $event = Event::resultToObject($result);
 
         return $event;
     }
@@ -347,30 +332,11 @@ class Event
      * @return  Event   $event  Event Object
      */
     public static function findCurrent() {
-        global $wpdb;
+        $db = new Database();
 
-        $table = Database::DB_EVENT_NAME;
-        $databaseName =  DB_NAME;
-        $prefix = $wpdb->prefix;
+        $result = $db->findBy(Database::DB_EVENT_NAME, 'current', 1, true);
 
-        // sql query find row with id
-        $sql = "
-        SELECT * FROM $databaseName.$prefix$table WHERE current='1';
-        ";
-
-        $event = new Event();
-
-        $row = $wpdb->get_row($sql); // execute sql query
-
-        //create team object
-        $event->id = $row->id;
-        $event->setName($row->name);
-        $event->setCurrent($row->current);
-        $event->setOpeningDate($row->opening_date);
-        $event->setClosingDate($row->closing_date);
-        $event->setEventDate($row->event_date);
-        $event->setManager(WP_User::get_data_by( 'ID', $row->manager ));
-        $event->setPaired($row->paired);
+        $event = Event::resultToObject($result);
 
         return $event;
     }
@@ -382,36 +348,15 @@ class Event
      * @return  Event[] $event  Array of Event Object
      */
     public static function findAll() {
-        global $wpdb;
+        $db = new Database();
 
-        $table = Database::DB_EVENT_NAME;
-        $databaseName =  DB_NAME;
-        $prefix = $wpdb->prefix;
-
-        // sql query
-        $sql = "
-            SELECT * FROM $databaseName.$prefix$table ;
-        ";
-
-        $results = $wpdb->get_results($sql); // execute sql query
+        $results = $db->findAll(Database::DB_EVENT_NAME);
 
         $events = array();
 
-        // create each team object
+        // create each event object
         foreach ($results as $row) {
-            //create team object
-            $event = new Event();
-            $event->id = $row->id;
-            $event->setName($row->name);
-            $event->setCurrent($row->current);
-            $event->setOpeningDate($row->opening_date);
-            $event->setClosingDate($row->closing_date);
-            $event->setEventDate($row->event_date);
-            $event->setManager(WP_User::get_data_by( 'ID', $row->manager ));
-            $event->setPaired($row->paired);
-
-            $events[] = $event;
-
+            $events[] = Event::resultToObject($row);
         }
 
         return $events;
@@ -423,12 +368,10 @@ class Event
      * @since 1.0.0
      */
     public function save() {
-        global $wpdb;
 
-        // wp_kr_team
-        $table_name = $wpdb->prefix . Database::DB_EVENT_NAME;
+        $db = new Database();
 
-        $col = array(
+        $row = array( //convert event object to row array for database
             'name' => $this->name,
             'event_date' => $this->event_date,
             'opening_date' => $this->opening_date,
@@ -449,21 +392,7 @@ class Event
             '%d',
         );
 
-        if ($this->id !== NULL) { // is id already set
-            $col['id'] = $this->id;
-            $format[] = '%d';
-
-            $wpdb->replace($table_name, $col, $format);
-
-        } else {
-
-            // save team in database
-            $wpdb->insert(
-                $table_name,
-                $col,
-                $format
-            );
-        }
+        $db->saveRow(Database::DB_EVENT_NAME, $row, $format, $this->id);
 
     }
 
@@ -474,11 +403,33 @@ class Event
      */
     public function delete()
     {
-        global $wpdb;
-        $table_name = $wpdb->prefix . Database::DB_EVENT_NAME;
+        $db = new Database();
+        $db->deleteRow(Database::DB_EVENT_NAME, $this->id);
+    }
 
-        $wpdb->delete( $table_name, array( 'id' => $this->id ) );
+    /**
+     * Creates a Event Object through a database row object. The row object is created through the Database class.
+     *
+     * @since   1.0.0
+     * @param   object  $row    Row Object from Database
+     * @return  Event   $event  Event Object
+     */
+    private static function resultToObject($row) {
 
+        /** @var WP_User $wp_user */
+        $wp_user = WP_User::get_data_by( 'ID', $row->manager );
+
+        $event = new Event();
+        $event->id = $row->id;
+        $event->setName($row->name);
+        $event->setCurrent($row->current);
+        $event->setOpeningDate($row->opening_date);
+        $event->setClosingDate($row->closing_date);
+        $event->setEventDate($row->event_date);
+        $event->setManager($wp_user);
+        $event->setPaired($row->paired);
+
+        return $event;
     }
 
 }

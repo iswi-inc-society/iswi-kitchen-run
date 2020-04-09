@@ -44,15 +44,6 @@ class Admin {
 	 */
 	private $plugin_text_domain;
 
-    /**
-     * Event List Object to create the list of events
-     *
-     * @since   1.0.0
-     * @access  private
-     * @var     Event_List_Table    $event_table
-     */
-	private $event_table;
-
 	/**
 	 * Initialize the class and set its properties.
 	 *
@@ -132,7 +123,7 @@ class Admin {
         /**
          * Admin Menus
          */
-        $main_page = add_menu_page( //kitchenrun top menu
+        add_menu_page( //kitchenrun top menu
             __( 'Kitchen Run', $this->plugin_text_domain ),
             __( 'Kitchen Run', $this->plugin_text_domain ),
             'manage_options',
@@ -153,7 +144,7 @@ class Admin {
         );
 
 
-        $event_new_page = add_submenu_page( // create new event submenu
+        add_submenu_page( // create new event submenu
             $this->plugin_name,
             __( 'Add Event', $this->plugin_text_domain ),
             __( 'Add Event', $this->plugin_text_domain ),

@@ -1,12 +1,10 @@
 <?php
-
-
 namespace KitchenRun\Inc\Admin;
-
 
 use KitchenRun\Inc\Common\Model\Event;
 use KitchenRun\Inc\Common\Model\Pair;
 use KitchenRun\Inc\Common\Model\Team;
+use League\Plates\Engine;
 
 /**
  * Class Team_Page
@@ -65,9 +63,13 @@ class Team_Page
     private $team_table;
 
     /**
-     * @var string[]
+     * Templating Engine Plates
+     *
+     * @since   1.0.0
+     * @access  private
+     * @var     Engine  $templates
      */
-    private $messages = array();
+    private $templates;
 
 
     /**
@@ -84,6 +86,8 @@ class Team_Page
         $this->version = $version;
         $this->plugin_text_domain = $plugin_text_domain;
 
+        $this->templates = new Engine(__DIR__ . '/views');
+
         if (isset($_GET['event'])) { // get event by filter of table
             $this->event = Event::findbyId($_GET['event']);
         } else { // no filter -> current event for team table
@@ -93,7 +97,7 @@ class Team_Page
     }
 
     /**
-     * Initialization Method that is called after the page is choosen.
+     * Initialization Method that is called after the page is chosen.
      * Called by add_plugin_admin_menu() in Class Admin.
      *
      * @since 1.0.0
@@ -150,18 +154,22 @@ class Team_Page
         // query, filter, and sort the data
         $this->team_table->prepare_items();
 
-        // render the List Table
-        include_once('views/html-team-list.php');
+        // Render a template
+        echo $this->templates->render('html-team-list', [ // renders views/html-team-list.php
+            'title' => __('Kitchen Run Teams', $this->plugin_text_domain),
+            'table' => $this->team_table,
+            'new'   => __('Add New', $this->plugin_text_domain),
+        ]);
     }
 
     /**
      * Renders the Team edit and add form and processes it.
      *
-     * @param   string  $header    Header of the rendered page
+     * @param   string  $title     Title of the rendered page
      * @param   bool    $add       true: add new team; false: update existing team
      * @since   1.0.0
      */
-    public function team_update_page($header, $add)
+    public function team_update_page($title, $add)
     {
         // form is submitted
         if(isset($_POST['team_submit'])) {
@@ -187,7 +195,7 @@ class Team_Page
                 $team->setVegan(($_POST['team_food_preference'] == 'vegan') ? 1 : 0); // vegan checked?
                 $team->setVegetarian(($_POST['team_food_preference'] == 'vegetarian') ? 1 : 0); // vegetarian checked?
                 $team->setHalal(($_POST['team_food_preference'] == 'halal') ? 1 : 0); // halal checked?
-                $team->setKosher(($_POST['team_food_preference'] == 'kosher') ? 1 : 0); // kosha checked?
+                $team->setKosher(($_POST['team_food_preference'] == 'kosher') ? 1 : 0); // kosher checked?
                 $team->setFoodRequest($_POST['team_food_request']);
                 $team->setFindPlace($_POST['team_find_place']);
                 $team->setAppetizer(isset($_POST['team_appetizer']) ? 1 : 0);
@@ -197,13 +205,30 @@ class Team_Page
                 $team->setEvent(Event::findbyId($_POST['team_event']));
                 $team->save();
 
-                include_once('views/html-team-referer.php'); // refer back to team table page
+                echo $this->templates->render('html-team-referer'); // render views/html-team-referer.php
             }
         } else { // render form
             if ($add) $team = new Team();
             else $team = Team::findbyId($_GET['team']); // needed in view
 
-            include_once('views/html-team-update-form.php'); // html form
+            // Event Options
+            $options = array();
+
+            foreach (Event::findAll() as $event) {
+                $current = !$add ? $team->getEvent()->getId() == $event->getId() : false;
+                $options[] = sprintf('<option value="%s" %s>%s</option>',
+                    $event->getId(),
+                    ($current) || $event->getId() == Event::findCurrent()->getId() ? 'selected' : '',
+                    $event->getName());
+            }
+
+            echo $this->templates->render('html-team-update-form', [ // render views/html-team-update-form.php
+                'title'             => $title,
+                'team'              => $team,
+                'event_options'     => $options,
+                'plugin_text_domain'=> $this->plugin_text_domain,
+                'submit'            => $add ? __('Create Team', $this->plugin_text_domain) : __('Update Team', $this->plugin_text_domain),
+            ]);
         }
     }
 
@@ -237,11 +262,17 @@ class Team_Page
                     $event = Team::findbyId($_POST['team']);
                     $event->delete();
 
-                    include_once('views/html-team-referer.php'); // refer back to team table
+                    echo $this->templates->render('html-team-referer'); // render views/html-team-referer.php
                 }
             } else { // delete confirmation form
                 $team = Team::findbyId($_GET['team']); // needed in view
-                include_once('views/html-team-delete.php'); // html form
+
+                echo $this->templates->render('html-team-delete', [ // render views/html-team-delete.php
+                    'title'             => __('Delete Kitchen Run Team', $this->plugin_text_domain),
+                    'team'              => $team,
+                    'plugin_text_domain'=> $this->plugin_text_domain,
+                    'submit'            => __('Confirm Deletion', $this->plugin_text_domain),
+                ]);
             }
         }
     }
@@ -256,7 +287,14 @@ class Team_Page
     {
         if ($this->event->getPaired()) { // only shown when teams of the event are paired
             $pairs = Pair::findByEvent($this->event); // needed in view
-            include_once('views/html-pair-table.php'); // html table
+
+            echo $this->templates->render('html-pair-table', [ // render views/html-pair-table.php
+                'title'             => __('Team Pairs', $this->plugin_text_domain),
+                'pairs'             => $pairs,
+                'plugin_text_domain'=> $this->plugin_text_domain,
+                'exchange'          => __('Exchange Pairs', $this->plugin_text_domain),
+            ]);
+
         }
     }
 
@@ -340,9 +378,6 @@ class Team_Page
         /** @var Team[] $teams */
         $teams = Team::findByEvent($this->event);
 
-        /** @var Pair[] $pairs */
-        $pairs = array();
-
         if (count($teams) < 7) {
             echo 'You need more than 7 teams to start the pair process';
 
@@ -352,7 +387,7 @@ class Team_Page
 
             // add dummy teams
             for ($i=1; $i<=$dummy_count; $i++) {
-                $team = new Team(true);
+                $team = new Team();
                 $team->setName('Dummy Team '.$i);
                 $team->setEvent($this->event);
                 $team->setAppetizer(1);
@@ -428,7 +463,7 @@ class Team_Page
             }
 
             // Set two choices
-            for ($i; $i < ($n1 + $n2); ++$i) {
+            for (; $i < ($n1 + $n2); ++$i) {
                 if ($candidates[$i]['course1']) {
                     if ($course1 < $num_can / 3) {
                         $output[$course1][0] = $candidates[$i]['team'];
@@ -459,7 +494,7 @@ class Team_Page
             }
 
             // Fill with three choices
-            for ($i; $i < count($candidates); ++$i) {
+            for (; $i < count($candidates); ++$i) {
                 if ($course1 < $num_can / 3) {
                     $output[$course1][0] = $candidates[$i]['team'];
                     $associated[$i] = $candidates[$i];
@@ -569,8 +604,8 @@ class Team_Page
      * Compare function for php usort function.
      * To compare two $candidate arrays for their number of preferred courses.
      *
-     * @param   $candidate1     Candidate Array -> see pair_teams()
-     * @param   $candidate2     Candidate Array -> see pair_teams()
+     * @param   array   $candidate1     Candidate Array -> see pair_teams()
+     * @param   array   $candidate2     Candidate Array -> see pair_teams()
      * @return  int
      */
     protected function cmp($candidate1, $candidate2) {

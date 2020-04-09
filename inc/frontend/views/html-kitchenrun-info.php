@@ -1,4 +1,6 @@
 <?php
+use League\Plates\Template\Template;
+
 /**
  * View to render a Message that gives information about the current Kitchen Run Event.
  *
@@ -6,7 +8,8 @@
  *
  * @author  Niklas Loos <niklas.loos@live.com>
  *
- * @var     string  $message    Information about current Kitchen Run Event
+ * @var     Template    $this       Template Object to render
+ * @var     string      $message    Information about current Kitchen Run Event
  */
 ?>
 

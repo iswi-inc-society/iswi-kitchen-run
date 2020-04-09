@@ -6,6 +6,7 @@ namespace KitchenRun\Inc\Frontend;
 
 use KitchenRun\Inc\Common\Model\Event;
 use KitchenRun\Inc\Common\Model\Team;
+use League\Plates\Engine;
 
 /**
  * Class Signup
@@ -17,6 +18,42 @@ use KitchenRun\Inc\Common\Model\Team;
  */
 class Signup
 {
+    /**
+     * The ID of this plugin.
+     *
+     * @since    1.0.0
+     * @access   private
+     * @var      string    $plugin_name    The ID of this plugin.
+     */
+    private $plugin_name;
+
+    /**
+     * The version of this plugin.
+     *
+     * @since    1.0.0
+     * @access   private
+     * @var      string    $version    The current version of this plugin.
+     */
+    private $version;
+
+    /**
+     * The text domain of this plugin.
+     *
+     * @since    1.0.0
+     * @access   private
+     * @var      string    $plugin_text_domain    The text domain of this plugin.
+     */
+    private $plugin_text_domain;
+
+    /**
+     * Templating Engine Plates
+     *
+     * @since   1.0.0
+     * @access  private
+     * @var     Engine  $templates
+     */
+    private $templates;
+
     /**
      * Team that is signing up
      *
@@ -43,9 +80,18 @@ class Signup
      * Checks the state of sign up (submitted or not)
      *
      * @since 1.0.0
+     * @param       string $plugin_name        The name of this plugin.
+     * @param       string $version            The version of this plugin.
+     * @param       string $plugin_text_domain The text domain of this plugin.
      */
-    public function __construct()
+    public function __construct( $plugin_name, $version, $plugin_text_domain )
     {
+        $this->plugin_name = $plugin_name;
+        $this->version = $version;
+        $this->plugin_text_domain = $plugin_text_domain;
+
+        $this->templates = new Engine(__DIR__ . '/views');
+
         if (isset($_POST['kr_team_submitted'])) { // form submitted
 
             $this->createTeam();
@@ -71,7 +117,7 @@ class Signup
      *
      * @return bool|int
      */
-    public function isSuccessfull() {
+    public function isSuccessful() {
         return $this->suc;
     }
 
@@ -98,7 +144,7 @@ class Signup
         $this->team->setVegan(isset($_POST['kr_team_vegan']) ? 1 : 0); // vegan checked?
         $this->team->setVegetarian(isset($_POST['kr_team_vegetarian']) ? 1 : 0); // vegetarian checked?
         $this->team->setHalal(isset($_POST['kr_team_halal']) ? 1 : 0); // halal checked?
-        $this->team->setKosher(isset($_POST['kr_team_kosher']) ? 1 : 0); // kosha checked?
+        $this->team->setKosher(isset($_POST['kr_team_kosher']) ? 1 : 0); // kosher checked?
         $this->team->setFoodRequest($_POST['kr_team_food_request']);
         $this->team->setFindPlace($_POST['kr_team_find_place']);
         $this->team->setAppetizer(isset($_POST['kr_team_appetizer']) ? 1 : 0);
@@ -118,6 +164,9 @@ class Signup
      */
     public function render()
     {
-        include_once('views/html-kitchenrun-signup.php');
+
+        echo $this->templates->render('html-kitchenrun-signup', [ // render views/html-kitchenrun-signup.php
+            'plugin_text_domain'    => $this->plugin_text_domain,
+        ]);
     }
 }

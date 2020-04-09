@@ -1,7 +1,7 @@
 <?php
 
 namespace KitchenRun\Inc\Core;
-use KitchenRun as NS;
+use KitchenRun;
 use KitchenRun\Inc\Admin as Admin;
 use KitchenRun\Inc\Frontend as Frontend;
 
@@ -35,6 +35,15 @@ class Init {
 	 */
 	protected $plugin_basename;
 
+    /**
+     * The ID of this plugin.
+     *
+     * @since    1.0.0
+     * @access   protected
+     * @var      string    $plugin_name    The ID of this plugin.
+     */
+    protected $plugin_name;
+
 	/**
 	 * The current version of the plugin.
 	 *
@@ -58,10 +67,10 @@ class Init {
 	 */
 	public function __construct() {
 
-		$this->plugin_name = NS\PLUGIN_NAME;
-		$this->version = NS\PLUGIN_VERSION;
-				$this->plugin_basename = NS\PLUGIN_BASENAME;
-				$this->plugin_text_domain = NS\PLUGIN_TEXT_DOMAIN;
+		$this->plugin_name = KitchenRun\PLUGIN_NAME;
+		$this->version = KitchenRun\PLUGIN_VERSION;
+		$this->plugin_basename = KitchenRun\PLUGIN_BASENAME;
+		$this->plugin_text_domain = KitchenRun\PLUGIN_TEXT_DOMAIN;
 
 		$this->load_dependencies();
 		$this->set_locale();

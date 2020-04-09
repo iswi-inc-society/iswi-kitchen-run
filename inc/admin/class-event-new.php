@@ -3,7 +3,10 @@
 
 namespace KitchenRun\Inc\Admin;
 
+use DateTime;
+use Exception;
 use KitchenRun\Inc\Common\Model\Event;
+use League\Plates\Engine;
 
 /**
  * Class Team_Page
@@ -44,16 +47,20 @@ class Event_New
     private $plugin_text_domain;
 
     /**
-     * Event Object to create the new event
+     * Templating Engine Plates
      *
      * @since   1.0.0
      * @access  private
-     * @var     Event   $event
+     * @var     Engine  $templates
      */
-    private $event;
+    private $templates;
 
     /**
-     * @var string[]
+     * Array of Messages that are created during the process.
+     *
+     * @since   1.0.0
+     * @access  private
+     * @var     string[]    $messages
      */
     private $messages = array();
 
@@ -72,10 +79,12 @@ class Event_New
         $this->version = $version;
         $this->plugin_text_domain = $plugin_text_domain;
 
+        $this->templates = new Engine(__DIR__ . '/views');
+
     }
 
     /**
-     * Initialization Method that is called after the page is choosen.
+     * Initialization Method that is called after the page is chosen.
      * Called by add_plugin_admin_menu() in Class Admin.
      *
      * @since 1.0.0
@@ -100,10 +109,10 @@ class Event_New
                 $event_date = $_POST['event_date'].' '.$_POST['event_time'].':00';
 
                 try { // testing date format and create date objects
-                    $opening_date = new \DateTime($opening_date);
-                    $closing_date = new \DateTime($closing_date);
-                    $event_date = new \DateTime($event_date);
-                } catch (\Exception $e) {
+                    $opening_date = new DateTime($opening_date);
+                    $closing_date = new DateTime($closing_date);
+                    $event_date = new DateTime($event_date);
+                } catch (Exception $e) {
                     echo 'Datetime has false Format';
                 }
 
@@ -132,17 +141,34 @@ class Event_New
 
                     $event->setName($_POST['event_name']);
 
+                    $event->setPaired(0);
+
                     $event->save();
 
-                    include_once('views/html-new-event-success.php'); // html
+                    echo $this->templates->render('html-event-referer'); // js referer
 
                 } else { // opening date after closing date
                     $this->messages[] =  __( 'Please enter an Opening Date that takes place before the Closing Date. The Event Date has to take place after the Closing Date!', $this->plugin_text_domain );
-                    include_once('views/html-new-event-form.php'); // html form
                 }
             }
-        } else {
-            include_once('views/html-new-event-form.php'); // html form
         }
+
+        // create wp_nonce field
+        ob_start();
+        wp_nonce_field( 'add_event', '_wpnonce_add_event' );
+        $wp_nonce = ob_get_clean();
+
+        echo $this->templates->render('html-new-event-form', [ // render views/html-new-event-form.php
+            'title'         => __('New Kitchen Run Events', $this->plugin_text_domain),
+            'messages'      => $this->messages,
+            'wp_nonce'      => $wp_nonce,
+            'event_name'    => __('Event Name', $this->plugin_text_domain),
+            'opening_date'  => __('Opening Date', $this->plugin_text_domain),
+            'closing_date'  => __('Closing Date', $this->plugin_text_domain),
+            'event_date'    => __('Event Date', $this->plugin_text_domain),
+            'current'       => __('Current Event', $this->plugin_text_domain),
+            'submit'        => __('Create Event', $this->plugin_text_domain),
+        ]);
+
     }
 }

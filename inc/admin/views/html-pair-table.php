@@ -1,7 +1,7 @@
 <?php
 
-use KitchenRun\Inc\Admin\Team_Page;
 use KitchenRun\Inc\Common\Model\Pair;
+use League\Plates\Template\Template;
 
 /**
  * View to render a Table with all pairs that also has a form to exchange pairs.
@@ -12,12 +12,15 @@ use KitchenRun\Inc\Common\Model\Pair;
  *
  * @author    Niklas Loos <niklas.loos@live.com>
  *
- * @var       Team_Page     $this   Team_Page Object that has the plugin_text_domain variable.
- * @var       Pair[]        $pairs  Array of all Pairs of the Event.
+ * @var       Pair[]    $pairs              Array of all Pairs of the Event.
+ * @var       Template  $this               Event Page Object has the needed Event_Table_List object as property.
+ * @var       string    $title              Title of the Page
+ * @var       string    $plugin_text_domain Language Domain
+ * @var       string    $exchange           Translation of Exchange Pairs
  */
 ?>
 <div class="wrap">
-    <h1 class="wp-heading-inline"><?php _e('Pairs', $this->plugin_text_domain); ?></h1>
+    <h1 class="wp-heading-inline"><?= $this->e($title) ?></h1>
 
     <!-- Table Form to exchange pairs -->
     <div class="tablenav top">
@@ -27,7 +30,7 @@ use KitchenRun\Inc\Common\Model\Pair;
                 <input type="hidden" name="guest_exg_2" class="guest-exg-2">
                 <input type="hidden" name="exg_pairs_submit">
                 <?php wp_nonce_field( 'exg_pairs', '_wpnonce_exg_pairs' ); ?>
-                <?php submit_button( __( 'Exchange Pairs' ), 'submit', 'exg_pairs_action', false, array( 'disabled' => 'true' ) ); ?>
+                <?php submit_button( $this->e($exchange), 'submit', 'exg_pairs_action', false, array( 'disabled' => 'true' ) ); ?>
             </form>
         </div>
     </div>
@@ -36,7 +39,7 @@ use KitchenRun\Inc\Common\Model\Pair;
     <table class="tl-pairs fixed striped widefat">
         <tbody>
             <tr id="row-appetizer">
-                <th><?php echo __('Appetizer', $this->plugin_text_domain) ?></th>
+                <th><?= __('Appetizer', $plugin_text_domain) ?></th>
                 <?php foreach ($pairs as $pair): ?>
                 <?php if($pair->getCourse() == 0): ?>
                     <td id="pair-<?php echo $pair->getId(); ?>">
@@ -48,7 +51,7 @@ use KitchenRun\Inc\Common\Model\Pair;
                 <?php endforeach; ?>
             </tr>
             <tr id="row-main-course">
-                <th><?php echo __('Main Course', $this->plugin_text_domain) ?></th>
+                <th><?= __('Main Course', $plugin_text_domain) ?></th>
                 <?php foreach ($pairs as $pair): ?>
                     <?php if($pair->getCourse() == 1): ?>
                         <td id="pair-<?php echo $pair->getId(); ?>">
@@ -60,7 +63,7 @@ use KitchenRun\Inc\Common\Model\Pair;
                 <?php endforeach; ?>
             </tr>
             <tr id="row-dessert">
-                <th><?php echo __('Dessert', $this->plugin_text_domain) ?></th>
+                <th><?= __('Dessert', $plugin_text_domain) ?></th>
                 <?php foreach ($pairs as $pair): ?>
                     <?php if($pair->getCourse() == 2): ?>
                         <td id="pair-<?php echo $pair->getId(); ?>">

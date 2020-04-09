@@ -61,10 +61,11 @@ class Team_List_Table extends WP_List_Table
     /**
      * Initialize the class and set its properties.
      *
+     * @param string $plugin_name           The name of this plugin.
+     * @param string $version               The version of this plugin.
+     * @param string $plugin_text_domain    The text domain of this plugin.
+     * @param array  $args
      * @since       1.0.0
-     * @param       string $plugin_name        The name of this plugin.
-     * @param       string $version            The version of this plugin.
-     * @param       string $plugin_text_domain The text domain of this plugin.
      */
     public function __construct( $plugin_name, $version, $plugin_text_domain, $args = array() ) {
 
@@ -134,17 +135,17 @@ class Team_List_Table extends WP_List_Table
 
             // food preferences with icons
             $food_pref = '';
-            if ($team->getVegan()) $food_pref .= sprintf('<img src="%s" alt="%s" />', $image_dir.'leaf.png', 'vegan');
-            else if ($team->getVegetarian()) $food_pref .= sprintf('<img src="%s" alt="%s" />', $image_dir.'milk.png', 'vegetarian');
-            else if ($team->getKosher()) $food_pref .= sprintf('<img src="%s" alt="%s" />', $image_dir.'kosher.png', 'kosher');
-            else if ($team->getHalal()) $food_pref .= sprintf('<img src="%s" alt="%s" />', $image_dir.'halal.png', 'halal');
-            else $food_pref .= sprintf('<img src="%s" alt="%s" />', $image_dir.'beef.png', 'all');
+            if ($team->getVegan()) $food_pref .= '<img src="' . $image_dir . 'leaf.png' . '" alt="' . 'vegan' . '" />';
+            else if ($team->getVegetarian()) $food_pref .= '<img src="' . $image_dir . 'milk.png' . '" alt="' . 'vegetarian' . '" />';
+            else if ($team->getKosher()) $food_pref .= '<img src="' . $image_dir . 'kosher.png' . '" alt="' . 'kosher' . '" />';
+            else if ($team->getHalal()) $food_pref .= '<img src="' . $image_dir . 'halal.png' . '" alt="' . 'halal' . '" />';
+            else $food_pref .= '<img src="' . $image_dir . 'beef.png' . '" alt="' . 'all' . '" />';
 
             // course preference with icons
             $course_pref = '';
-            if ($team->getAppetizer()) $course_pref .= sprintf('<img src="%s" alt="%s" />', $image_dir.'soup.png', 'appetizer');
-            if ($team->getMainCourse()) $course_pref .= sprintf('<img src="%s" alt="%s" />', $image_dir.'food-tray.png', 'main course');
-            if ($team->getDessert()) $course_pref .= sprintf('<img src="%s" alt="%s" />', $image_dir.'ice-creams.png', 'dessert');
+            if ($team->getAppetizer()) $course_pref .= '<img src="' . $image_dir . 'soup.png' . '" alt="' . 'appetizer' . '" />';
+            if ($team->getMainCourse()) $course_pref .= '<img src="' . $image_dir . 'food-tray.png' . '" alt="' . 'main course' . '" />';
+            if ($team->getDessert()) $course_pref .= '<img src="' . $image_dir . 'ice-creams.png' . '" alt="' . 'dessert' . '" />';
 
             // array with data for the table rows
             $table_data[] = array(
@@ -271,7 +272,7 @@ class Team_List_Table extends WP_List_Table
                 if ($this->event->getPaired()) { // unpair button
                 } else { // pair button
                     ?>
-                    <a class="button submit" href="?page=<?php echo $_REQUEST['page'] ?>&action=pair";"> <?php echo __('Pair Teams', $this->plugin_text_domain); ?> </a>
+                    <a class="button submit" href="?page=<?php echo $_REQUEST['page'] ?>&action=pair"> <?php echo __('Pair Teams', $this->plugin_text_domain); ?> </a>
                     <?php
                 }
 
