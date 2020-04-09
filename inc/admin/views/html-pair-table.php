@@ -42,11 +42,9 @@ use League\Plates\Template\Template;
                 <th><?= __('Appetizer', $plugin_text_domain) ?></th>
                 <?php foreach ($pairs as $pair): ?>
                 <?php if($pair->getCourse() == 0): ?>
-                    <td id="pair-<?php echo $pair->getId(); ?>">
-                        <div id="cook-<?php echo $pair->getId(); ?>" class="appetizer pair-cook"><?php echo $pair->getCook()->getName(); ?></div>
-                        <div id="guest1-<?php echo $pair->getId(); ?>" class="appetizer pair-guest1 pair-guest"><?php echo $pair->getGuest1()->getName(); ?></div>
-                        <div id="guest2-<?php echo $pair->getId(); ?>" class="appetizer pair-guest2 pair-guest"><?php echo $pair->getGuest2()->getName(); ?></div>
-                    </td>
+
+                    <?php $this->insert('html-pair-cell', ['pair' => $pair]) ?>
+
                 <?php endif; ?>
                 <?php endforeach; ?>
             </tr>
@@ -54,11 +52,7 @@ use League\Plates\Template\Template;
                 <th><?= __('Main Course', $plugin_text_domain) ?></th>
                 <?php foreach ($pairs as $pair): ?>
                     <?php if($pair->getCourse() == 1): ?>
-                        <td id="pair-<?php echo $pair->getId(); ?>">
-                            <div id="cook-<?php echo $pair->getId(); ?>" class="main-course pair-cook"><?php echo $pair->getCook()->getName(); ?></div>
-                            <div id="guest1-<?php echo $pair->getId(); ?>" class="main-course pair-guest1 pair-guest"><?php echo $pair->getGuest1()->getName(); ?></div>
-                            <div id="guest2-<?php echo $pair->getId(); ?>" class="main-course pair-guest2 pair-guest"><?php echo $pair->getGuest2()->getName(); ?></div>
-                        </td>
+                        <?php $this->insert('html-pair-cell', ['pair' => $pair]) ?>
                     <?php endif; ?>
                 <?php endforeach; ?>
             </tr>
@@ -66,11 +60,7 @@ use League\Plates\Template\Template;
                 <th><?= __('Dessert', $plugin_text_domain) ?></th>
                 <?php foreach ($pairs as $pair): ?>
                     <?php if($pair->getCourse() == 2): ?>
-                        <td id="pair-<?php echo $pair->getId(); ?>">
-                            <div id="cook-<?php echo $pair->getId(); ?>" class="dessert pair-cook"><?php echo $pair->getCook()->getName(); ?></div>
-                            <div id="guest1-<?php echo $pair->getId(); ?>" class="dessert pair-guest1 pair-guest"><?php echo $pair->getGuest1()->getName(); ?></div>
-                            <div id="guest2-<?php echo $pair->getId(); ?>" class="dessert pair-guest2 pair-guest"><?php echo $pair->getGuest2()->getName(); ?></div>
-                        </td>
+                        <?php $this->insert('html-pair-cell', ['pair' => $pair]) ?>
                     <?php endif; ?>
                 <?php endforeach; ?>
             </tr>

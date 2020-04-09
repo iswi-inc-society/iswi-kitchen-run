@@ -48,3 +48,7 @@ table.tl-pairs tr div.checked-2 {
     border: 3px dashed  #121864;
     cursor: pointer;
 }
+
+table.tl-pairs span.food-pref {
+    float: right;
+}

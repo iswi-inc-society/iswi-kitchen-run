@@ -10,7 +10,7 @@ use League\Plates\Template\Template;
  *
  * @author  Niklas Loos <niklas.loos@live.com>
  *
- * @var       Event     $event               Team Object that will be edited.
+ * @var       Event     $event              Team Object that will be edited.
  * @var       Template  $this               Event Page Object has the needed Event_Table_List object as property.
  * @var       string    $title              Title of the Page
  * @var       string    $plugin_text_domain Language Domain
