@@ -113,6 +113,8 @@ class Team_Page
                 $this->team_update_page('Add Kitchen Run Team', true);
             } else if ($_GET['action'] == 'pair') { // pair all teams for courses
                 $this->pair_teams();
+            } else if ($_GET['action'] == 'unpair') { // unpair created pairs
+                $this->team_unpair_page();
             }
         } else if (isset($_POST['exg_pairs_submit'])) { // manually edit the created pairs
             $this->exg_pairs();
@@ -233,7 +235,7 @@ class Team_Page
     }
 
     /**
-     * Renders the Page to confirm the event deletion process, submits this process and deletes the event.
+     * Renders the Page to confirm the team deletion process, submits this process and deletes the event.
      *
      * @since 1.0.0
      */
@@ -259,8 +261,8 @@ class Team_Page
                     exit;
 
                 } else { // wpnonce for confirmation successfully checked
-                    $event = Team::findbyId($_POST['team']);
-                    $event->delete();
+                    $team = Team::findbyId($_POST['team']);
+                    $team->delete();
 
                     echo $this->templates->render('html-team-referer'); // render views/html-team-referer.php
                 }
@@ -296,6 +298,41 @@ class Team_Page
             ]);
 
         }
+    }
+
+    /**
+     * Renders the Page to confirm the unpair process, submits this process and unpairs the teams.
+     *
+     * @since 1.0.0
+     */
+    private function team_unpair_page()
+    {
+        if (isset($_POST['action'])) { // confirmation form submitted
+
+            if ( // check wpnonce for confirmation -> to verify the validity of the form
+                ! isset( $_POST['_wpnonce_unpair_event'] )
+                || ! wp_verify_nonce( $_POST['_wpnonce_unpair_event'], 'unpair_event_confirmation' )
+            ) {
+
+                print 'Sorry, your nonce did not verify.';
+                exit;
+
+            } else { // wpnonce for confirmation successfully checked
+
+                $this->unpair_teams();
+
+                echo $this->templates->render('html-team-referer'); // render views/html-team-referer.php
+            }
+        } else { // unpair confirmation form
+
+            echo $this->templates->render('html-event-unpair', [ // render views/html-event-unpair.php
+                'title'             => __('Unpair Teams', $this->plugin_text_domain),
+                'event'             => $this->event,
+                'plugin_text_domain'=> $this->plugin_text_domain,
+                'submit'            => __('Confirm Unpairing', $this->plugin_text_domain),
+            ]);
+        }
+
     }
 
     /**
@@ -358,7 +395,7 @@ class Team_Page
                     $pair2->save();
                 }
 
-                include_once('views/html-team-referer.php'); // refer back to team table
+                echo $this->templates->render('html-team-referer');
             }
         }
     }
@@ -383,7 +420,7 @@ class Team_Page
 
         } else {
             // How many dummy teams will be used
-            $dummy_count = 3 - (count($teams) % 3);
+            $dummy_count = (count($teams) % 3) == 0 ? 0 : 3 - (count($teams) % 3);
 
             // add dummy teams
             for ($i=1; $i<=$dummy_count; $i++) {
@@ -597,6 +634,25 @@ class Team_Page
 
             $this->event->setPaired(1); // event now paired status
             $this->event->save();
+
+            echo $this->templates->render('html-team-referer');
+        }
+    }
+
+    /**
+     * Unpairs all Teams of an Event by deleting the pairs from the database.
+     *
+     * @since 1.0.0
+     */
+    private function unpair_teams()
+    {
+        if ($this->event->getPaired()) {
+            $pairs = Pair::findByEvent($this->event);
+
+            foreach ($pairs as $pair) $pair->delete();
+
+            $this->event->setPaired(0);
+            $this->event->save();
         }
     }
 
@@ -628,4 +684,6 @@ class Team_Page
         array_unshift($matrix, null);
         return call_user_func_array('array_map', $matrix);
     }
+
+
 }

@@ -270,6 +270,9 @@ class Team_List_Table extends WP_List_Table
                 echo $output;
 
                 if ($this->event->getPaired()) { // unpair button
+                    ?>
+                    <a class="button submit" href="?page=<?php echo $_REQUEST['page'] ?>&action=unpair"> <?php echo __('Unpair Teams', $this->plugin_text_domain); ?> </a>
+                    <?php
                 } else { // pair button
                     ?>
                     <a class="button submit" href="?page=<?php echo $_REQUEST['page'] ?>&action=pair"> <?php echo __('Pair Teams', $this->plugin_text_domain); ?> </a>
