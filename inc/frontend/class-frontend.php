@@ -130,7 +130,7 @@ class Frontend {
      */
 	public function signup_page()
     {
-        $signup = new Signup($this->plugin_name, $this->version, $this->plugin_text_domain);
+        $signup = new Signup($this->plugin_name, $this->version, $this->plugin_text_domain, true);
         $event = $signup->getEvent();
 
         if ($signup->isSuccessful()) { // successful sign up

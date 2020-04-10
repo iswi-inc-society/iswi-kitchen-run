@@ -75,6 +75,15 @@ class Signup
     private $suc = 0;
 
     /**
+     * Should a confirmation email be sent after registration.
+     *
+     * @since   1.0.0
+     * @access  private
+     * @var     bool
+     */
+    private $confirmation_mail;
+
+    /**
      * Signup constructor.
      *
      * Checks the state of sign up (submitted or not)
@@ -83,12 +92,15 @@ class Signup
      * @param       string $plugin_name        The name of this plugin.
      * @param       string $version            The version of this plugin.
      * @param       string $plugin_text_domain The text domain of this plugin.
+     * @param       bool   $confirmation_mail  Should a confirmation mail be sent after registration?
      */
-    public function __construct( $plugin_name, $version, $plugin_text_domain )
+    public function __construct( $plugin_name, $version, $plugin_text_domain, $confirmation_mail )
     {
         $this->plugin_name = $plugin_name;
         $this->version = $version;
         $this->plugin_text_domain = $plugin_text_domain;
+
+        $this->confirmation_mail = $confirmation_mail;
 
         $this->templates = new Engine(__DIR__ . '/views');
 
@@ -154,7 +166,32 @@ class Signup
         $this->team->setEvent(Event::findCurrent());
         $this->team->save();
 
+        // send confirmation mail
+        if ($this->confirmation_mail) {
+            $this->sendConfirmationMail();
+        }
+
         $this->suc = 1;
+    }
+
+    /**
+     * Sends a Confirmation E-Mail to the registered Team with wp_mail.
+     *
+     * @since 1.0.0
+     */
+    public function sendConfirmationMail() {
+
+        $to = $this->team->getName() . '<' . $this->team->getEmail() . '>'; //receiver
+        $subject = __('Kitchen Run Team Registration', $this->plugin_text_domain);
+        $message = $this->templates->render('mail/html-confirmation-mail', [
+            'plugin_text_domain' => $this->plugin_text_domain,
+        ]);
+        $headers = array(
+            'Content-Type: text/html',
+            'Bcc: niklas.loos@iswi.org',
+        );
+
+        wp_mail($to, $subject, $message, $headers);
     }
 
     /**
