@@ -1,0 +1,507 @@
+# Copyright (C) 2020 Niklas Loos
+# This file is distributed under the same license as the Kitchen Run plugin.
+msgid ""
+msgstr ""
+"Project-Id-Version: Kitchen Run 1.0.0\n"
+"Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/iswi-kitchen-run\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"POT-Creation-Date: 2020-04-10T11:16:24+00:00\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"X-Generator: WP-CLI 2.4.0\n"
+
+#. Plugin Name of the plugin
+#: inc/admin/class-admin.php:127
+#: inc/admin/class-admin.php:128
+msgid "Kitchen Run"
+msgstr ""
+
+#. Plugin URI of the plugin
+msgid "https://github.com/XRayLP/iswi-kitchen-run"
+msgstr ""
+
+#. Description of the plugin
+msgid "Kitchen Run Plugin for Wordpress"
+msgstr ""
+
+#. Author of the plugin
+msgid "Niklas Loos"
+msgstr ""
+
+#. Author URI of the plugin
+msgid "https://github.com/XRayLP"
+msgstr ""
+
+#: inc/admin/class-admin.php:138
+#: inc/admin/class-admin.php:139
+msgid "Events"
+msgstr ""
+
+#: inc/admin/class-admin.php:149
+#: inc/admin/class-admin.php:150
+msgid "Add Event"
+msgstr ""
+
+#: inc/admin/class-admin.php:159
+#: inc/admin/class-admin.php:160
+msgid "Teams"
+msgstr ""
+
+#: inc/admin/class-event-list-table.php:77
+#: inc/admin/class-event-new.php:165
+#: inc/admin/class-event-page.php:234
+msgid "Event Name"
+msgstr ""
+
+#: inc/admin/class-event-list-table.php:78
+#: inc/admin/class-event-new.php:166
+#: inc/admin/class-event-page.php:235
+msgid "Opening Date"
+msgstr ""
+
+#: inc/admin/class-event-list-table.php:79
+msgctxt "column name"
+msgid "Closing Date"
+msgstr ""
+
+#: inc/admin/class-event-list-table.php:80
+#: inc/admin/class-event-new.php:168
+#: inc/admin/class-event-page.php:237
+msgid "Event Date"
+msgstr ""
+
+#: inc/admin/class-event-list-table.php:81
+msgid "Event Manager"
+msgstr ""
+
+#: inc/admin/class-event-list-table.php:82
+msgid "Paired"
+msgstr ""
+
+#: inc/admin/class-event-new.php:151
+msgid "Please enter an Opening Date that takes place before the Closing Date. The Event Date has to take place after the Closing Date!"
+msgstr ""
+
+#: inc/admin/class-event-new.php:162
+msgid "New Kitchen Run Events"
+msgstr ""
+
+#: inc/admin/class-event-new.php:167
+#: inc/admin/class-event-page.php:236
+msgid "Closing Date"
+msgstr ""
+
+#: inc/admin/class-event-new.php:169
+#: inc/admin/class-event-page.php:238
+msgid "Current Event"
+msgstr ""
+
+#: inc/admin/class-event-new.php:170
+msgid "Create Event"
+msgstr ""
+
+#: inc/admin/class-event-page.php:119
+msgid "Events Per Page"
+msgstr ""
+
+#: inc/admin/class-event-page.php:148
+msgid "Kitchen Run Events"
+msgstr ""
+
+#: inc/admin/class-event-page.php:150
+#: inc/admin/class-team-page.php:163
+msgid "Add New"
+msgstr ""
+
+#: inc/admin/class-event-page.php:230
+msgid "Update Kitchen Run Event"
+msgstr ""
+
+#: inc/admin/class-event-page.php:239
+msgid "Update Event"
+msgstr ""
+
+#: inc/admin/class-event-page.php:278
+msgid "Delete Kitchen Run Event"
+msgstr ""
+
+#: inc/admin/class-event-page.php:280
+msgid "You have specified this event for deletion: "
+msgstr ""
+
+#: inc/admin/class-event-page.php:281
+#: inc/admin/class-team-page.php:277
+msgid "Confirm Deletion"
+msgstr ""
+
+#: inc/admin/class-team-list-table.php:96
+#: inc/admin/views/html-team-update-form.php:40
+#: inc/frontend/views/html-kitchenrun-signup.php:19
+msgid "Team Name"
+msgstr ""
+
+#: inc/admin/class-team-list-table.php:97
+msgid "Members"
+msgstr ""
+
+#: inc/admin/class-team-list-table.php:98
+#: inc/admin/views/html-team-update-form.php:55
+#: inc/frontend/views/html-kitchenrun-signup.php:28
+msgid "Address"
+msgstr ""
+
+#: inc/admin/class-team-list-table.php:99
+#: inc/admin/views/html-team-update-form.php:60
+#: inc/frontend/views/html-kitchenrun-signup.php:31
+msgid "City"
+msgstr ""
+
+#: inc/admin/class-team-list-table.php:100
+msgid "Telephone"
+msgstr ""
+
+#: inc/admin/class-team-list-table.php:101
+#: inc/admin/views/html-team-update-form.php:65
+#: inc/frontend/views/html-kitchenrun-signup.php:34
+msgid "E-Mail"
+msgstr ""
+
+#: inc/admin/class-team-list-table.php:102
+#: inc/admin/views/html-team-update-form.php:75
+msgid "Food Preferences"
+msgstr ""
+
+#: inc/admin/class-team-list-table.php:103
+#: inc/admin/views/html-team-update-form.php:105
+msgid "Course Preferences"
+msgstr ""
+
+#: inc/admin/class-team-list-table.php:235
+msgid "Filter by event"
+msgstr ""
+
+#: inc/admin/class-team-list-table.php:245
+msgid "Filter"
+msgstr ""
+
+#: inc/admin/class-team-list-table.php:274
+#: inc/admin/class-team-page.php:330
+msgid "Unpair Teams"
+msgstr ""
+
+#: inc/admin/class-team-list-table.php:278
+msgid "Pair Teams"
+msgstr ""
+
+#: inc/admin/class-team-page.php:139
+msgid "Teams Per Page"
+msgstr ""
+
+#: inc/admin/class-team-page.php:161
+msgid "Kitchen Run Teams"
+msgstr ""
+
+#: inc/admin/class-team-page.php:232
+msgid "Create Team"
+msgstr ""
+
+#: inc/admin/class-team-page.php:232
+msgid "Update Team"
+msgstr ""
+
+#: inc/admin/class-team-page.php:274
+msgid "Delete Kitchen Run Team"
+msgstr ""
+
+#: inc/admin/class-team-page.php:295
+msgid "Team Pairs"
+msgstr ""
+
+#: inc/admin/class-team-page.php:298
+msgid "Exchange Pairs"
+msgstr ""
+
+#: inc/admin/class-team-page.php:333
+msgid "Confirm Unpairing"
+msgstr ""
+
+#: inc/admin/views/html-event-unpair.php:27
+msgid "You have specified this event to unpair its teams: "
+msgstr ""
+
+#: inc/admin/views/html-pair-table.php:42
+#: inc/admin/views/html-team-update-form.php:108
+#: inc/admin/views/html-team-update-form.php:111
+#: inc/frontend/views/html-kitchenrun-signup.php:73
+msgid "Appetizer"
+msgstr ""
+
+#: inc/admin/views/html-pair-table.php:52
+#: inc/frontend/views/html-kitchenrun-signup.php:76
+msgid "Main Course"
+msgstr ""
+
+#: inc/admin/views/html-pair-table.php:60
+#: inc/admin/views/html-team-update-form.php:114
+#: inc/frontend/views/html-kitchenrun-signup.php:79
+msgid "Dessert"
+msgstr ""
+
+#: inc/admin/views/html-team-delete.php:27
+msgid "You have specified this team for deletion: "
+msgstr ""
+
+#: inc/admin/views/html-team-delete.php:31
+msgid "Team can't be deleted because it is already paired. Unpair all Teams of the Event before deleting them."
+msgstr ""
+
+#: inc/admin/views/html-team-update-form.php:45
+msgid "Member 1"
+msgstr ""
+
+#: inc/admin/views/html-team-update-form.php:50
+msgid "Member 2"
+msgstr ""
+
+#: inc/admin/views/html-team-update-form.php:70
+#: inc/frontend/views/html-kitchenrun-signup.php:37
+msgid "Phone Number"
+msgstr ""
+
+#: inc/admin/views/html-team-update-form.php:78
+msgid "Vegan"
+msgstr ""
+
+#: inc/admin/views/html-team-update-form.php:81
+msgid "Vegetarian"
+msgstr ""
+
+#: inc/admin/views/html-team-update-form.php:84
+msgid "Halal"
+msgstr ""
+
+#: inc/admin/views/html-team-update-form.php:87
+msgid "Kosher"
+msgstr ""
+
+#: inc/admin/views/html-team-update-form.php:90
+msgid "Everything"
+msgstr ""
+
+#: inc/admin/views/html-team-update-form.php:95
+msgid "Food Request"
+msgstr ""
+
+#: inc/admin/views/html-team-update-form.php:100
+msgid "Find Place"
+msgstr ""
+
+#: inc/admin/views/html-team-update-form.php:119
+msgid "Comment"
+msgstr ""
+
+#: inc/admin/views/html-team-update-form.php:124
+msgid "Event"
+msgstr ""
+
+#: inc/frontend/class-frontend.php:137
+msgid "Your Sign Up was successful. You will get more information per e-mail soon. For questions, please contact kitchenrun@iswi.org"
+msgstr ""
+
+#: inc/frontend/class-frontend.php:149
+#: inc/frontend/class-frontend.php:155
+#: inc/frontend/class-frontend.php:161
+msgid "The next Kitchen Run Event will be on the "
+msgstr ""
+
+#: inc/frontend/class-frontend.php:168
+msgid "There is no upcoming Kitchen Run Event. The last Event was on the "
+msgstr ""
+
+#: inc/frontend/class-frontend.php:174
+msgid "There is no upcoming Kitchen Run Event."
+msgstr ""
+
+#: inc/frontend/views/html-kitchenrun-signup.php:22
+msgid "Team Member 1"
+msgstr ""
+
+#: inc/frontend/views/html-kitchenrun-signup.php:25
+msgid "Team Member 2"
+msgstr ""
+
+#: inc/frontend/views/html-kitchenrun-signup.php:40
+msgid "Do you have any food preferences?"
+msgstr ""
+
+#: inc/frontend/views/html-kitchenrun-signup.php:45
+msgid "vegan"
+msgstr ""
+
+#: inc/frontend/views/html-kitchenrun-signup.php:48
+msgid "vegetarian"
+msgstr ""
+
+#: inc/frontend/views/html-kitchenrun-signup.php:51
+msgid "halal"
+msgstr ""
+
+#: inc/frontend/views/html-kitchenrun-signup.php:54
+msgid "kosher"
+msgstr ""
+
+#: inc/frontend/views/html-kitchenrun-signup.php:57
+msgid "I eat everything"
+msgstr ""
+
+#: inc/frontend/views/html-kitchenrun-signup.php:62
+msgid "Other special request for food, they will be sent to the cooking team"
+msgstr ""
+
+#: inc/frontend/views/html-kitchenrun-signup.php:65
+msgid "If it is not easy, give hints on how to find your place"
+msgstr ""
+
+#: inc/frontend/views/html-kitchenrun-signup.php:68
+msgid "We are able to cook the following courses"
+msgstr ""
+
+#: inc/frontend/views/html-kitchenrun-signup.php:83
+msgid "Comments for the organization (they will not be shared)"
+msgstr ""
+
+#: inc/frontend/views/html-kitchenrun-signup.php:88
+msgid "We would like to receive e-mails informing us about upcoming events"
+msgstr ""
+
+#: inc/frontend/views/html-kitchenrun-signup.php:94
+msgid "We would like to receive e-mails informing us about ISWI e.V. in general"
+msgstr ""
+
+#: inc/frontend/views/html-kitchenrun-signup.php:99
+msgid "We have read and understood the privacy agreement"
+msgstr ""
+
+#: inc/frontend/views/html-kitchenrun-signup.php:103
+msgid "Send"
+msgstr ""
+
+#: inc/libraries/class-wp-list-table.php:171
+msgid "List View"
+msgstr ""
+
+#: inc/libraries/class-wp-list-table.php:172
+msgid "Excerpt View"
+msgstr ""
+
+#: inc/libraries/class-wp-list-table.php:337
+msgid "No items found."
+msgstr ""
+
+#: inc/libraries/class-wp-list-table.php:466
+msgid "Select bulk action"
+msgstr ""
+
+#: inc/libraries/class-wp-list-table.php:468
+msgid "Bulk Actions"
+msgstr ""
+
+#: inc/libraries/class-wp-list-table.php:478
+msgid "Apply"
+msgstr ""
+
+#: inc/libraries/class-wp-list-table.php:530
+#: inc/libraries/class-wp-list-table.php:1381
+msgid "Show more details"
+msgstr ""
+
+#: inc/libraries/class-wp-list-table.php:598
+msgid "Filter by date"
+msgstr ""
+
+#: inc/libraries/class-wp-list-table.php:600
+msgid "All dates"
+msgstr ""
+
+#. translators: 1: Month name, 2: 4-digit year.
+#: inc/libraries/class-wp-list-table.php:615
+msgid "%1$s %2$d"
+msgstr ""
+
+#. translators: %s: Number of comments.
+#: inc/libraries/class-wp-list-table.php:671
+msgid "%s comment"
+msgid_plural "%s comments"
+msgstr[0] ""
+msgstr[1] ""
+
+#. translators: %s: Number of comments.
+#: inc/libraries/class-wp-list-table.php:677
+msgid "%s approved comment"
+msgid_plural "%s approved comments"
+msgstr[0] ""
+msgstr[1] ""
+
+#. translators: %s: Number of comments.
+#: inc/libraries/class-wp-list-table.php:683
+msgid "%s pending comment"
+msgid_plural "%s pending comments"
+msgstr[0] ""
+msgstr[1] ""
+
+#: inc/libraries/class-wp-list-table.php:691
+#: inc/libraries/class-wp-list-table.php:713
+#: inc/libraries/class-wp-list-table.php:736
+msgid "No comments"
+msgstr ""
+
+#: inc/libraries/class-wp-list-table.php:713
+msgid "No approved comments"
+msgstr ""
+
+#: inc/libraries/class-wp-list-table.php:736
+msgid "No pending comments"
+msgstr ""
+
+#. translators: %s: Number of items.
+#. translators: Number of items.
+#: inc/libraries/class-wp-list-table.php:814
+#: inc/libraries/class-wp-list-table.php:1406
+msgid "%s item"
+msgid_plural "%s items"
+msgstr[0] ""
+msgstr[1] ""
+
+#: inc/libraries/class-wp-list-table.php:856
+msgid "First page"
+msgstr ""
+
+#: inc/libraries/class-wp-list-table.php:867
+msgid "Previous page"
+msgstr ""
+
+#: inc/libraries/class-wp-list-table.php:874
+#: inc/libraries/class-wp-list-table.php:878
+msgid "Current Page"
+msgstr ""
+
+#. translators: 1: Current page, 2: Total pages.
+#: inc/libraries/class-wp-list-table.php:886
+msgctxt "paging"
+msgid "%1$s of %2$s"
+msgstr ""
+
+#: inc/libraries/class-wp-list-table.php:897
+msgid "Next page"
+msgstr ""
+
+#: inc/libraries/class-wp-list-table.php:908
+msgid "Last page"
+msgstr ""
+
+#: inc/libraries/class-wp-list-table.php:1130
+msgid "Select All"
+msgstr ""
