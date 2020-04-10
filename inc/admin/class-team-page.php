@@ -240,6 +240,7 @@ class Team_Page
      * @since 1.0.0
      */
     public function team_delete_page() {
+
         if ( // check wpnonce -> to verify the validity of the form
             ! isset( $_GET['_wpnonce'] )
             || ! wp_verify_nonce( $_GET['_wpnonce'], 'delete_team' )

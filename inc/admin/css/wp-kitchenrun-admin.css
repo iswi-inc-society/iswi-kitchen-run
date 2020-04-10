@@ -19,23 +19,24 @@ table.tl-pairs tr th {
     width: 10em;
     text-align: left;
 }
-table.tl-pairs tr div {
+table.tl-pairs tr div.pair-guest1-border{
+    border-bottom: 1px solid black;
+    border-top: 1px solid black;
+}
+
+table.tl-pairs tr div.pair-cell {
     padding: 1em;
+    border: 3px solid aqua;
     background-color: aqua;
 }
 
 table.tl-pairs tr div.pair-cook {
     padding: 1em;
     background-color: cornflowerblue;
+    border-color: cornflowerblue;
 }
 
-table.tl-pairs tr div.pair-guest1 {
-    border-bottom: 1px solid black;
-    border-top: 1px solid black;
-    cursor: pointer;
-}
-
-table.tl-pairs tr div.pair-guest2 {
+table.tl-pairs tr div.pair-guest {
     cursor: pointer;
 }
 

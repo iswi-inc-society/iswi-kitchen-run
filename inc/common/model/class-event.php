@@ -403,6 +403,14 @@ class Event
      */
     public function delete()
     {
+        // delete pairs of event
+        $pairs = Pair::findByEvent($this);
+        foreach ($pairs as $pair) $pair->delete();
+
+        // delete teams of event
+        $teams = Team::findByEvent($this);
+        foreach ($teams as $team) $team->delete();
+
         $db = new Database();
         $db->deleteRow(Database::DB_EVENT_NAME, $this->id);
     }

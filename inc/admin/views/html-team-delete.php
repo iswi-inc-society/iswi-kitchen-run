@@ -27,7 +27,9 @@ use League\Plates\Template\Template;
     <p><?php _e('You have specified this team for deletion: ', $plugin_text_domain); ?></p>
 
 
-
+    <?php if($team->getEvent()->getPaired()): ?>
+    <p style="color: darkred"><?= $this->e(__('Team can\'t be deleted because it is already paired. Unpair all Teams of the Event before deleting them.', $plugin_text_domain)) ?></p>
+    <?php else: ?>
     <form id="delete_team" name="delete_team" method="post">
         <?php wp_nonce_field( 'delete_team_confirmation', '_wpnonce_delete_team' ); ?>
 
@@ -40,4 +42,5 @@ use League\Plates\Template\Template;
 
         <p class="submit"><input type="submit" name="submit" id="submit" class="button button-primary" value="<?= $submit ?>"></p>
     </form>
+    <?php endif; ?>
 </div>
