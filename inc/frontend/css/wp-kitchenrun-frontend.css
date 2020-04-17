@@ -3,3 +3,91 @@
  *
  * The file is enqueued from inc/frontend/class-frontend.php.
  */
+
+form.kr_signup_form_edit span.kr_edit_label {
+    width: 100%;
+}
+
+form.kr_signup_form_edit span.kr_edit_input_text {
+    width: 100%;
+    height: 1em;
+    background-color: white;
+    border: 0.1rem solid #dcd7ca;
+    padding: 1.5rem 1.8rem;
+}
+
+p.kr-signup-info {
+    font-family: inherit;
+}
+
+form#kr_signup div.kr_form_text,
+form#kr_signup div.kr_form_checkboxes,
+form#kr_signup div.kr_form_textarea {
+    margin-bottom: 1em;
+}
+
+form#kr_signup div.kr_form_checkboxes span{
+    font-size: 18px;
+}
+
+form#kr_signup div.kr_form_check {
+    display: inline-flex;
+    align-items: center;
+}
+
+form#kr_signup div.kr_form_check input{
+    margin: unset;
+}
+
+form#kr_signup div.kr_form_check label{
+    margin: 0 1rem 0 0.3rem;
+}
+
+/* soon fancy form
+/*form#kr_signup div.field-inline-2{
+
+}
+
+form#kr_signup div.field-inline-2 > div.kr_form_text{
+
+}
+
+
+form#kr_signup div.kr_form_text {
+    height: 60px;
+    position: relative;
+    overflow: hidden;
+    margin-top: 1em;
+    margin-bottom: 1em;
+    clear: right;
+}
+
+form#kr_signup input.kr_input_text {
+    width: 100%;
+    height: 100%;
+    color: grey;
+    padding-top: 20px;
+    padding-bottom: 1rem;
+    padding-left: 0;
+    border: none;
+    outline: none;
+    background: none;
+}
+
+form#kr_signup label.kr_label_text {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    color: grey;
+    border-bottom: 1px solid grey;
+}
+
+form#kr_signup label.kr_label_text > span {
+    position: absolute;
+    top: 5px;
+    left: 0;
+    font-size: 12px;
+}

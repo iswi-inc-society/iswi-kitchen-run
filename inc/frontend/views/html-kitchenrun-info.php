@@ -1,4 +1,6 @@
 <?php
+
+use KitchenRun\Inc\Frontend\Signup;
 use League\Plates\Template\Template;
 
 /**
@@ -10,9 +12,15 @@ use League\Plates\Template\Template;
  *
  * @var     Template    $this       Template Object to render
  * @var     string      $message    Information about current Kitchen Run Event
+ * @var     boolean     $su         Is SignUp rendered?
+ * @var     Signup      $signup     Sign Up Object fro rendering.
  */
 ?>
 
-<p class="info">
+<p class="kr-signup-info">
     <?php echo $message ?>
 </p>
+
+<?php if ($su): ?>
+    <?php $signup->render(); ?>
+<?php endif; ?>

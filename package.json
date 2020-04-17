@@ -1,0 +1,23 @@
+{
+  "name": "iswi-kitchen-run",
+  "version": "1.0.0",
+  "private": true,
+  "description": "ISWI Kitchen Run Wordpress Plugin",
+  "author": "Niklas Loos",
+  "license": "GPL-2.0-or-later",
+  "keywords": [
+    "WordPress",
+    "kitchen-run",
+    "gutenberg"
+  ],
+  "devDependencies": {
+    "@wordpress/api-fetch": "^3.13.0",
+    "@wordpress/block-editor": "^3.8.0",
+    "@wordpress/blocks": "^6.13.0",
+    "@wordpress/components": "^9.3.0",
+    "@wordpress/i18n": "latest",
+    "@wordpress/scripts": "^7.2.0",
+    "lerna": "^3.20.2",
+    "react": "latest"
+  }
+}

@@ -1,0 +1,96 @@
+form#kr_signup_edit div.kr_form_text,
+form#kr_signup_edit div.kr_form_checkboxes,
+form#kr_signup_edit div.kr_form_textarea {
+    margin-bottom: 1em;
+}
+
+form#kr_signup_edit div.kr_form_text label,
+form#kr_signup_edit div.kr_form_textarea label,
+form#kr_signup_edit div.kr_form_check label,
+form#kr_signup_edit div.kr_form_radio label {
+    width: 100%;
+    font-size: 1rem;
+    font-weight: 400;
+}
+
+form#kr_signup_edit div.kr_form_text input {
+    width: 100%;
+    height: 1em;
+    background-color: white;
+    border: 0.1rem solid #dcd7ca;
+    border-radius: 0;
+    padding: 1.5rem 1.8rem;
+    margin-bottom: 0.5rem;
+}
+
+form#kr_signup_edit div.kr_form_checkboxes span{
+    font-size: 18px;
+    display: block;
+}
+
+form#kr_signup_edit div.kr_form_check,
+form#kr_signup_edit div.kr_form_radio {
+    display: inline-flex;
+    align-items: center;
+}
+
+form#kr_signup_edit div.kr_form_check input,
+form#kr_signup_edit div.kr_form_radio input {
+    margin: unset;
+}
+form#kr_signup_edit div.kr_form_check input {
+    background: #fff;
+    border-radius: 0;
+    border-style: solid;
+    border-width: 0.1rem;
+    border-color: #dcd7ca;
+    box-shadow: none;
+}
+
+form#kr_signup_edit div.kr_form_radio input {
+    border-color: #dcd7ca;
+}
+
+form#kr_signup_edit div.kr_form_check label,
+form#kr_signup_edit div.kr_form_radio label {
+    margin: 0 1rem 0 0.3rem;
+}
+
+form#kr_signup_edit div.kr_form_textarea textarea {
+    width: 100%;
+    height: 10em;
+}
+
+form#kr_signup_edit div.kr_form_submit input {
+    border: none;
+    border-radius: 0;
+    color: #fff;
+    cursor: pointer;
+    display: inline-block;
+    font-size: 1.1rem;
+    font-weight: 600;
+    letter-spacing: 0.0333em;
+    line-height: 1.25;
+    margin: 0;
+    opacity: 1;
+    padding: 0.8em 1.2em;
+    text-align: center;
+    text-decoration: none;
+    text-transform: uppercase;
+    transition: opacity 0.15s linear;
+    width: 100%;
+    background-color: #cd2653;
+}
+
+form#kr_signup_edit p.kr_preview {
+    text-transform: uppercase;
+    text-align: justify;
+    font-weight: 900;
+    color: darkred;
+    padding-left: 1em;
+    padding-right: 1em;
+    border-right: 5px solid darkred;
+    border-left: 5px solid darkred;
+}
+
+

@@ -122,7 +122,8 @@ class Frontend {
 
     /**
      * Renders the Frontend Page for the current Kitchen Run Event.
-     * Shortcode is used to add it to the frontend, see define_shortcodes() in the Init Class.
+     * @deprecated Shortcode is used to add it to the frontend, see define_shortcodes() in the Init Class.
+     * Use now the Gutenberg Block to add it to the frontend.
      *
      * The functions renders for each possible status of the event a message and when the sign up form is open it will render it to.
      *
@@ -176,19 +177,17 @@ class Frontend {
             $su = false;
         }
 
-        echo $this->templates->render('html-kitchenrun-info', [ // render views/html-kitchenrun-info.php
+        return $this->templates->render('html-kitchenrun-info', [ // render views/html-kitchenrun-info.php
                 'message'  =>   $message,
+                'su'       =>   $su,
+                'signup'   =>   $signup,
         ]);
-
-        if ($su) $signup->render(); // render sign up form
     }
 
-
     /**
-     * Test to try the Gutenberg Blocks, so that later the sign up form can be added to the fronted through gutenberg.
-     * Right Now the sign up form is created through a shortcode in define_shortcodes() in the Init Class.
+     * Registers Gutenberg Block to add signup page for current Kitchenrun Event to the frontend.
      *
-     * @TODO    Gutenberg block for sign up form
+     * @TODO    Approve Gutenberg Block
      */
     function gutenberg_kitchenrun_signup_register_block()
     {
@@ -197,15 +196,29 @@ class Frontend {
             return;
         }
 
+        // dependencies for the js block
+        $dep = array('wp-api-fetch', 'wp-block-editor', 'wp-blocks', 'wp-components', 'wp-data', 'wp-element', 'wp-i18n', 'wp-polyfill');
+
+        // register the script for the block
         wp_register_script(
             'gutenberg-kitchenrun-signup',
             plugins_url( 'js/gutenberg-kitchenrun-signup.js', __FILE__ ),
-            array( 'wp-blocks', 'wp-i18n', 'wp-element' ),
+            $dep,
             filemtime( plugin_dir_path( __FILE__ ) . 'js/gutenberg-kitchenrun-signup.js' )
         );
 
-        register_block_type( 'gutenberg-kitchenrun/kitchenrun-signup', array(
+        // stylesheet for block
+        wp_register_style('gutenberg-kitchenrun-signup',
+            plugins_url( 'css/wp-kitchenrun-editor.css', __FILE__ ),
+            array( 'wp-edit-blocks' ),
+            filemtime( plugin_dir_path( __FILE__ ) . 'css/wp-kitchenrun-editor.css' )
+        );
+
+        // register the block for editor
+        register_block_type( 'kitchenrun/signup', array(
+            'render_callback' => array($this, 'signup_page'), // rendering for frontend
             'editor_script' => 'gutenberg-kitchenrun-signup',
+            'editor_style'  => 'gutenberg-kitchenrun-signup',
         ) );
 
         if ( function_exists( 'wp_set_script_translations' ) ) {
@@ -214,7 +227,7 @@ class Frontend {
              * plugin_dir_path( MY_PLUGIN ) . 'languages' ) ). For details see
              * https://make.wordpress.org/core/2018/11/09/new-javascript-i18n-support-in-wordpress/
              */
-            wp_set_script_translations( 'gutenberg-kitchenrun-signup', 'gutenberg-kitchenrun' );
+            wp_set_script_translations( 'gutenberg-kitchenrun-signup', 'kitchen-run' );
         }
 
     }

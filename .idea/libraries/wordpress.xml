@@ -3,10 +3,12 @@
     <properties>
       <sourceFilesUrls>
         <item url="file://$PROJECT_DIR$/../../../wp-admin/js" />
+        <item url="file://$PROJECT_DIR$/../../../wp-includes/js" />
       </sourceFilesUrls>
     </properties>
     <CLASSES>
       <root url="file://$PROJECT_DIR$/../../../wp-admin/js" />
+      <root url="file://$PROJECT_DIR$/../../../wp-includes/js" />
     </CLASSES>
     <SOURCES />
   </library>

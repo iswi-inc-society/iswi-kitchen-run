@@ -3,6 +3,7 @@
 namespace KitchenRun\Inc\Core;
 use KitchenRun;
 use KitchenRun\Inc\Admin as Admin;
+use KitchenRun\Inc\Api\Rest_Events_Controller;
 use KitchenRun\Inc\Frontend as Frontend;
 
 /**
@@ -77,6 +78,8 @@ class Init {
 		$this->define_admin_hooks();
 		$this->define_public_hooks();
 		$this->define_shortcodes();
+
+
 	}
 
 	/**
@@ -91,6 +94,7 @@ class Init {
 	 */
 	private function load_dependencies() {
 		$this->loader = new Loader();
+
 
 	}
 
@@ -123,6 +127,9 @@ class Init {
 		$this->loader->add_action( 'admin_enqueue_scripts', $plugin_admin, 'enqueue_styles' );
 		$this->loader->add_action( 'admin_enqueue_scripts', $plugin_admin, 'enqueue_scripts' );
 		$this->loader->add_action('admin_menu', $plugin_admin, 'add_plugin_admin_menu');
+        $this->loader->add_action( 'rest_api_init',$this, 'prefix_register_event_rest_route');
+
+
 
 		/*
 		 * Additional Hooks go here
@@ -163,6 +170,9 @@ class Init {
     private function define_shortcodes() {
         $plugin_public = new Frontend\Frontend( $this->get_plugin_name(), $this->get_version(), $this->get_plugin_text_domain() );
 
+        /**
+         * @deprecated use gutenberg block
+         */
         add_shortcode( 'kitchenrun', array($plugin_public, 'signup_page') ); // shortcode for sign up form
     }
 
@@ -209,5 +219,13 @@ class Init {
 	public function get_plugin_text_domain() {
 		return $this->plugin_text_domain;
 	}
+
+    // Function to register our new routes from the controller.
+    public function prefix_register_event_rest_route() {
+        $controller = new Rest_Events_Controller();
+        $controller->register_routes();
+    }
+
+
 
 }
