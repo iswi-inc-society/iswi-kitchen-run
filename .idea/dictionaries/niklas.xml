@@ -16,6 +16,7 @@
       <w>shortcodes</w>
       <w>signup</w>
       <w>sitewide</w>
+      <w>smtp</w>
       <w>tablenav</w>
       <w>textdomain</w>
       <w>unpair</w>
@@ -27,6 +28,7 @@
       <w>wpdb</w>
       <w>wpinc</w>
       <w>wpnonce</w>
+      <w>wporg</w>
     </words>
   </dictionary>
 </component>

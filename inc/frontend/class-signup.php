@@ -191,6 +191,14 @@ class Signup
             'Bcc: niklas.loos@iswi.org',
         );
 
+        // Set Kitchen Run E-Mail Settings
+        $from_mail = get_option('kitchenrun_email');
+        $from_name = get_option('kitchenrun_email_name');
+        if (isset($from_mail) && isset($from_name))
+            $headers[] = 'From: '.$from_name.' <'.$from_mail.'>';
+        else if (isset($from_mail))
+            $headers[] = 'From: '.$from_mail;
+
         wp_mail($to, $subject, $message, $headers);
     }
 

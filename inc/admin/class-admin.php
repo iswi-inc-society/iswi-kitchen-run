@@ -119,6 +119,7 @@ class Admin {
         $event_page_page = new Event_Page($this->plugin_name, $this->version, $this->plugin_text_domain);
         $event_new = new Event_New($this->plugin_name, $this->version, $this->plugin_text_domain);
         $team_page_page = new Team_Page($this->plugin_name, $this->version, $this->plugin_text_domain);
+        $settings_page = new Settings_Page($this->plugin_name, $this->version, $this->plugin_text_domain);
 
         /**
          * Admin Menus
@@ -165,6 +166,16 @@ class Admin {
         );
 
 
+        add_submenu_page(
+            $this->plugin_name,
+            __( 'Settings', $this->plugin_text_domain ),
+            __( 'Settings', $this->plugin_text_domain ),
+            'manage_options',
+            $this->plugin_name.'_settings',
+            array($settings_page, 'init')
+        );
+
+
         /*
          * The $page_hook_suffix can be combined with the load-($page_hook) action hook
          * https://codex.wordpress.org/Plugin_API/Action_Reference/load-(page)
@@ -175,6 +186,58 @@ class Admin {
         add_action( 'load-'.$teams_page, array( $team_page_page, 'load_team_list_table_screen_options' ) );
 
     }
+
+    /**
+     * Callback for the settings sub-menu in define_admin_hooks() for class Init.
+     *
+     * @since    1.0.0
+     */
+    public function add_admin_settings() {
+
+        $settings_page = new Settings_Page($this->plugin_name, $this->version, $this->plugin_text_domain);
+
+        // register a new setting for "kitchenrun_settings" page
+        register_setting('kitchenrun', 'kitchenrun_email');
+        register_setting('kitchenrun', 'kitchenrun_email_name');
+
+        // register a new section in the "kitchenrun_settings" page
+        add_settings_section(
+            'kitchenrun_email_section',
+            __('E-Mail Settings', $this->plugin_text_domain),
+            null,
+            $this->plugin_name.'_settings'
+        );
+
+        // register fields for email section
+        // email field
+        add_settings_field(
+            'kitchenrun_field_email',
+            __('E-Mail', $this->plugin_text_domain),
+            array($settings_page, 'email_field_cb'),
+            $this->plugin_name.'_settings',
+            'kitchenrun_email_section',
+            [
+                'label_for' => 'kitchenrun_email',
+                'class' => 'kitchenrun_row',
+            ]
+        );
+
+        // email name field
+        add_settings_field(
+            'kitchenrun_field_email_name',
+            __('E-Mail Name', $this->plugin_text_domain),
+            array($settings_page, 'email_name_field_cb'),
+            $this->plugin_name.'_settings',
+            'kitchenrun_email_section',
+            [
+                'label_for' => 'kitchenrun_email_name',
+                'class' => 'kitchenrun_row',
+            ]
+        );
+    }
+
+
+
 
 
 
