@@ -428,15 +428,17 @@ class Team_Page
                 $team = new Team();
                 $team->setName('Dummy Team '.$i);
                 $team->setEvent($this->event);
+                $team->setHalal(0);
+                $team->setKosher(0);
+                $team->setVegetarian(0);
+                $team->setVegan(0);
                 $team->setAppetizer(1);
                 $team->setMainCourse(1);
                 $team->setDessert(1);
                 $team->save();
+                $teams[] = $team;
 
             }
-
-            /** @var Team[] $teams */
-            $teams = Team::findByEvent($this->event);
 
             // Randomize team order
             shuffle($teams);
@@ -459,131 +461,109 @@ class Team_Page
             usort($candidates, array($this, "cmp"));
 
             // Count possibilities
-            $n1 = $n2 = $n3 = 0;
+            $g1 = $g2 = $g3 = array();
             foreach($candidates as $candidate) {
                 switch($candidate['count']) {
                     case 1 :
-                        ++$n1;
+                        $g1[] = $candidate;
                         break;
                     case 2 :
-                        ++$n2;
+                        $g2[] = $candidate;
                         break;
                     case 3 :
-                        ++$n3;
+                        $g3[] = $candidate;
                         break;
                     default :
                         trigger_error('Possible count > 3', E_USER_ERROR);
                 }
             }
+    
 
+            /** @var int Number of Slots that are assigned for a course */
             $course1 = $course2 = $course3 = 0;
-            $output = $associated = array();
+            $output = array();
 
 
             // Add single choices
-            for ($i = 0; $i < $n1; ++$i) {
-                if ($candidates[$i]['course1']) {
-                    $output[$course1][0] = $candidates[$i]['team'];
-                    $associated[$i] = $candidates[$i];
-                    unset($candidates[$i]);
+            for ($i = 0; $i < count($g1); ++$i) {
+                if ($g1[$i]['course1']) {
+                    if ($course1 < $num_can / 3) { // course is full
+                        $g2[] = $g1[$i]; // add the candidate in the next round
+                        continue;
+                    }
+                    $output[0][$course1] = $g1[$i]['team'];
                     $course1++;
-                } elseif ($candidates[$i]['course2']) {
-                    $output[$course2][1] = $candidates[$i]['team'];
-                    $associated[$i] = $candidates[$i];
-                    unset($candidates[$i]);
+
+                } elseif ($g1[$i]['course2']) {
+                    if ($course2 < $num_can / 3) { // course is full
+                        $g2[] = $g1[$i];
+                        continue; 
+                    }
+                    $output[1][$course2] = $g1[$i]['team'];
                     $course2++;
-                } elseif ($candidates[$i]['course3']) {
-                    $output[$course3][2] = $candidates[$i]['team'];
-                    $associated[$i] = $candidates[$i];
-                    unset($candidates[$i]);
+                } elseif ($g1[$i]['course3']) {
+                    if ($course3 < $num_can / 3) { // course is full
+                        $g2[] = $g1[$i];
+                        continue;
+                    }
+                    $output[2][$course3] = $g1[$i]['team'];
                     $course3++;
                 }
             }
 
             // Set two choices
-            for (; $i < ($n1 + $n2); ++$i) {
-                if ($candidates[$i]['course1']) {
+            for ($i = 0; $i < count($g2); ++$i) {
+                if ($g2[$i]['course1']) {
                     if ($course1 < $num_can / 3) {
-                        $output[$course1][0] = $candidates[$i]['team'];
-                        $associated[$i] = $candidates[$i];
-                        unset($candidates[$i]);
+                        $output[0][$course1] = $g2[$i]['team'];
                         $course1++;
                         continue;
                     }
                 }
-                if ($candidates[$i]['course2']) {
+                if ($g2[$i]['course2']) {
                     if ($course2 < $num_can / 3) {
-                        $output[$course2][1] = $candidates[$i]['team'];
-                        $associated[$i] = $candidates[$i];
-                        unset($candidates[$i]);
+                        $output[1][$course2] = $g2[$i]['team'];
                         $course2++;
                         continue;
                     }
                 }
-                if ($candidates[$i]['course3']) {
+                if ($g2[$i]['course3']) {
                     if ($course3 < $num_can / 3) {
-                        $output[$course3][2] = $candidates[$i]['team'];
-                        $associated[$i] = $candidates[$i];
-                        unset($candidates[$i]);
+                        $output[2][$course3] = $g2[$i]['team'];
                         $course3++;
                         continue;
                     }
                 }
+
+                // when course is full
+                $g3[] = $g2[$i];
             }
 
             // Fill with three choices
-            for (; $i < count($candidates); ++$i) {
+            for ($i = 0; $i < count($g3); ++$i) {
                 if ($course1 < $num_can / 3) {
-                    $output[$course1][0] = $candidates[$i]['team'];
-                    $associated[$i] = $candidates[$i];
-                    unset($candidates[$i]);
+                    $output[0][$course1] = $g3[$i]['team'];
                     $course1++;
                     continue;
                 }
                 if ($course2 < $num_can / 3) {
-                    $output[$course2][1] = $candidates[$i]['team'];
-                    $associated[$i] = $candidates[$i];
-                    unset($candidates[$i]);
+                    $output[1][$course2] = $g3[$i]['team'];
+                    $associated[$i] = $g3[$i];
                     $course2++;
                     continue;
                 }
                 if ($course3 < $num_can / 3) {
-                    $output[$course3][2] = $candidates[$i]['team'];
-                    $associated[$i] = $candidates[$i];
-                    unset($candidates[$i]);
+                    $output[2][$course3] = $g3[$i]['team'];
+                    $associated[$i] = $g3[$i];
                     $course3++;
                     continue;
                 }
             }
 
-
-            // Fill up missing
-            foreach($candidates as $team) {
-                if ($course1 < $num_can / 3) {
-                    $output[$course1][0] = $team['team'];
-                    unset($candidates[$i]);
-                    $course1++;
-                    continue;
-                }
-                if ($course2 < $num_can / 3) {
-                    $output[$course2][1] = $team['team'];
-                    unset($candidates[$i]);
-                    $course2++;
-                    continue;
-                }
-                if ($course3 < $num_can / 3) {
-                    $output[$course3][2] = $team['team'];
-                    unset($candidates[$i]);
-                    $course3++;
-                    continue;
-                }
-            }
-            foreach($output as &$row) {
-                ksort($row);
-            }
             /** @var Pair[] $pairs */
             $pairs = array();
-            $t_out = $this->_transpose($output);
+
+            $t_out = $output;
 
 
             // Calculate team partners
@@ -672,7 +652,7 @@ class Team_Page
         if ($a_count == $b_count) {
             return 0;
         }
-        return ($a_count < $b_count) ? +1 : -1;
+        return ($a_count < $b_count) ? -1 : 1;
     }
 
     /**

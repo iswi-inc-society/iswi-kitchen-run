@@ -57,7 +57,7 @@ class Team
      * @access  private
      * @var     string  $member1
      */
-    private $member1;
+    private $member1 = "";
 
     /**
      * Name of the second participant in the team. Is optional for a team.
@@ -66,7 +66,7 @@ class Team
      * @access  private
      * @var     string  $member2
      */
-    private $member2;
+    private $member2 = "";
 
     /**
      * E-Mail of the Team. All Important Information are send to this mail.
@@ -75,7 +75,7 @@ class Team
      * @access  private
      * @var     string  $email
      */
-    private $email;
+    private $email = "";
 
     /**
      * Address where the team is cooking one of the courses.
@@ -84,7 +84,7 @@ class Team
      * @access  private
      * @var     string  $address
      */
-    private $address;
+    private $address = "";
 
     /**
      * City of the address. Normally Ilmenau.
@@ -93,7 +93,7 @@ class Team
      * @access  private
      * @var     string  $city
      */
-    private $city;
+    private $city = "";
 
     /**
      * Phone Number on which the team is always reachable. For really important and fast information.
@@ -102,7 +102,7 @@ class Team
      * @access  private
      * @var     string  $phone
      */
-    private $phone;
+    private $phone = "";
 
     /**
      * One of the Food Preferences of the Team.
@@ -164,7 +164,7 @@ class Team
      * @access  private
      * @var     string  $food_request
      */
-    private $food_request;
+    private $food_request = "";
 
     /**
      * General comment of the team on where to find their apartment or home.
@@ -174,7 +174,7 @@ class Team
      * @access  private
      * @var     string  $find_place
      */
-    private $find_place;
+    private $find_place = "";
 
     /**
      * General comment of the event or god and the world :D
@@ -183,7 +183,7 @@ class Team
      * @access  private
      * @var     string  $comments
      */
-    private $comments;
+    private $comments = "";
 
     /**
      * One of the Course Preferences of the Team.
