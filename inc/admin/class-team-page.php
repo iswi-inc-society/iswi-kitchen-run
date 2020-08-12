@@ -296,6 +296,7 @@ class Team_Page
                 'pairs'             => $pairs,
                 'plugin_text_domain'=> $this->plugin_text_domain,
                 'exchange'          => __('Exchange Pairs', $this->plugin_text_domain),
+                'smails'            => __('Send Informations', $this->plugin_text_domain),
             ]);
 
         }
@@ -635,6 +636,10 @@ class Team_Page
             $this->event->setPaired(0);
             $this->event->save();
         }
+    }
+
+    private function send_mails() {
+        
     }
 
     /**

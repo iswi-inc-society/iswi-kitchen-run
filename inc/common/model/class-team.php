@@ -794,7 +794,9 @@ class Team
             '%d',
         );
 
-        $db->saveRow(Database::DB_TEAM_NAME, $row, $format, $this->id);
+
+        // insert into db and save new id in id field
+        $this->id = $db->saveRow(Database::DB_TEAM_NAME, $row, $format, $this->id);
 
     }
 

@@ -125,6 +125,8 @@ class Database {
 
             $wpdb->replace($table_name, $row, $format);
 
+            return $id;
+
         } else {
             // save in database as new row
             $wpdb->insert(
@@ -132,6 +134,7 @@ class Database {
                 $row,
                 $format
             );
+            return $wpdb->insert_id;
         }
     }
 

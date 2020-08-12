@@ -17,6 +17,7 @@ use League\Plates\Template\Template;
  * @var       string    $title              Title of the Page
  * @var       string    $plugin_text_domain Language Domain
  * @var       string    $exchange           Translation of Exchange Pairs
+ * @var       string    $smails             Translation of Send Information
  */
 ?>
 <div class="wrap">
@@ -32,8 +33,17 @@ use League\Plates\Template\Template;
                 <?php wp_nonce_field( 'exg_pairs', '_wpnonce_exg_pairs' ); ?>
                 <?php submit_button( $this->e($exchange), 'submit', 'exg_pairs_action', false, array( 'disabled' => 'true' ) ); ?>
             </form>
+
+        </div>
+        <div class="alignleft actions">
+            <form id="send_pair_mails", method="post">
+                <?php wp_nonce_field('send_pair_mails', '_wpnonce_pair_mails'); ?>
+                <?php submit_button( $this->e($smails), 'submit', 'send_pair_mails_action', false); ?>
+            </form>
         </div>
     </div>
+
+
 
     <!-- Table -->
     <table class="tl-pairs fixed striped widefat">
