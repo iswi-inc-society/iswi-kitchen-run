@@ -199,6 +199,7 @@ class Signup
         else if (isset($from_mail))
             $headers[] = 'From: '.$from_mail;
 
+        /** @TODO: get mail running in docker */
         wp_mail($to, $subject, $message, $headers);
     }
 

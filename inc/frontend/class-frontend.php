@@ -135,7 +135,7 @@ class Frontend {
         $event = $signup->getEvent();
 
         if ($signup->isSuccessful()) { // successful sign up
-            $message = __('Your Sign Up was successful. You will get more information per e-mail soon. For questions, please contact kitchenrun@iswi.org',
+            $message = __('Your Sign Up was successful. You will get more information per e-mail soon. For questions, please contact'.get_option('kitchenrun_contact_email').'.',
                 $this->plugin_text_domain);
             $su = false;
         } else if (isset($event)) { // current event exists

@@ -124,6 +124,19 @@ class Settings_Page
         $this->text_field_cb($args['label_for'], $description);
     }
 
+
+    /**
+     * Callback function to render the contact email settings field. Called in Admin add_admin_settings().
+     *
+     * @since 1.0.0
+     * @param array $args Array of arguments defined during the register of the field
+     */
+    public function contact_email_field_cb ( $args ) {
+        $description = __('Sets the contact email that is shown in the frontend. Frontend user should be able to contact this mail in case they have questions or problems.', $this->plugin_text_domain);
+
+        $this->text_field_cb($args['label_for'], $description);
+    }
+
     /**
      * Render a text field for the settings menu.
      *

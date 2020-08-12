@@ -199,6 +199,7 @@ class Admin {
         // register a new setting for "kitchenrun_settings" page
         register_setting('kitchenrun', 'kitchenrun_email');
         register_setting('kitchenrun', 'kitchenrun_email_name');
+        register_setting('kitchenrun', 'kitchenrun_contact_email');
 
         // register a new section in the "kitchenrun_settings" page
         add_settings_section(
@@ -231,6 +232,19 @@ class Admin {
             'kitchenrun_email_section',
             [
                 'label_for' => 'kitchenrun_email_name',
+                'class' => 'kitchenrun_row',
+            ]
+        );
+
+        //contact email field
+        add_settings_field(
+            'kitchenrun_field_contact_email',
+            __('Contact E-Mail', $this->plugin_text_domain),
+            array($settings_page, 'contact_email_field_cb'),
+            $this->plugin_name.'_settings',
+            'kitchenrun_email_section',
+            [
+                'label_for' => 'kitchenrun_contact_email',
                 'class' => 'kitchenrun_row',
             ]
         );
