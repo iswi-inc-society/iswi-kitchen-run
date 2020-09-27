@@ -3,7 +3,6 @@
 namespace KitchenRun\Inc\Core;
 use KitchenRun;
 use KitchenRun\Inc\Admin as Admin;
-use KitchenRun\Inc\Api\Rest_Events_Controller;
 use KitchenRun\Inc\Frontend as Frontend;
 
 /**
@@ -128,8 +127,6 @@ class Init {
 		$this->loader->add_action( 'admin_enqueue_scripts', $plugin_admin, 'enqueue_scripts' );
 		$this->loader->add_action('admin_menu', $plugin_admin, 'add_plugin_admin_menu');
 		$this->loader->add_action('admin_init', $plugin_admin, 'add_admin_settings');
-        $this->loader->add_action( 'rest_api_init',$this, 'prefix_register_event_rest_route');
-
 
 
 		/*
@@ -220,12 +217,6 @@ class Init {
 	public function get_plugin_text_domain() {
 		return $this->plugin_text_domain;
 	}
-
-    // Function to register our new routes from the controller.
-    public function prefix_register_event_rest_route() {
-        $controller = new Rest_Events_Controller();
-        $controller->register_routes();
-    }
 
 
 

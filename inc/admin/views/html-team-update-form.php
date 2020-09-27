@@ -74,19 +74,19 @@ use League\Plates\Template\Template;
                     <tr class="form-field form-required">
                         <th scope="row"><label><?php _e('Food Preferences', $plugin_text_domain); ?></label></th>
                         <td><fieldset>
-                            <input value="vegan" type="radio" id="kr_signup_vegan" name="team_food_preference" <?php if ($team->getVegan()) echo 'checked'; ?> />
+                            <input type="checkbox" id="kr_signup_vegan" name="team_vegan" <?php if ($team->getVegan()) echo 'checked'; ?> />
                             <label for="kr_signup_vegan" style="display: inline"><?php _e('Vegan', $plugin_text_domain); ?></label>
 
-                            <input value="vegetarian" type="radio" id="kr_signup_vegetarian" name="team_food_preference" <?php if ($team->getVegetarian()) echo 'checked'; ?> />
+                            <input type="checkbox" id="kr_signup_vegetarian" name="team_vegetarian" <?php if ($team->getVegetarian()) echo 'checked'; ?> />
                             <label for="kr_signup_vegetarian" style="display: inline"><?php _e('Vegetarian', $plugin_text_domain); ?></label>
 
-                            <input value="halal" type="radio" id="kr_signup_halal" name="team_food_preference" <?php if ($team->getHalal()) echo 'checked'; ?> />
+                            <input type="checkbox" id="kr_signup_halal" name="team_halal" <?php if ($team->getHalal()) echo 'checked'; ?> />
                             <label for="kr_signup_halal" style="display: inline"><?php _e('Halal', $plugin_text_domain); ?></label>
 
-                            <input value="kosher" type="radio" id="kr_signup_kosher" name="team_food_preference" <?php if ($team->getKosher()) echo 'checked'; ?> />
+                            <input type="checkbox" id="kr_signup_kosher" name="team_kosher" <?php if ($team->getKosher()) echo 'checked'; ?> />
                             <label for="kr_signup_kosher" style="display: inline"><?php _e('Kosher', $plugin_text_domain); ?></label>
 
-                            <input value="everything" type="radio" id="kr_signup_everything" name="team_food_preference" <?php if (!$team->getKosher() && !$team->getHalal() && !$team->getVegetarian() && !$team->getVegan()) echo 'checked'; ?> />
+                            <input type="checkbox" id="kr_signup_everything" name="team_everything" <?php if (!$team->getKosher() && !$team->getHalal() && !$team->getVegetarian() && !$team->getVegan()) echo 'checked'; ?> />
                             <label for="kr_signup_everything" style="display: inline"><?php _e('Everything', $plugin_text_domain); ?></label>
                         </fieldset></td>
                     </tr>
@@ -128,6 +128,14 @@ use League\Plates\Template\Template;
                                     <?= $option ?>
                                 <?php endforeach; ?>
                             </select>
+                        </td>
+                    </tr>
+
+
+                    <tr class="form-field form-required">
+                        <th scope="row"><label for="kr_update_team_iswi"><?php _e('ISWI team', $plugin_text_domain); ?></label></th>
+                        <td>
+                                <input type="checkbox" id="kr_update_team_iswi" name="team_iswi" <?php if ($team->getISWI()) echo 'checked'; ?> />
                         </td>
                     </tr>
 

@@ -131,57 +131,7 @@ class Frontend {
      */
 	public function signup_page()
     {
-        $signup = new Signup($this->plugin_name, $this->version, $this->plugin_text_domain, true);
-        $event = $signup->getEvent();
 
-        if ($signup->isSuccessful()) { // successful sign up
-            $message = __('Your Sign Up was successful. You will get more information per e-mail soon. For questions, please contact'.get_option('kitchenrun_contact_email').'.',
-                $this->plugin_text_domain);
-            $su = false;
-        } else if (isset($event)) { // current event exists
-            $opening_date = $event->getOpeningDate();
-            $closing_date = $event->getClosingDate();
-            $event_date = $event->getEventDate();
-            $current_date = (new DateTime())->setTimestamp(time());
-
-            if ($current_date->getTimestamp() < $event_date->getTimestamp()) { // before event date
-                if ($opening_date->getTimestamp() < $current_date->getTimestamp()) { // after opening date
-                    if ($current_date->getTimestamp() < $closing_date->getTimestamp()) { // before closing date
-                        $message = __('The next Kitchen Run Event will be on the '.
-                            $event_date->format('d.m.Y').'. The Sign Up stays open until the '.
-                            $closing_date->format('d.m.Y').'.',
-                            $this->plugin_text_domain);
-                        $su = true;
-                    } else { // after closing date
-                        $message = __('The next Kitchen Run Event will be on the '.
-                            $event_date->format('d.m.Y').'. The Sign Up is closed but, if you have questions contact kitchenrun@iswi.org',
-                            $this->plugin_text_domain);
-                        $su = false;
-                    }
-                } else { // before opening date
-                    $message = __('The next Kitchen Run Event will be on the '.
-                        $event_date->format('d.m.Y').'. If you are interested, the sign up starts on the '.
-                        $opening_date->format('d.m.Y').'.',
-                        $this->plugin_text_domain);
-                    $su = false;
-                }
-            } else { // after event date
-                $message = __('There is no upcoming Kitchen Run Event. The last Event was on the '.
-                    $event_date->format('d.m.Y').'. If you are interested in another Event, contact kitchenrun@iswi.org',
-                    $this->plugin_text_domain);
-                $su = false;
-            }
-        } else { // no current event
-            $message = __('There is no upcoming Kitchen Run Event.',
-                $this->plugin_text_domain);
-            $su = false;
-        }
-
-        return $this->templates->render('html-kitchenrun-info', [ // render views/html-kitchenrun-info.php
-                'message'  =>   $message,
-                'su'       =>   $su,
-                'signup'   =>   $signup,
-        ]);
     }
 
     /**
@@ -214,9 +164,11 @@ class Frontend {
             filemtime( plugin_dir_path( __FILE__ ) . 'css/wp-kitchenrun-editor.css' )
         );
 
+        $signup = new Signup($this->plugin_name, $this->version, $this->plugin_text_domain, true);
+
         // register the block for editor
         register_block_type( 'kitchenrun/signup', array(
-            'render_callback' => array($this, 'signup_page'), // rendering for frontend
+            'render_callback' => array($signup, 'init'), // rendering for frontend
             'editor_script' => 'gutenberg-kitchenrun-signup',
             'editor_style'  => 'gutenberg-kitchenrun-signup',
         ) );

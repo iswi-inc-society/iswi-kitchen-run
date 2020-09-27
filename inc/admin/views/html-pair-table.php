@@ -36,10 +36,7 @@ use League\Plates\Template\Template;
 
         </div>
         <div class="alignleft actions">
-            <form id="send_pair_mails", method="post">
-                <?php wp_nonce_field('send_pair_mails', '_wpnonce_pair_mails'); ?>
-                <?php submit_button( $this->e($smails), 'submit', 'send_pair_mails_action', false); ?>
-            </form>
+            <a class="button submit" href="?page=<?php echo $_REQUEST['page'] ?>&action=info_mails"> <?php echo __('Send Information Mails', $plugin_text_domain); ?> </a>
         </div>
     </div>
 

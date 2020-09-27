@@ -130,8 +130,10 @@ class Event_New
 
                         //delete old current
                         $old_current = Event::findCurrent();
-                        $old_current->setCurrent(0);
-                        $old_current->save();
+                        if (isset($old_current)) {
+                            $old_current->setCurrent(0);
+                            $old_current->save();
+                        }
 
                     } else {
                         $event->setCurrent(0);

@@ -58,7 +58,7 @@ class Database {
         $prefix = $wpdb->prefix;
 
         // sql query find row with id
-        $sql = sprintf("SELECT * FROM %s.%s%s WHERE %s=%s;", $databaseName, $prefix, $table, $column, $value);
+        $sql = sprintf("SELECT * FROM %s.%s%s WHERE %s='%s';", $databaseName, $prefix, $table, $column, $value);
 
         if ($single) { return $wpdb->get_row($sql); } // query for a single row
         else { return $wpdb->get_results($sql); } // query for several rows
@@ -156,16 +156,19 @@ class Database {
             city tinytext NOT NULL,
             email tinytext NOT NULL,
             telephone tinytext NOT NULL,
-            vegan tinyint NOT NULL,
-            vegetarian tinyint NOT NULL,
-            halal tinyint NOT NULL,
-            kosher tinyint NOT NULL,
+            vegan tinyint(1) NOT NULL,
+            vegetarian tinyint(1) NOT NULL,
+            halal tinyint(1) NOT NULL,
+            kosher tinyint(1) NOT NULL,
             food_requests text NULL,
             find_place text NULL,
             comments text NULL,
-            appetizer tinyint NOT NULL,
-            main_course tinyint NOT NULL,
-            dessert tinyint NOT NULL,'
+            appetizer tinyint(1) NOT NULL,
+            main_course tinyint(1) NOT NULL,
+            dessert tinyint(1) NOT NULL,
+            valid tinyint(1) NOT NULL DEFAULT 0,
+            token varchar(255) DEFAULT NULL,
+            iswi tinyint(1) NOT NULL DEFAULT 0,'
         ;
 
         $this->db_install($sql, self::DB_TEAM_NAME); // table creation algorithm

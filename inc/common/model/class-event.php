@@ -336,7 +336,10 @@ class Event
 
         $result = $db->findBy(Database::DB_EVENT_NAME, 'current', 1, true);
 
-        $event = Event::resultToObject($result);
+        $event = NULL;
+        if (isset($result)) {
+            $event = Event::resultToObject($result);
+        }
 
         return $event;
     }
@@ -355,9 +358,11 @@ class Event
         $events = array();
 
         // create each event object
-        foreach ($results as $row) {
-            $events[] = Event::resultToObject($row);
-        }
+        if (isset($results)) {
+            foreach ($results as $row) {
+                $events[] = Event::resultToObject($row);
+            }
+        }   
 
         return $events;
     }

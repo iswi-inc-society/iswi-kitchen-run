@@ -101,6 +101,7 @@ class Team_List_Table extends WP_List_Table
             'team_email'        => __( 'E-Mail', $this->plugin_text_domain),
             'team_food_pref'    => __( 'Food Preferences', $this->plugin_text_domain),
             'team_course_pref'  => __( 'Course Preferences', $this->plugin_text_domain),
+            'team_valid'        => __( 'Valid', $this->plugin_text_domain),
         );
         return $table_columns;
     }
@@ -110,6 +111,7 @@ class Team_List_Table extends WP_List_Table
      * The items are saved in an array with the names of the columns that are written in get_columns(). Prior to rendering.
      *
      * @since 1.0.0
+     * @return bool
      */
     public function prepare_items()
     {
@@ -121,6 +123,10 @@ class Team_List_Table extends WP_List_Table
             $teams = Team::findByEvent(Event::findbyId($_GET['event']));
         } else { // standard event is the current event
             $teams = Team::findByEvent(Event::findCurrent());
+        }
+
+        if (!isset($teams)) {
+            return false;
         }
 
         $table_data = array();
@@ -136,16 +142,20 @@ class Team_List_Table extends WP_List_Table
             // food preferences with icons
             $food_pref = '';
             if ($team->getVegan()) $food_pref .= '<img src="' . $image_dir . 'leaf.png' . '" alt="' . 'vegan' . '" />';
-            else if ($team->getVegetarian()) $food_pref .= '<img src="' . $image_dir . 'milk.png' . '" alt="' . 'vegetarian' . '" />';
-            else if ($team->getKosher()) $food_pref .= '<img src="' . $image_dir . 'kosher.png' . '" alt="' . 'kosher' . '" />';
-            else if ($team->getHalal()) $food_pref .= '<img src="' . $image_dir . 'halal.png' . '" alt="' . 'halal' . '" />';
-            else $food_pref .= '<img src="' . $image_dir . 'beef.png' . '" alt="' . 'all' . '" />';
+            if ($team->getVegetarian()) $food_pref .= '<img src="' . $image_dir . 'milk.png' . '" alt="' . 'vegetarian' . '" />';
+            if ($team->getKosher()) $food_pref .= '<img src="' . $image_dir . 'kosher.png' . '" alt="' . 'kosher' . '" />';
+            if ($team->getHalal()) $food_pref .= '<img src="' . $image_dir . 'halal.png' . '" alt="' . 'halal' . '" />';
+            if ($food_pref == '') $food_pref .= '<img src="' . $image_dir . 'beef.png' . '" alt="' . 'all' . '" />';
 
             // course preference with icons
             $course_pref = '';
             if ($team->getAppetizer()) $course_pref .= '<img src="' . $image_dir . 'soup.png' . '" alt="' . 'appetizer' . '" />';
             if ($team->getMainCourse()) $course_pref .= '<img src="' . $image_dir . 'food-tray.png' . '" alt="' . 'main course' . '" />';
             if ($team->getDessert()) $course_pref .= '<img src="' . $image_dir . 'ice-creams.png' . '" alt="' . 'dessert' . '" />';
+
+            $valid = '';
+            if ($team->getValid()) $valid .= '<img src="' . $image_dir . 'checked.png' . '" alt="' . 'valid' . '"/>';
+            else $valid .= '<img src="' . $image_dir . 'cancel.png' . '" alt="' . 'not valid' . '"/>';
 
             // array with data for the table rows
             $table_data[] = array(
@@ -159,10 +169,13 @@ class Team_List_Table extends WP_List_Table
                 'team_email'    => $team->getEmail(),
                 'team_food_pref'=> $food_pref,
                 'team_course_pref' => $course_pref,
+                'team_valid'    => $valid
             );
         }
 
         $this->items = $table_data; // save in items -> rows
+
+        return true;
     }
 
     /**
@@ -210,6 +223,7 @@ class Team_List_Table extends WP_List_Table
             case 'team_email':
             case 'team_food_pref':
             case 'team_course_pref':
+            case 'team_valid':
             default:
                 return $item[$column_name];
         }
@@ -272,12 +286,15 @@ class Team_List_Table extends WP_List_Table
                 if ($this->event->getPaired()) { // unpair button
                     ?>
                     <a class="button submit" href="?page=<?php echo $_REQUEST['page'] ?>&action=unpair"> <?php echo __('Unpair Teams', $this->plugin_text_domain); ?> </a>
+
                     <?php
                 } else { // pair button
                     ?>
                     <a class="button submit" href="?page=<?php echo $_REQUEST['page'] ?>&action=pair"> <?php echo __('Pair Teams', $this->plugin_text_domain); ?> </a>
+
                     <?php
                 }
+
 
             }
 

@@ -115,6 +115,8 @@ class Team_Page
                 $this->pair_teams();
             } else if ($_GET['action'] == 'unpair') { // unpair created pairs
                 $this->team_unpair_page();
+            } else if ($_GET['action'] == 'info_mails') {
+            	$this->information_mails();
             }
         } else if (isset($_POST['exg_pairs_submit'])) { // manually edit the created pairs
             $this->exg_pairs();
@@ -154,14 +156,18 @@ class Team_Page
      */
     public function team_list_table_page(){
         // query, filter, and sort the data
-        $this->team_table->prepare_items();
+        $bool = $this->team_table->prepare_items();
 
-        // Render a template
-        echo $this->templates->render('html-team-list', [ // renders views/html-team-list.php
-            'title' => __('Kitchen Run Teams', $this->plugin_text_domain),
-            'table' => $this->team_table,
-            'new'   => __('Add New', $this->plugin_text_domain),
-        ]);
+        if ($bool) {
+            // Render a template
+            echo $this->templates->render('html-team-list', [ // renders views/html-team-list.php
+                'title' => __('Kitchen Run Teams', $this->plugin_text_domain),
+                'table' => $this->team_table,
+                'new'   => __('Add New', $this->plugin_text_domain),
+            ]);
+        } else {
+            echo __('No Events yet registered!', $this->plugin_text_domain);
+        }
     }
 
     /**
@@ -194,10 +200,10 @@ class Team_Page
                 $team->setCity($_POST['team_city']);
                 $team->setPhone($_POST['team_phone']);
                 $team->setEmail($_POST['team_email']);
-                $team->setVegan(($_POST['team_food_preference'] == 'vegan') ? 1 : 0); // vegan checked?
-                $team->setVegetarian(($_POST['team_food_preference'] == 'vegetarian') ? 1 : 0); // vegetarian checked?
-                $team->setHalal(($_POST['team_food_preference'] == 'halal') ? 1 : 0); // halal checked?
-                $team->setKosher(($_POST['team_food_preference'] == 'kosher') ? 1 : 0); // kosher checked?
+                $team->setVegan(isset($_POST['team_vegan']) ? 1 : 0); // vegan checked?
+                $team->setVegetarian(isset($_POST['team_vegetarian']) ? 1 : 0); // vegetarian checked?
+                $team->setHalal(isset($_POST['team_halal']) ? 1 : 0); // halal checked?
+                $team->setKosher(isset($_POST['team_kosher']) ? 1 : 0); // kosher checked?
                 $team->setFoodRequest($_POST['team_food_request']);
                 $team->setFindPlace($_POST['team_find_place']);
                 $team->setAppetizer(isset($_POST['team_appetizer']) ? 1 : 0);
@@ -288,7 +294,7 @@ class Team_Page
      */
     public function team_pairs_page()
     {
-        if ($this->event->getPaired()) { // only shown when teams of the event are paired
+        if (isset($this->event) && $this->event instanceof Event && $this->event->getPaired()) { // only shown when teams of the event are paired
             $pairs = Pair::findByEvent($this->event); // needed in view
 
             echo $this->templates->render('html-pair-table', [ // render views/html-pair-table.php
@@ -415,10 +421,10 @@ class Team_Page
     public function pair_teams() {
 
         /** @var Team[] $teams */
-        $teams = Team::findByEvent($this->event);
+        $teams = Team::findByEventAndValid($this->event);
 
         if (count($teams) < 7) {
-            echo 'You need more than 7 teams to start the pair process';
+            echo 'You need more than 7 teams to start the pair process. You only have '. count($teams).' valid Teams!';
 
         } else {
             // How many dummy teams will be used
@@ -436,6 +442,9 @@ class Team_Page
                 $team->setAppetizer(1);
                 $team->setMainCourse(1);
                 $team->setDessert(1);
+                $team->setValid(true);
+                $team->setISWI(true);
+                $team->setToken(bin2hex(random_bytes(50)));
                 $team->save();
                 $teams[] = $team;
 
@@ -638,8 +647,115 @@ class Team_Page
         }
     }
 
-    private function send_mails() {
-        
+	/**
+	 * Send the information mails
+	 */
+    private function information_mails() {
+
+	    // wp_nonce check
+	    if(isset($_GET['send_pair_mails_action'])) {
+		    if ( // check wpnonce -> to verify the validity of the form
+			    ! isset( $_GET['_wpnonce_pair_mails'] )
+			    || ! wp_verify_nonce( $_GET['_wpnonce_pair_mails'], 'send_pair_mails' )
+		    ) {
+
+			    print 'Sorry, your nonce did not verify.';
+			    exit;
+		    }
+	    }
+
+    	$error_msg = array();
+	    $msg = array();
+    	$errors = 0;
+
+    	$course_length = 3600;
+    	$course_pause = 1800;
+    	$timestamp = $this->event->getEventDate()->getTimestamp();
+
+	    $teams = Team::findByEventAndValid($this->event);
+
+	    // collect mails, but check for errors before sending all!
+	    $teams_mail = array();
+	    $i = 0;
+
+	    if (!$this->event->getPaired()) { // check paired status
+	    	$errors++;
+		    $error_msg[] = 'Teams must be paired before sending them information mails!';
+	    } else {
+
+		    foreach ( $teams as $team ) {
+			    $pairs = Pair::findByEventAndTeam( $this->event, $team );
+
+			    //course 1
+			    $pair1  = $pairs[0];
+			    $bcook1 = $pair1->getCook()->getId() == $team->getId();
+
+			    //course 2
+			    $pair2  = $pairs[1];
+			    $bcook2 = $pair2->getCook()->getId() == $team->getId();
+
+			    //course 3
+			    $pair3  = $pairs[2];
+			    $bcook3 = $pair3->getCook()->getId() == $team->getId();
+
+			    // generate mail messages
+			    $teams_mail[ $i ]['message'] = $this->templates->render( 'mail/html-pair-information-mail', [
+				    'pair1'  => $pair1,
+				    'bcook1' => $bcook1,
+				    'pair2'  => $pair2,
+				    'bcook2' => $bcook2,
+				    'pair3'  => $pair3,
+				    'bcook3' => $bcook3,
+				    'team'   => $team,
+				    'date'   => $this->event->getEventDate()->format( 'd.m.Y' ),
+				    'stime1' => date( 'h:i', $timestamp ),
+				    'etime1' => date( 'h:i', $timestamp + $course_length ),
+				    'stime2' => date( 'h:i', $timestamp + $course_length + $course_pause ),
+				    'etime2' => date( 'h:i', $timestamp + 2 * $course_length + $course_length ),
+				    'stime3' => date( 'n:i', $timestamp + 2 * $course_length + 2 * $course_pause ),
+				    'etime3' => date( 'h:i', $timestamp + 3 * $course_length + 2 * $course_pause ),
+			    ] );
+
+			    $teams_mail[ $i ]['team']    = $team;
+			    $teams_mail[ $i ++ ]['mail'] = $team->getEmail();
+
+			    if ( $bcook1 + $bcook2 + $bcook3 != 1 ) {
+				    ++ $errors; // check that team only cooks one time!
+				    $error_msg[] = 'Too many cooking course for Team ' . $team->getId();
+			    }
+		    }
+	    }
+
+    	if ($errors == 0) { // only send mails when everything went fine
+    		$i = 0;
+
+		    $subject = __('Kitchen Run Course Informations ', $this->plugin_text_domain);
+
+		    $headers = array(
+			    'Content-Type: text/html',
+		    );
+
+		    // Set Kitchen Run E-Mail Settings
+		    $from_mail = get_option('kitchenrun_email');
+		    $from_name = get_option('kitchenrun_email_name');
+		    if (isset($from_mail) && isset($from_name))
+			    $headers[] = 'From: '.$from_name.' <'.$from_mail.'>';
+		    else if (isset($from_mail))
+			    $headers[] = 'From: '.$from_mail;
+
+    		foreach ($teams_mail as $mail) {
+
+			    $msg[$i]['succ'] = wp_mail($mail['mail'], $subject, $mail['message'], $headers);
+			    $msg[$i]['mail'] = $mail['mail'];
+		    }
+
+	    }
+
+    	echo $this->templates->render('html-team-info-mails', [
+			'errors'    => $errors,
+		    'error_msg' => $error_msg,
+		    'messages'  => $msg,
+	    ]);
     }
 
     /**

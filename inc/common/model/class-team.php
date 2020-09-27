@@ -221,6 +221,33 @@ class Team
      */
     private $dessert;
 
+    /**
+     * E-Mail validation flag
+     * 
+     * @since   1.0.0
+     * @access  private
+     * @var     int $valid
+     */
+    private $valid;
+
+    /**
+     * token used for e-mail validation
+     * 
+     * @since   1.0.0
+     * @access  private
+     * @var     string $valid
+     */
+    private $token;
+
+    /**
+     * ISWI/Dummy Team flag
+     * 
+     * @since   1.0.0
+     * @access  private
+     * @var     int $valid
+     */
+    private $iswi;
+
 
     /**
      * Get Team ID.
@@ -682,6 +709,68 @@ class Team
     }
 
     /**
+     * Get valid flag.
+     *
+     * @since   1.0.0
+     * @return   int
+     */
+    public function getValid()
+    {
+        return $this->valid;
+    }
+
+    /**
+     * Set valid flag.
+     *
+     * @since   1.0.0
+     * @param   int $valid
+     */
+    public function setValid($valid) {
+        $this->valid = $valid;
+    }
+
+    /**
+     * Get token for email validation
+     *
+     * @since   1.0.0
+     * @return   string
+     */
+    public function getToken() {
+        return $this->token;
+    }
+
+    /**
+     * set token for email validation
+     *
+     * @since   1.0.0
+     * @param   int $token
+     */
+    public function setToken($token) {
+        $this->token = $token;
+    }
+
+    /**
+     * Get ISWI flag.
+     *
+     * @since   1.0.0
+     * @return   int
+     */
+    public function getISWI()
+    {
+        return $this->iswi;
+    }
+
+    /**
+     * Set ISWI flag.
+     *
+     * @since   1.0.0
+     * @param   int $iswi
+     */
+    public function setISWI($iswi) {
+        $this->iswi = $iswi;
+    }
+
+    /**
      * Find a Team in the Database through the id.
      *
      * @since   1.0.0
@@ -698,6 +787,24 @@ class Team
         return $team;
     }
 
+
+    /**
+     * Find a Team in the Database by token.
+     *
+     * @since   1.0.0
+     * @param   string  $token  Team Token
+     * @return  Team    $team   Team Object
+     */
+    static function findByToken($token) {
+        $db = new Database();
+
+        $result = $db->findBy(Database::DB_TEAM_NAME, 'token', $token, true);
+
+        $team = Team::resultToObject($result);
+
+        return $team;
+    }
+
     /**
      * Find a list of Teams in the Database through the event, where they participate.
      *
@@ -706,7 +813,12 @@ class Team
      * @return  Team[]  $teams  Array of Team Objects
      */
     static function findByEvent($event) {
-        $event_id = $event->getId();
+
+        if (isset($event)) {
+            $event_id = $event->getId();
+        } else {
+            return NULL;
+        }
 
         $db = new Database();
 
@@ -714,12 +826,74 @@ class Team
 
         $teams = array();
 
-        foreach ($results as $result) {
-            $teams[] = Team::resultToObject($result);
+        if (isset($results)) {
+            foreach ($results as $result) {
+                $teams[] = Team::resultToObject($result);
+            }
         }
 
         return $teams;
     }
+
+	/**
+	 * Find a list of Teams in the Database through the event, where they participate.
+	 *
+	 * @since   1.0.0
+	 * @param   Event   $event  Event Object
+	 * @return  Team[]  $teams  Array of Team Objects
+	 */
+	static function findByEventAndValid($event) {
+
+		if (isset($event)) {
+			$event_id = $event->getId();
+		} else {
+			return NULL;
+		}
+
+		$db = new Database();
+
+		$results = $db->findBy(Database::DB_TEAM_NAME, 'event', $event_id, false);
+
+		$teams = array();
+
+		if (isset($results)) {
+			foreach ($results as $result) {
+				if ($result->valid) {
+					$teams[] = Team::resultToObject( $result );
+				}
+			}
+		}
+
+		return $teams;
+	}
+
+    static function findByMailAndEvent($mail, $event) {
+
+        if (isset($event)) {
+            $event_id = $event->getId();
+        } else {
+            return NULL;
+        }
+
+        $db = new Database();
+
+        $results = $db->findBy(Database::DB_TEAM_NAME, 'event', $event_id, false);
+
+        $teams = array();
+
+        if (isset($results)) {
+            foreach ($results as $result) {
+                /** @var Team */
+                $team = Team::resultToObject($result);
+
+                if ($mail == $team->getEmail()) return $team;
+            }
+        }
+
+        return NULL;
+    }
+
+
 
     /**
      * Find all teams in database and save them in a list.
@@ -770,6 +944,9 @@ class Team
             'dessert' => $this->getDessert(),
             'comments' => $this->getComments(),
             'event' => $this->event,
+            'valid' => $this->getValid(),
+            'token' => $this->getToken(),
+            'iswi'  => $this->getISWI(),
         );
 
         // Format of each column (%s = String, %d = Number)
@@ -788,6 +965,9 @@ class Team
             '%s',
             '%s',
             '%d',
+            '%d',
+            '%d',
+            '%s',
             '%d',
             '%d',
             '%s',
@@ -842,6 +1022,9 @@ class Team
         $team->setDessert($row->dessert);
         $team->setComments($row->comments);
         $team->event = $row->event;
+        $team->setValid($row->valid);
+        $team->setToken($row->token);
+        $team->setISWI($row->token);
 
         return $team;
     }

@@ -253,6 +253,34 @@ class Pair
 
     }
 
+	/**
+	 * Find a list of Pairs in the Database through the event, where they take place.
+	 *
+	 * @since   1.0.0
+	 * @param   Event   $event  Event Object
+	 * @param   int     $course Course Number (1,2,3)
+	 * @param   Team    $team   Team to search for in course
+	 * @return  Pair[]  $pairs  Array of Pair Objects
+	 */
+	public static function findByEventAndTeam(Event $event, Team $team) {
+
+		$event_id = $event->getId();
+
+		$db = new Database();
+
+		$results = $db->findBy(Database::DB_PAIR_NAME, 'event', $event_id, false);
+
+		$pairs = array();
+
+		foreach ($results as $result) {
+			if ($result->cook == $team->getId() || $result->guest1 == $team->getId() || $result->guest2 == $team->getId())
+				$pairs[$result->course] = Pair::resultToObject($result);
+		}
+
+		return $pairs;
+
+	}
+
     /**
      * Saves object in database table
      *

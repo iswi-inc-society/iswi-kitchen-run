@@ -17,7 +17,7 @@ use League\Plates\Template\Template;
 
 <form id="kr_signup" action="<?php echo $_SERVER['REQUEST_URI'] ?>" method="post">
 
-    <?php $this->insert('form/html-kitchenrun-input-text', ['label' => __('Team Name', $plugin_text_domain), 'name'  => 'kr_team_name',]); ?>
+    <?php $this->insert('form/html-kitchenrun-input-text', ['label' => __('Team Name', $plugin_text_domain), 'name'  => 'kr_team_name']); ?>
 
     <?php $this->insert('form/html-kitchenrun-input-text', ['label' => __('Team Member 1', $plugin_text_domain), 'name'  => 'kr_team_member_1',]); ?>
 
@@ -36,27 +36,27 @@ use League\Plates\Template\Template;
         <span><?= $this->e(__('Do you have any food preferences?', $plugin_text_domain)) ?></span> <br>
 
         <div class="kr_form_check">
-            <input type="radio" id="kr_signup_vegan" name="team_food_preference" />
+            <input type="checkbox" id="kr_signup_vegan" name="kr_team_vegan" />
             <label for="kr_signup_vegan" style="display: inline"><?= $this->e(__('vegan', $plugin_text_domain)) ?></label>
         </div>
 
         <div class="kr_form_check">
-            <input type="radio" id="kr_signup_vegetarian" name="team_food_preference" />
+            <input type="checkbox" id="kr_signup_vegetarian" name="kr_team_vegetarian" />
             <label for="kr_signup_vegetarian" style="display: inline"><?= $this->e(__('vegetarian', $plugin_text_domain)) ?></label>
         </div>
 
         <div class="kr_form_check">
-            <input type="radio" id="kr_signup_halal" name="team_food_preference" />
+            <input type="checkbox" id="kr_signup_halal" name="kr_team_halal" />
             <label for="kr_signup_halal" style="display: inline"><?= $this->e(__('halal', $plugin_text_domain)) ?></label>
         </div>
 
         <div class="kr_form_check">
-            <input type="radio" id="kr_signup_kosher" name="team_food_preference" />
+            <input type="checkbox" id="kr_signup_kosher" name="kr_team_kosher" />
             <label for="kr_signup_kosher" style="display: inline"><?= $this->e(__('kosher', $plugin_text_domain)) ?></label>
         </div>
 
         <div class="kr_form_check">
-            <input type="radio" id="kr_signup_everything" name="team_food_preference" />
+            <input type="checkbox" id="kr_signup_everything" name="kr_team_everything" />
             <label for="kr_signup_everything" style="display: inline"><?= $this->e(__('I eat everything', $plugin_text_domain)) ?></label>
         </div>
     </div>
@@ -73,6 +73,7 @@ use League\Plates\Template\Template;
 
     <div class="kr_form_checkboxes">
         <span><?= $this->e(__('We are able to cook the following courses', $plugin_text_domain)) ?>:</span> <br>
+        <span class="kr_info">These are just preferences, our algorithm could also choose a different course for you if too less people have chosen it.</span><br>
 
         <div class="kr_form_check">
             <input type="checkbox" id="kr_signup_appetizer" name="kr_team_appetizer" checked />

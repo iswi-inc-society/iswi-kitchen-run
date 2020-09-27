@@ -15,7 +15,6 @@ use League\Plates\Template\Template;
  * @var     Team_List_Table     $table    Link to the new Event Form
  * @var     string              $new     Add New text translation
  */
-
 ?>
 
 <!-- This file should primarily consist of HTML with a little bit of PHP. -->
