@@ -10,6 +10,9 @@
     "kitchen-run",
     "gutenberg"
   ],
+  "dependencies": {
+    "jquery-validation": "latest"
+  },
   "devDependencies": {
     "@wordpress/api-fetch": "^3.13.0",
     "@wordpress/block-editor": "^3.8.0",

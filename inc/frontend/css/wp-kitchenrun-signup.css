@@ -1,0 +1,329 @@
+/**
+ * CSS styling for the Kitchen Run signup formular and the extras
+ */
+
+
+/** General Elements **/
+.kr_container {
+    width: 40em;
+}
+
+.kr_container > h2 {
+    text-align: center;
+}
+
+
+
+/** Progressbar **/
+.kr_progressbar {
+    counter-reset: step;
+    padding: 0;
+    width: 100%;
+    margin: 0;
+}
+
+.kr_progressbar li {
+    list-style-type: none;
+    float: left;
+    width: 16.66%;
+    position: relative;
+    text-align: center;
+    margin: 0;
+}
+
+.kr_progressbar li:after {
+    content: counter(step);
+    counter-increment: step;
+    width: 30px;
+    height: 30px;
+    line-height: 30px;
+    border: 2px solid #999;
+    border-radius: 50%;
+    display: block;
+    text-align: center;
+    margin: 5px auto 0 auto;
+    background-color: white;
+    box-sizing: content-box;
+}
+
+.kr_progressbar li:before {
+    content: '';
+    width: 100%;
+    height: 2px;
+    background-color: #999;
+    position: absolute;
+    bottom: 15px;
+    left: -50%;
+    z-index: -1;
+}
+
+.kr_progressbar li:first-child:before {
+    content: none;
+}
+
+.kr_progressbar li.kr_active {
+    color: #32bea6ff;
+}
+
+.kr_progressbar li.kr_active:after {
+    border-color: #32bea6ff;
+    background-color: #32bea6ff;
+    color: white;
+}
+
+.kr_progressbar li.kr_active + li:before {
+    background-color: #32bea6ff;
+}
+
+
+/** General Form **/
+.kr_signup {
+    padding: 5em 0;
+    margin: auto;
+    max-width: 35em;
+    width: 100%;
+}
+
+.kr_signup label.error {
+    color: red;
+    font-size: 0.7em;
+}
+
+
+/** Fieldsets (Steps) **/
+.kr_tab {
+    border: none;
+    display: none;
+}
+
+.kr_tab:first-child {
+    display: block;
+}
+
+.kr_tab input[type="button"] {
+    width: 45%;
+    padding: 10px 5px;
+    margin: 5px 5px;
+    border: 0;
+    border-bottom: 1px solid #999;
+    outline: none;
+    background-color: #32bea6ff;
+    color: white;
+    cursor: pointer;
+    text-decoration: none;
+}
+
+.kr_tab input[type="submit"] {
+    width: 45%;
+    padding: 10px 5px;
+    margin: 5px 5px;
+    border: 0;
+    border-bottom: 1px solid #999;
+    outline: none;
+    background-color: #d77f7f;
+    color: white;
+    cursor: pointer;
+    text-decoration: none;
+}
+
+.kr_btn_next {
+    float: right;
+}
+
+
+
+/** Text Input Fields **/
+.kr_txtb {
+    width: 100%;
+    position: relative;
+    margin-bottom: 2em;
+    margin-top: 2em;
+}
+
+.kr_txtb input {
+    width: 100%;
+    padding: 2px 0 2px 5px;
+    box-sizing: border-box;
+    box-shadow: none;
+    display: inline-block;
+    margin: 0;
+    border: 0;
+    border-bottom: 2px solid #999;
+    outline: none;
+    background: transparent;
+    height: 2em;
+    font-size: 1em;
+}
+
+.kr_txtb input.error {
+    border-bottom: 2px solid red;
+}
+
+.kr_txtb textarea {
+    width: 100%;
+    height: 4em;
+    padding: 2px 0 2px 5px;
+    margin: 0;
+    border: 0;
+    border-bottom: 2px solid #999;
+    outline: none;
+    box-sizing: border-box;
+    background: transparent;
+}
+
+.kr_txtb label.error {
+    position: absolute;
+    left: 5px;
+}
+
+.focus + span::before, .focus + label + span::before {
+    top: -5px !important;
+    font-size: 0.7em !important;
+}
+
+.focus + span::after, .focus + label + span::after {
+    width: 100% !important;
+}
+
+
+.kr_txtb span::before {
+    content: attr(data-placeholder);
+    position: absolute;
+    top: 50%;
+    left: 5px;
+    color: grey;
+    transform: translateY(-50%);
+    z-index: -1;
+    transition: .5s;
+}
+
+.kr_txtb span::after {
+    content: '';
+    width: 0%;
+    position: absolute;
+    height: 2px;
+    background-color: #32bea6ff;
+    bottom: 0;
+    left: 0;
+    transition: .5s;
+}
+
+.kr_txtb input.error + label + span::after {
+    background-color: red;
+}
+
+.kr_txtb > textarea + span::before {
+    top: 23px;
+}
+
+
+
+
+
+/** Selection Boxes **/
+.kr_chbox {
+    margin: 1em 0;
+    position: relative;
+}
+
+.kr_chbox input[type="checkbox"] {
+    display: none;
+}
+
+.kr_chbox label {
+    border: 2px solid #999;
+    border-radius: 4px;
+    color: black;
+    font-size: 1em;
+    display: block !important;
+    width: 100%;
+    padding: 0.8em 1em 0.8em 4em;
+    margin: 0 !important;
+    box-sizing: border-box;
+    cursor: pointer;
+    position: relative;
+}
+
+.kr_chbox label::before {
+    content: "";
+    background: url("../../../assets/images/check.svg");
+    background-position: center ;
+    background-size: contain;
+    width: 1.6em;
+    height: 1.6em;
+    position: absolute;
+    left: 1.2em;
+    top: 0.7em;
+
+    transform: scale(0) rotateZ(180deg);
+    transition: all 0.4s cubic-bezier(0.54, 0.01, 0, 1.49);
+}
+
+.kr_chbox > input[type="checkbox"]:checked + label {
+    border: 2px solid #32bea6ff;
+}
+
+.kr_chbox > input[type="checkbox"]:checked + label::before {
+    transform: scale(1) rotate(0deg);
+}
+
+
+
+
+/** Normal Checkboxes **/
+.kr_check {
+    margin: 1em 0;
+}
+
+.kr_check input[type="checkbox"] {
+    display: none;
+}
+
+.kr_check label.kr_label {
+    display: block;
+    width: 100%;
+    padding: 0.9em 1em 0.9em 2.5em;
+    box-sizing: border-box;
+    cursor: pointer;
+    position: relative;
+}
+
+.kr_check label.kr_label::before {
+    content: "";
+    background: url("../../../assets/images/check.svg");
+    background-position: center ;
+    background-size: contain;
+    width: 1.4em;
+    height: 1.4em;
+    position: absolute;
+    left: 0.5em;
+    top: 0.9em;
+
+    transform: scale(0) rotateZ(180deg);
+    transition: all 0.4s cubic-bezier(0.54, 0.01, 0, 1.49);
+}
+
+.kr_check > input[type="checkbox"]:checked + label::before {
+    transform: scale(1) rotate(0deg);
+}
+
+.kr_check label.kr_label::after {
+    content: "";
+    width: 1.4em;
+    height: 1.4em;
+    border: 2px solid #32bea6ff;
+    border-radius: 50%;
+    position: absolute;
+    left: 0.5em;
+    top: 0.9em;
+}
+
+
+/** Description of Steps **/
+.kr_step_description {
+    font-size: 0.8em;
+}
+
+.kr_step_subtitle {
+    margin-top: 0 !important;
+}

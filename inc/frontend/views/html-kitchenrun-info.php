@@ -12,8 +12,9 @@ use League\Plates\Template\Template;
  *
  * @var     Template    $this       Template Object to render
  * @var     string      $message    Information about current Kitchen Run Event
- * @var     array(string) $errors   All error messages?
+ * @var     array       $errors     All error messages?
  * @var     Signup      $signup     Sign Up Object fro rendering.
+ * @var     string      $state      State of EVENT or SIGNUP
  */
 ?>
 

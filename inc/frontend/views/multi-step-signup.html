@@ -1,0 +1,588 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+    <meta charset="utf-8">
+    <title>Multi Step Form</title>
+
+    <style type="text/css">
+
+        body{
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: "Droid Sans", "Open Sans", "Arial";
+        }
+
+        .container {
+            width: 40em;
+        }
+
+        .container > h2 {
+            text-align: center;
+        }
+
+        .kr_progressbar {
+            counter-reset: step;
+            padding: 0;
+        }
+
+        .kr_progressbar li {
+            list-style-type: none;
+            float: left;
+            width: 16.66%;
+            position: relative;
+            text-align: center;
+        }
+
+        .kr_progressbar li:after {
+            content: counter(step);
+            counter-increment: step;
+            width: 30px;
+            height: 30px;
+            line-height: 30px;
+            border: 2px solid #ddd;
+            border-radius: 50%;
+            display: block;
+            text-align: center;
+            margin: 5px auto 0 auto;
+            background-color: white;
+        }
+
+        .kr_progressbar li:before {
+            content: '';
+            width: 100%;
+            height: 2px;
+            background-color: #ddd;
+            position: absolute;
+            bottom: 15px;
+            left: -50%;
+            z-index: -1;
+        }
+
+        .kr_progressbar li:first-child:before {
+            content: none;
+        }
+
+        .kr_progressbar li.kr_active {
+            color: #32bea6ff;
+        }
+
+        .kr_progressbar li.kr_active:after {
+            border-color: #32bea6ff;
+            background-color: #32bea6ff;
+            color: white;
+        }
+
+        .kr_progressbar li.kr_active + li:before {
+            background-color: #32bea6ff;
+        }
+
+
+
+        .kr_signup {
+            padding: 5em 0;
+            margin: auto;
+            width: 35em;
+        }
+
+        .kr_signup label.error {
+            color: #999;
+            font-size: 0.7em;
+        }
+
+
+
+        .kr_tab {
+            border: none;
+            display: none;
+        }
+
+        .kr_tab:first-child {
+            display: block;
+        }
+
+        .kr_tab input[type="button"] {
+            width: 45%;
+            padding: 10px 5px;
+            margin: 5px 5px;
+            border: 0;
+            border-bottom: 1px solid #999;
+            outline: none;
+            background-color: #32bea6ff;
+            color: white;
+            cursor: pointer;
+        }
+
+        .kr_tab input[type="submit"] {
+            width: 45%;
+            padding: 10px 5px;
+            margin: 5px 5px;
+            border: 0;
+            border-bottom: 1px solid #999;
+            outline: none;
+            background-color: #d77f7f;
+            color: white;
+            cursor: pointer;
+        }
+
+        .kr_btn_next {
+            float: right;
+        }
+
+
+
+
+        .kr_txtb {
+            width: 100%;
+            position: relative;
+            margin-bottom: 2em;
+            margin-top: 2em;
+        }
+
+        .kr_txtb input {
+            width: 100%;
+            padding: 2px 0 2px 5px;
+            box-sizing: border-box;
+            margin: 5px 0;
+            border: 0;
+            border-bottom: 1px solid #999;
+            outline: none;
+            background: transparent;
+            height: 30px;
+            font-size: 1em;
+        }
+
+        .kr_txtb input.error {
+            border-bottom: 1px solid red;
+        }
+
+        .kr_txtb textarea {
+            width: 100%;
+            height: 60px;
+            padding: 2px 0 2px 5px;
+            margin: 5px 0;
+            border: 0;
+            border-bottom: 1px solid #999;
+            outline: none;
+            box-sizing: border-box;
+            background: transparent;
+        }
+
+        .kr_txtb label.error {
+            position: absolute;
+            bottom: -15px;
+            left: 5px;
+        }
+
+        .focus + span::before, .focus + label + span::before {
+            top: -5px !important;
+            font-size: 0.8em !important;
+        }
+
+        .focus + span::after, .focus + label + span::after {
+            width: 100% !important;
+        }
+
+
+        .kr_txtb span::before {
+            content: attr(data-placeholder);
+            position: absolute;
+            top: 50%;
+            left: 5px;
+            color: grey;
+            transform: translateY(-50%);
+            z-index: -1;
+            transition: .5s;
+        }
+
+        .kr_txtb span::after {
+            content: '';
+            width: 0%;
+            position: absolute;
+            height: 2px;
+            background-color: #32bea6ff;
+            bottom: 4px;
+            left: 0;
+            transition: .5s;
+        }
+
+        .kr_txtb > textarea + span::before {
+            top: 23px;
+        }
+
+
+
+
+
+
+        .kr_chbox {
+            margin: 1em 0;
+            position: relative;
+        }
+
+        .kr_chbox input[type="checkbox"] {
+            display: none;
+        }
+
+        .kr_chbox label {
+            border: 2px solid #999;
+            border-radius: 4px;
+            color: black;
+            font-size: 1.2em;
+            display: block;
+            width: 100%;
+            padding: 0.9em 1em 0.9em 4em;
+            box-sizing: border-box;
+            cursor: pointer;
+            position: relative;
+        }
+
+        .kr_chbox label::before {
+            content: "";
+            background: url("check.svg");
+            background-position: center ;
+            background-size: contain;
+            width: 32px;
+            height: 32px;
+            position: absolute;
+            left: 20px;
+            top: 12px;
+
+            transform: scale(0) rotateZ(180deg);
+            transition: all 0.4s cubic-bezier(0.54, 0.01, 0, 1.49);
+        }
+
+        .kr_chbox > input[type="checkbox"]:checked + label {
+            border: 2px solid #32bea6ff;
+        }
+
+        .kr_chbox > input[type="checkbox"]:checked + label::before {
+            transform: scale(1) rotate(0deg);
+        }
+
+
+
+
+
+
+
+        .kr_check {
+            margin: 1em 0;
+        }
+
+        .kr_check input[type="checkbox"] {
+            display: none;
+        }
+
+        .kr_check label.kr_label {
+            display: block;
+            width: 100%;
+            padding: 0.9em 1em 0.9em 2.5em;
+            box-sizing: border-box;
+            cursor: pointer;
+            position: relative;
+        }
+
+        .kr_check label.kr_label::before {
+            content: "";
+            background: url("check.svg");
+            background-position: center ;
+            background-size: contain;
+            width: 24px;
+            height: 24px;
+            position: absolute;
+            left: 7px;
+            top: 10px;
+
+            transform: scale(0) rotateZ(180deg);
+            transition: all 0.4s cubic-bezier(0.54, 0.01, 0, 1.49);
+        }
+
+        .kr_check > input[type="checkbox"]:checked + label::before {
+            transform: scale(1) rotate(0deg);
+        }
+
+        .kr_check label.kr_label::after {
+            content: "";
+            width: 20px;
+            height: 20px;
+            border: 2px solid #32bea6ff;
+            border-radius: 50%;
+            position: absolute;
+            left: 7px;
+            top: 10px;
+        }
+
+
+
+        .kr_step_description {
+            font-size: 0.7em;
+        }
+
+    </style>
+
+    <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.2/jquery.validate.min.js"></script>
+
+</head>
+<body>
+<div class="container">
+
+    <h2>Kitchen Run Signup</h2>
+
+    <ul class="kr_progressbar">
+        <li>Team</li>
+        <li>Contact</li>
+        <li>Address</li>
+        <li>Food</li>
+        <li>Courses</li>
+        <li>Submit</li>
+    </ul>
+
+    <form id="kr_signup" class="kr_signup">
+
+        <fieldset id="kr_tab_1" class="kr_tab">
+            <h3 class="kr_step_subtitle">Team Information</h3>
+            <p class="kr_step_description">Please choose a Team Name and tell us your names. One team member is at least required.</p>
+
+            <div class="kr_txtb">
+                <input type="text" id="kr_team_name" name="team_name" required>
+                <span data-placeholder="Team Name"></span>
+            </div>
+
+            <div class="kr_txtb">
+                <input type="text" name="team_member_1" required>
+                <span data-placeholder="Team Member 1"></span>
+            </div>
+
+            <div class="kr_txtb">
+                <input type="text" name="team_member_2">
+                <span data-placeholder="Team Member 2"></span>
+            </div>
+
+            <input type="button" name="kr_next" class="kr_btn_next" value="Next" />
+
+        </fieldset>
+
+        <fieldset id="kr_tab_2" class="kr_tab">
+            <h3 class="kr_step_subtitle">Contact Information</h3>
+            <p class="kr_step_description">The E-Mail Address is needed to send your team the informations for the evening. At the end of the sign up you need to confirm your E-Mail Address.</p>
+
+            <div class="kr_txtb">
+                <input type="email" name="team_email" required>
+                <span data-placeholder="E-Mail"></span>
+            </div>
+
+            <div class="kr_txtb">
+                <input type="tel" required>
+                <span data-placeholder="Phone Number"></span>
+            </div>
+
+            <input type="button" name="kr_prev" class="kr_btn_prev" value="Previous" />
+
+            <input type="button" name="kr_next" class="kr_btn_next" value="Next" />
+
+        </fieldset>
+
+
+        <fieldset id="kr_tab_3" class="kr_tab">
+            <h3 class="kr_step_subtitle">Address Information</h3>
+            <p class="kr_step_description">Your address is needed so that your guests can find you. The description is only needed when your home is not so easy to find.</p>
+
+            <div class="kr_txtb">
+                <input type="text" name="team_address" required>
+                <span data-placeholder="Address"></span>
+            </div>
+
+            <div class="kr_txtb">
+                <input type="text" name="team_city" required>
+                <span data-placeholder="City"></span>
+            </div>
+
+            <div class="kr_txtb">
+                <textarea name="team_find_place"></textarea>
+                <span data-placeholder="Description to find my place (if it is difficult to find)"></span>
+            </div>
+
+
+            <input type="button" name="kr_prev" class="kr_btn_prev" value="Previous" />
+
+            <input type="button" name="kr_next" class="kr_btn_next" value="Next" />
+
+        </fieldset>
+
+        <fieldset id="kr_tab_4" class="kr_tab">
+            <h3 class="kr_step_subtitle">Food Preferences</h3>
+            <p class="kr_step_description">Please tell us your food preferences, multiple selections are possible. Please use the text field, if you have allergies or something else. The informations will be sent to the cooking team.</p>
+
+            <!-- just needed for verification -->
+            <input type="hidden" name="food_pref" id="kr_food_pref">
+
+            <div class="kr_chbox">
+                <input type="checkbox" name="team_vegan" id="kr_vegan" class="kr_food">
+                <label for="kr_vegan">Vegan</label>
+            </div>
+
+            <div class="kr_chbox">
+                <input type="checkbox" name="team_vegetarian" id="kr_veggie" class="kr_food">
+                <label for="kr_veggie">Vegetarian</label>
+            </div>
+
+            <div class="kr_chbox">
+                <input type="checkbox" name="team_halal" id="kr_halal" class="kr_food">
+                <label for="kr_halal">Halal</label>
+            </div>
+
+            <div class="kr_chbox">
+                <input type="checkbox" name="team_kosher" id="kr_kosher" class="kr_food">
+                <label for="kr_kosher">Kosher</label>
+            </div>
+
+            <div class="kr_chbox">
+                <input type="checkbox" name="team_everything" id="kr_all" class="kr_food">
+                <label for="kr_all">I eat everything!</label>
+            </div>
+
+            <div class="kr_txtb">
+                <textarea class="team_food_request"></textarea>
+                <span data-placeholder="Allergies, Food Requests, ..."></span>
+            </div>
+
+            <input type="button" name="kr_prev" class="kr_btn_prev" value="Previous" />
+
+            <input type="button" name="kr_next" class="kr_btn_next" value="Next" />
+
+        </fieldset>
+
+
+        <fieldset id="kr_tab_5" class="kr_tab">
+            <h3 class="kr_step_subtitle">Course Preferences</h3>
+            <p class="kr_step_description">Please use this selection carefully. It is only preference!</p>
+
+            <!-- just needed for verification -->
+            <input type="hidden" name="course_pref" id="kr_course_pref">
+
+            <div class="kr_chbox">
+                <input type="checkbox" name="team_appetizer" id="kr_appetizer" class="kr_course" checked>
+                <label for="kr_appetizer">Appetizer</label>
+            </div>
+
+            <div class="kr_chbox">
+                <input type="checkbox" name="team_main_course" id="kr_main_course" class="kr_course" checked>
+                <label for="kr_main_course">Main Course</label>
+            </div>
+
+            <div class="kr_chbox">
+                <input type="checkbox" name="team_dessert" id="kr_dessert" class="kr_course" checked>
+                <label for="kr_dessert">Dessert</label>
+            </div>
+
+            <input type="button" name="kr_prev" class="kr_btn_prev" value="Previous" />
+
+            <input type="button" name="kr_next" class="kr_btn_next" value="Next" />
+
+        </fieldset>
+
+        <fieldset id="kr_tab_6" class="kr_tab">
+            <h3 class="kr_step_subtitle">Submit</h3>
+            <p class="kr_step_description">It is time to submit your kitchen run registration. You will get an verification E-Mail after that!</p>
+
+            <!-- Fancy Checkboxes -->
+            <div class="kr_check">
+                <input type="checkbox" name="team_privacy_aggreement" id="kr_privacy_aggreement" required>
+                <label for="kr_privacy_aggreement" class="kr_label">We have read and understood the privacy agreement!</label>
+            </div>
+
+            <input type="button" name="kr_prev" class="kr_btn_prev" value="Previous" />
+
+            <input type="submit" name="kr_submit" class="kr_btn_submit" value="Submit" />
+
+        </fieldset>
+
+    </form>
+
+</div>
+
+<script type="text/javascript">
+    $(document).ready(function(){
+        var current = 1,current_step,next_step,steps,current_progress;
+        steps = $("fieldset.kr_tab").length;
+        current_progress = $(".kr_progressbar li:first-child");
+
+
+        // Check at the beginning if some fields already have content
+        $('.kr_txtb input, textarea').each(function (){
+            if ($(this).val() != '') $(this).addClass("focus");
+        });
+
+        $(".kr_btn_next").click(function(){
+            var form = $('#kr_signup');
+            form.validate({
+                ignore: ':hidden:not("#kr_food_pref"):not("#kr_course_pref"):not("#kr_privacy_aggreement")', // ignore all hidden fields except these three
+                rules: {
+                    food_pref: {
+                        required: function () {
+                            var boxes = $('.kr_chbox .kr_food');
+                            if ($('#kr_tab_4').is(":visible") && boxes.filter(':checked').length == 0) return true;
+                            else false;
+                        }
+                    },
+                    course_pref: {
+                        required: function () {
+                            var boxes = $('.kr_chbox .kr_course');
+                            if ($('#kr_tab_5').is(":visible") && boxes.filter(':checked').length == 0) return true;
+                            else false;
+                        }
+                    },
+                    team_privacy_aggreement: {
+                        required: function (){
+                            if ($('#kr_tab_6').is(":visible")) return true;
+                            else false;
+                        },
+                    }
+                },
+                messages: {
+                    food_pref: "Please select at least one preference of food!",
+                    course_pref: "Please select at least one course preference!",
+                },
+                errorPlacement: function(error, element) {
+                    if(element.attr("type") == "checkbox" && element.parent().hasClass("kr_check")) error.insertAfter(element.next());
+                    else error.insertAfter(element);
+                }
+            });
+
+            if (form.valid() === true) {
+                current_step = $(this).parent();
+                next_step = $(this).parent().next();
+                next_step.show();
+                current_step.hide();
+
+                current_progress.addClass("kr_active");
+                current_progress = current_progress.next();
+            }
+        });
+
+        $(".kr_btn_prev").click(function(){
+            current_step = $(this).parent();
+            next_step = $(this).parent().prev();
+            next_step.show();
+            current_step.hide();
+
+            current_progress = current_progress.prev();
+        });
+
+        $('.kr_txtb input, textarea').on("focus", function (){
+            $(this).addClass("focus");
+        });
+
+        $(".kr_txtb input, textarea").on("blur",function(){
+            if($(this).val() == "")
+                $(this).removeClass("focus");
+        });
+    });
+
+
+</script>
+
+</body>
+</html>

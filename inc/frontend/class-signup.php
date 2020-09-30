@@ -415,7 +415,7 @@ class Signup
     public function render()
     {
 
-        echo $this->templates->render('html-kitchenrun-signup', [ // render views/html-kitchenrun-signup.php
+        echo $this->templates->render('html-kitchenrun-signup-multiform', [ // render views/html-kitchenrun-signup.php
             'plugin_text_domain'    => $this->plugin_text_domain,
         ]);
     }
