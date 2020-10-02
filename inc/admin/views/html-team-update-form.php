@@ -23,6 +23,9 @@ use League\Plates\Template\Template;
 <!-- This file should primarily consist of HTML with a little bit of PHP. -->
 
 <div class="wrap">
+
+	<?php $this->insert('html-notices') ?>
+
     <h2><?php _e($title, $plugin_text_domain); ?></h2>
 
     <div id="wp-form-kr-update-team">

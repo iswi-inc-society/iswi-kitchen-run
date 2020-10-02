@@ -166,8 +166,7 @@ class Event_Page
                 || !wp_verify_nonce($_POST['_wpnonce_update_event'], 'update_event')
             ) {
 
-                print 'Sorry, your nonce did not verify.';
-                exit;
+	            Admin_Notice::create('error', __('The WPnonce didn\'t verify please try again!', $this->plugin_text_domain));
 
             } else { // wpnonce successfully checked
 
@@ -190,7 +189,7 @@ class Event_Page
                     $closing_date = new DateTime($closing_date);
                     $event_date = new DateTime($event_date);
                 } catch (Exception $e) {
-                    echo 'Datetime has false Format';
+	                Admin_Notice::create('error', __('Datetime has false Format', $this->plugin_text_domain));
                 }
 
                 // is opening date before closing date?
@@ -219,7 +218,9 @@ class Event_Page
 
                     $event->save();
 
+	                Admin_Notice::create('success', sprintf(esc_html__( 'Successfully updated the Event %s', $this->plugin_text_domain ), $event->getName()));
                     echo $this->templates->render('html-event-referer'); // render views/html-event-referer.php
+	                die();
 
                 }
             }
@@ -251,8 +252,8 @@ class Event_Page
             || ! wp_verify_nonce( $_GET['_wpnonce'], 'delete_event' )
         ) {
 
-            print 'Sorry, your nonce did not verify.';
-            exit;
+	        Admin_Notice::create('error', __('The WPnonce didn\'t verify please try again!', $this->plugin_text_domain));
+	        echo $this->templates->render('html-event-referer'); // render views/html-event-referer.php
 
         } else {
 
@@ -262,12 +263,14 @@ class Event_Page
                     || ! wp_verify_nonce( $_POST['_wpnonce_delete_event'], 'delete_event_confirmation' )
                 ) {
 
-                    print 'Sorry, your nonce did not verify.';
-                    exit;
+	                Admin_Notice::create('error', __('The WPnonce didn\'t verify please try again!', $this->plugin_text_domain));
+	                echo $this->templates->render('html-event-referer'); // render views/html-event-referer.php
 
                 } else { // delete event after validation
                     $event = Event::findbyId($_POST['event']);
                     $event->delete();
+
+	                Admin_Notice::create('success', sprintf(esc_html__( 'Successfully deleted the Event %s', $this->plugin_text_domain ), $event->getName()));
 
                     echo $this->templates->render('html-event-referer'); // render views/html-event-referer.php
                 }

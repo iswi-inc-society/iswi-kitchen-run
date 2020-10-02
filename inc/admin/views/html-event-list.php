@@ -17,12 +17,14 @@ use League\Plates\Template\Template;
  * @var     string     $new     Add New text translation
  * @var     string     $table   Table in generated HTML; Not escaped.
  */
-
 ?>
 
 <!-- This file should primarily consist of HTML with a little bit of PHP. -->
 
 <div class="wrap">
+
+	<?php $this->insert('html-notices') ?>
+
     <h1 class="wp-heading-inline"> <?php echo $this->e($title) ?> </h1>
     <a class="page-title-action" href="<?php echo $this->e($link)?>"><?php echo $this->e($new) ?></a>
     <div id="kr-list-table-events">

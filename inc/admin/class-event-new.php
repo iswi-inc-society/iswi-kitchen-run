@@ -55,15 +55,6 @@ class Event_New
      */
     private $templates;
 
-    /**
-     * Array of Messages that are created during the process.
-     *
-     * @since   1.0.0
-     * @access  private
-     * @var     string[]    $messages
-     */
-    private $messages = array();
-
 
     /**
      * Initialize the class and set its properties.
@@ -98,8 +89,7 @@ class Event_New
                 || ! wp_verify_nonce( $_POST['_wpnonce_add_event'], 'add_event' )
             ) {
 
-                print 'Sorry, your nonce did not verify.';
-                exit;
+	            Admin_Notice::create('error', __('The WPnonce didn\'t verify please try again!', $this->plugin_text_domain));
 
             } else { // wpnonce successfully checked -> validated
 
@@ -113,7 +103,7 @@ class Event_New
                     $closing_date = new DateTime($closing_date);
                     $event_date = new DateTime($event_date);
                 } catch (Exception $e) {
-                    echo 'Datetime has false Format';
+                    Admin_Notice::create('error', __('Datetime has false Format', $this->plugin_text_domain));
                 }
 
                 // is opening date before closing date?
@@ -147,10 +137,13 @@ class Event_New
 
                     $event->save();
 
+					Admin_Notice::create('success', sprintf(esc_html__( 'Successfully created the Event %s', $this->plugin_text_domain ), $event->getName()));
+
                     echo $this->templates->render('html-event-referer'); // js referer
+	                die(); // so it doesn't automatically load the notices
 
                 } else { // opening date after closing date
-                    $this->messages[] =  __( 'Please enter an Opening Date that takes place before the Closing Date. The Event Date has to take place after the Closing Date!', $this->plugin_text_domain );
+	                Admin_Notice::create('error',  __( 'Please enter an Opening Date that takes place before the Closing Date. The Event Date has to take place after the Closing Date!', $this->plugin_text_domain ));
                 }
             }
         }
@@ -162,7 +155,6 @@ class Event_New
 
         echo $this->templates->render('html-new-event-form', [ // render views/html-new-event-form.php
             'title'         => __('New Kitchen Run Events', $this->plugin_text_domain),
-            'messages'      => $this->messages,
             'wp_nonce'      => $wp_nonce,
             'event_name'    => __('Event Name', $this->plugin_text_domain),
             'opening_date'  => __('Opening Date', $this->plugin_text_domain),

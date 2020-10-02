@@ -26,11 +26,10 @@ use League\Plates\Template\Template;
 <!-- This file should primarily consist of HTML with a little bit of PHP. -->
 
 <div class="wrap">
-    <h2><?= $this->e($title) ?></h2>
 
-    <?php foreach ($messages as $message): ?>
-        <p><?= $this->e($message); ?></p>
-    <?php endforeach; ?>
+	<?php $this->insert('html-notices') ?>
+
+    <h2><?= $this->e($title) ?></h2>
 
     <div id="nds-wp-form-kr-new-event">
         <div id="nds-form-body">

@@ -20,6 +20,9 @@ use League\Plates\Template\Template;
 <!-- This file should primarily consist of HTML with a little bit of PHP. -->
 
 <div class="wrap">
+
+	<?php $this->insert('html-notices') ?>
+
     <h1 class="wp-heading-inline"><?= $title ?></h1>
     <a class="page-title-action" href="<?= $table->get_new_team_link() ?>"><?= $this->e($new) ?></a>
 

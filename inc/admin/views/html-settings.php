@@ -19,6 +19,9 @@ use League\Plates\Template\Template;
 
 
 <div class="wrap">
+
+	<?php $this->insert('html-notices') ?>
+
     <h1><?= $this->e( $title ); ?></h1>
     <!--suppress HtmlUnknownTarget -->
     <form action="options.php" method="post">

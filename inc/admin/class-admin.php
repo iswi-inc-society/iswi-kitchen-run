@@ -250,6 +250,16 @@ class Admin {
         );
     }
 
+	function kr_start_session() {
+		if(!session_id()) {
+			session_start();
+		}
+	}
+
+	function kr_stop_session() {
+		session_destroy ();
+	}
+
 
 
 

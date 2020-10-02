@@ -21,6 +21,9 @@ use League\Plates\Template\Template;
  */
 ?>
 <div class="wrap">
+
+	<?php $this->insert('html-notices') ?>
+
     <h1 class="wp-heading-inline"><?= $this->e($title) ?></h1>
 
     <!-- Table Form to exchange pairs -->
