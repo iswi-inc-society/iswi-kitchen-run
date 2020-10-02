@@ -10,8 +10,22 @@ use League\Plates\Template\Template;
  *
  * @var     Template    $this                   Template Object to render
  * @var     string      $plugin_text_domain     Translation Domain
+ * @var     string      $state                  state of form
+ * @var     string      $opening_date           Opening Date String
+ * @var     string      $closing_date           Closing Date String
+ * @var     string      $event_date             Event Date String
+ * @var     array       $errors                 Errors
  */
 
+?>
+
+<?php $this->insert('html-kitchenrun-signup-info', [
+    'plugin_text_domain' => $plugin_text_domain,
+    'state'         => $state,
+    'opening_date'  => $opening_date,
+    'closing_date'  => $closing_date,
+    'event_date'    => $event_date
+]);
 ?>
 
 <div class="kr_container">
@@ -26,6 +40,14 @@ use League\Plates\Template\Template;
         <li>Courses</li>
         <li>Submit</li>
     </ul>
+
+	<?php if (isset($errors)): ?>
+	<?php foreach ($errors as $error): ?>
+        <div class="kr-error-msg">
+			<?= $error ?>
+        </div>
+	<?php endforeach ?>
+    <?php endif; ?>
 
     <form id="kr_signup" class="kr_signup" action="<?php echo $_SERVER['REQUEST_URI'] ?>" method="post">
 

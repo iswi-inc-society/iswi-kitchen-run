@@ -132,65 +132,61 @@ class Signup
 
         //no current event
         if ($state == self::NO_EVENT) {
-            $message = __('There is no upcoming Kitchen Run Event yet.',$this->plugin_text_domain);
+	        return $this->templates->render('html-kitchenrun-signup-info', array(
+		        'plugin_text_domain'    => $this->plugin_text_domain,
+		        'state'                 => $state,
+	        ));
         } else {
 
             // variables needed for messages
             $event = $this->getEvent();
-            $opening_date = $event->getOpeningDate();
-            $closing_date = $event->getClosingDate();
-            $event_date = $event->getEventDate();
+            $opening_date = $event->getOpeningDate()->format('d.m.Y');
+            $closing_date = $event->getClosingDate()->format('d.m.Y');
+            $event_date = $event->getEventDate()->format('d.m.Y');
 
             // get the right message through state
             switch($state) {
                 case self::SUCCESS:
-                    $message = __('Your Sign Up was successful. Please verify your email. We send you some instruction per email. For questions, please contact ',
-                    $this->plugin_text_domain).get_option('kitchenrun_contact_email');
-                break;
+                    return $this->templates->render('html-kitchenrun-signup-success', array(
+                    	'plugin_text_domain'    => $this->plugin_text_domain,
+	                    'state'                 => $state,
+	                    'contact'               => get_option('kitchenrun_contact_email'),
+	                    'opening_date'          => $opening_date,
+	                    'closing_date'          => $closing_date,
+	                    'event_date'            => $event_date
 
+                    ));
                 case self::VALIDATION:
-                    $message = $this->verifyToken($_GET['token']);
-                break;
-
-                case self::BEFORE_SIGNUP:
-                    $message = __('The next Kitchen Run Event will be on the '.
-                    $event_date->format('d.m.Y').'. If you are interested, the sign up starts on the '.
-                    $opening_date->format('d.m.Y').'.',
-                    $this->plugin_text_domain);
-                break;
+	                $verify = $this->verifyToken($_GET['token']);
+                	return $this->templates->render('html-kitchenrun-signup-validation', array(
+		                'plugin_text_domain'    => $this->plugin_text_domain,
+		                'state'                 => $state,
+		                'verify_state'          => $verify['state'],
+		                'verify_msg'            => $verify['msg'],
+		                'opening_date'          => $opening_date,
+		                'closing_date'          => $closing_date,
+		                'event_date'            => $event_date
+	                ));
 
                 case self::SIGNUP:
-                    $message = __('The next Kitchen Run Event will be on the '.
-                    $event_date->format('d.m.Y').'. The Sign Up stays open until the '.
-                    $closing_date->format('d.m.Y').'.',
-                    $this->plugin_text_domain);
-                break;
-
-                case self::AFTER_SIGNUP:
-                    $message = __('The next Kitchen Run Event will be on the '.
-                    $event_date->format('d.m.Y').'. The Sign Up is closed but, if you have questions contact kitchenrun@iswi.org',
-                    $this->plugin_text_domain);
-                break;
-
-                case self::AFTER_EVENT:
-                    $message = __('There is no upcoming Kitchen Run Event. The last Event was on the '.
-                    $event_date->format('d.m.Y').'. If you are interested in another Event, contact kitchenrun@iswi.org',
-                    $this->plugin_text_domain);
-                break;
+	                return $this->templates->render('html-kitchenrun-signup-multiform', array(
+		                'plugin_text_domain'    => $this->plugin_text_domain,
+		                'state'                 => $state,
+		                'opening_date'          => $opening_date,
+		                'closing_date'          => $closing_date,
+		                'event_date'            => $event_date
+	                ));
 
                 default:
-                    $message = __('There is no upcoming Kitchen Run Event yet.',$this->plugin_text_domain);
-                break;
+	                return $this->templates->render('html-kitchenrun-signup-info', array(
+		                'plugin_text_domain'    => $this->plugin_text_domain,
+		                'state'                 => $state,
+		                'opening_date'          => $opening_date,
+		                'closing_date'          => $closing_date,
+		                'event_date'            => $event_date
+	                ));
             }
         }
-
-        return $this->templates->render('html-kitchenrun-info', [ // render views/html-kitchenrun-info.php
-                'errors'   =>   $this->error_msg,
-                'message'  =>   $message,
-                'state'    =>   $state,
-                'signup'   =>   $this,
-	            'team'     =>   $this->team,
-        ]);
     }
 
     public function getState() {
@@ -333,19 +329,28 @@ class Signup
 	 *
 	 * @param $token
 	 *
-	 * @return string|void
+	 * @return array
 	 */
     public function verifyToken($token) {
     	$team = Team::findByToken($token);
 
     	if (isset($team) && $team->getEvent()->getCurrent()) {
-			if ($team->getValid()) return __('Your Team ').$team->getName().__(' is already valid.');
+			if ($team->getValid()) return array(
+				"msg"   => __('Your Team ').$team->getName().__(' is already valid.'),
+				"state" => "VALID"
+			);
 			else {
 				$team->setValid(true);
 				$team->save();
-				return __('Your Team ').$team->getName().__(' is now validated and you will get first information soon.');
+				return array(
+					"msg"   => __('Your Team ').$team->getName().__(' is now validated and you will get first information soon.'),
+					"state" => "SUC"
+				);
 			}
-	    } else return __('There is no Team linked to your token.');
+	    } else return array(
+	    	"msg"   => __('There is no Team linked to your token.'),
+		    "state" => "ERROR"
+	    );
     }
 
     /**

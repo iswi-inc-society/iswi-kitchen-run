@@ -800,9 +800,12 @@ class Team
 
         $result = $db->findBy(Database::DB_TEAM_NAME, 'token', $token, true);
 
-        $team = Team::resultToObject($result);
+	    if (isset($result)) {
+		    $team = Team::resultToObject( $result );
+		    return $team;
+	    } else return NULL;
 
-        return $team;
+
     }
 
     /**

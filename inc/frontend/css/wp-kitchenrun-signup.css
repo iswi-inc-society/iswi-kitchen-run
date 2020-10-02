@@ -327,3 +327,19 @@
 .kr_step_subtitle {
     margin-top: 0 !important;
 }
+
+/** Signup Success **/
+.kr_signup_success {
+    margin: 7em 2em 0 2em;
+}
+
+.kr_signup_success img {
+    width: 10em;
+    height: auto;
+    margin: auto;
+    padding-right: 1em;
+}
+
+.kr_signup_success p, .kr_signup_error p {
+    text-align: center;
+}
