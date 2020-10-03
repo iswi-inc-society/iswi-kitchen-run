@@ -166,7 +166,8 @@ class Team_Page
                 'new'   => __('Add New', $this->plugin_text_domain),
             ]);
         } else {
-            echo __('No Events yet registered!', $this->plugin_text_domain);
+        	Admin_Notice::create('info',  __('No Events yet registered!', $this->plugin_text_domain));
+            echo $this->templates->render('html-notices');
         }
     }
 
@@ -186,8 +187,9 @@ class Team_Page
                 || !wp_verify_nonce($_POST['_wpnonce_update_team'], 'update_team')
             ) {
 
-                print 'Sorry, your nonce did not verify.';
-                exit;
+	            Admin_Notice::create('error', __('The WPnonce didn\'t verify please try again!', $this->plugin_text_domain));
+	            echo $this->templates->render('html-team-referer');
+	            die();
 
             } else { // wpnonce successfully checked -> validated
 
@@ -213,7 +215,10 @@ class Team_Page
                 $team->setEvent(Event::findbyId($_POST['team_event']));
                 $team->save();
 
+	            if ($add) Admin_Notice::create('success', sprintf(esc_html__('The Team %s was successfully created', $this->plugin_text_domain), $team->getName()));
+	            else Admin_Notice::create('success', sprintf(esc_html__('The Team %s was successfully updated', $this->plugin_text_domain), $team->getName()));
                 echo $this->templates->render('html-team-referer'); // render views/html-team-referer.php
+	            die();
             }
         } else { // render form
             if ($add) $team = new Team();
@@ -271,7 +276,9 @@ class Team_Page
                     $team = Team::findbyId($_POST['team']);
                     $team->delete();
 
+	                Admin_Notice::create('success', sprintf(esc_html__('The Team %s was successfully deleted', $this->plugin_text_domain), $team->getName()));
                     echo $this->templates->render('html-team-referer'); // render views/html-team-referer.php
+	                die();
                 }
             } else { // delete confirmation form
                 $team = Team::findbyId($_GET['team']); // needed in view
@@ -330,6 +337,7 @@ class Team_Page
                 $this->unpair_teams();
 
                 echo $this->templates->render('html-team-referer'); // render views/html-team-referer.php
+	            die();
             }
         } else { // unpair confirmation form
 
@@ -403,7 +411,9 @@ class Team_Page
                     $pair2->save();
                 }
 
+	            Admin_Notice::create('success', sprintf(esc_html__('Teams were successfully exchanged', $this->plugin_text_domain)));
                 echo $this->templates->render('html-team-referer');
+                die();
             }
         }
     }
@@ -424,7 +434,9 @@ class Team_Page
         $teams = Team::findByEventAndValid($this->event);
 
         if (count($teams) < 7) {
-            echo 'You need more than 7 teams to start the pair process. You only have '. count($teams).' valid Teams!';
+	        Admin_Notice::create('error', sprintf(esc_html__('You need more than 7 teams to start the pair process. You only have %d valid Teams', $this->plugin_text_domain), count($teams)));
+	        echo $this->templates->render('html-team-referer');
+	        die();
 
         } else {
             // How many dummy teams will be used
@@ -626,7 +638,9 @@ class Team_Page
             $this->event->setPaired(1); // event now paired status
             $this->event->save();
 
-            echo $this->templates->render('html-team-referer');
+	        Admin_Notice::create('error', sprintf(esc_html__('The teams of the Event %s were successfully paired', $this->plugin_text_domain), $this->event->getName()));
+	        echo $this->templates->render('html-team-referer');
+	        die();
         }
     }
 
@@ -644,6 +658,10 @@ class Team_Page
 
             $this->event->setPaired(0);
             $this->event->save();
+
+            Admin_Notice::create('success', sprintf(esc_html__( 'Successfully unpaired the Event %s', $this->plugin_text_domain ), $this->event->getName()));
+        } else {
+        	Admin_Notice::create('warning', sprintf(esc_html__( 'Event %s isn\'t paired.'  , $this->plugin_text_domain ), $this->event->getName()));
         }
     }
 
@@ -680,7 +698,7 @@ class Team_Page
 
 	    if (!$this->event->getPaired()) { // check paired status
 	    	$errors++;
-		    $error_msg[] = 'Teams must be paired before sending them information mails!';
+		    Admin_Notice::create('error', sprintf(esc_html__('Teams must be paired before sending emails.', $this->plugin_text_domain)));
 	    } else {
 
 		    foreach ( $teams as $team ) {
@@ -721,7 +739,7 @@ class Team_Page
 
 			    if ( $bcook1 + $bcook2 + $bcook3 != 1 ) {
 				    ++ $errors; // check that team only cooks one time!
-				    $error_msg[] = 'Too many cooking course for Team ' . $team->getId();
+				    Admin_Notice::create('error', sprintf(esc_html__('Too many cooking courses for Team: Logic Error', $this->plugin_text_domain), $team->getName()));
 			    }
 		    }
 	    }
@@ -745,17 +763,20 @@ class Team_Page
 
     		foreach ($teams_mail as $mail) {
 
-			    $msg[$i]['succ'] = wp_mail($mail['mail'], $subject, $mail['message'], $headers);
-			    $msg[$i]['mail'] = $mail['mail'];
+			    if (!wp_mail($mail['mail'], $subject, $mail['message'], $headers)){
+				    Admin_Notice::create('error', sprintf(esc_html__('Mail couldn\'t be sent to %s', $this->plugin_text_domain), $mail['mail']));
+				    $errors++;
+			    }
+		    }
+
+    		if ($errors == 0) {
+			    Admin_Notice::create('success', sprintf(esc_html__('All mails were successfully sent', $this->plugin_text_domain)));
 		    }
 
 	    }
 
-    	echo $this->templates->render('html-team-info-mails', [
-			'errors'    => $errors,
-		    'error_msg' => $error_msg,
-		    'messages'  => $msg,
-	    ]);
+	    echo $this->templates->render('html-team-referer');
+	    die();
     }
 
     /**

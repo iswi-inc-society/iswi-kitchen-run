@@ -13,6 +13,12 @@ namespace KitchenRun\Inc\Admin;
  */
 class Admin_Notice {
 
+	/**
+	 * Creates a message in the Kitchen Run Session
+	 *
+	 * @param string $type 'error', 'success', 'warning', 'info'
+	 * @param string $message
+	 */
 	public static function create($type, $message) {
 		if (isset($_SESSION['kr_notice'][$type])) {
 			array_push($_SESSION['kr_notice'][$type], $message);
@@ -21,6 +27,12 @@ class Admin_Notice {
 		}
 	}
 
+	/**
+	 * Deletes messages in the Kitchen Run Session
+	 *
+	 * @param string $type 'error', 'success', 'warning', 'info'
+	 * @param string $message
+	 */
 	public static function delete($type, $message) {
 		if (isset($_SESSION['kr_notice'][$type])) {
 			foreach ($_SESSION['kr_notice'][$type] as $key => $msg) {

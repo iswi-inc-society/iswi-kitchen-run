@@ -12,7 +12,7 @@
 
 		<?php foreach ($messages as $key => $message): ?>
 
-			<div class="kr_notice_<?= $type ?> notice inline notice-<?= $type ?> notice-alt">
+			<div class="kr_notice_<?= $type ?> notice inline notice-<?= $type ?> notice-alt is-dismissible">
 				<p><?= $message ?></p>
 			</div>
 
