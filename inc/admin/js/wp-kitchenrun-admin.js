@@ -7,6 +7,24 @@
 	'use strict';
 
 	/**
+	 * Open extended functions
+	 */
+	$('.column-ext').on("click", function () {
+		let ext_row = $(this).parent().next();
+		let dashicon = $(this).children();
+
+		if (ext_row.hasClass("display-none")) { // open row
+			ext_row.removeClass("display-none");
+			dashicon.removeClass("dashicons-arrow-down-alt2");
+			dashicon.addClass("dashicons-arrow-left-alt2");
+		} else { //close row
+			ext_row.addClass("display-none");
+			dashicon.removeClass("dashicons-arrow-left-alt2");
+			dashicon.addClass("dashicons-arrow-down-alt2");
+		}
+	});
+
+	/**
 	 * Adds functionality to choose two guests of the same course and exchange their current position.
 	 */
 	$('.pair-guest').on("click", function () {

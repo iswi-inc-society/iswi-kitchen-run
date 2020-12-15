@@ -18,23 +18,6 @@ use KitchenRun\Inc\Common\Model\Event;
  */
 class Event_List_Table extends WP_List_Table
 {
-    /**
-     * The ID of this plugin.
-     *
-     * @since    1.0.0
-     * @access   private
-     * @var      string    $plugin_name    The ID of this plugin.
-     */
-    private $plugin_name;
-
-    /**
-     * The version of this plugin.
-     *
-     * @since    1.0.0
-     * @access   private
-     * @var      string    $version    The current version of this plugin.
-     */
-    private $version;
 
     /**
      * The text domain of this plugin.
@@ -54,10 +37,8 @@ class Event_List_Table extends WP_List_Table
      * @param array  $args
      * @since       1.0.0
      */
-    public function __construct( $plugin_name, $version, $plugin_text_domain, $args = array() ) {
+    public function __construct($plugin_text_domain, $args = array() ) {
 
-        $this->plugin_name = $plugin_name;
-        $this->version = $version;
         $this->plugin_text_domain = $plugin_text_domain;
 
         parent::__construct($args);

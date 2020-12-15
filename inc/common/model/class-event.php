@@ -282,6 +282,20 @@ class Event
         $this->manager = $manager->ID;
     }
 
+	/**
+	 * @TODO: Move pair function to model
+	 */
+    public function pair() {
+
+    }
+
+	/**
+	 * @TODO: Move unpair function to model
+	 */
+    public function unpair() {
+
+    }
+
     /**
      * Are the Teams of the Event already paired.
      * '0' -> no
@@ -336,7 +350,7 @@ class Event
 
         $result = $db->findBy(Database::DB_EVENT_NAME, 'current', 1, true);
 
-        $event = NULL;
+        $event = null;
         if (isset($result)) {
             $event = Event::resultToObject($result);
         }

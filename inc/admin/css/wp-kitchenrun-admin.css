@@ -12,8 +12,46 @@
     background-color: #c2e1ee;
 }
 
-table.tl-pairs {
 
+/**
+ * Teams List
+ */
+
+div#kr-list-teams > table.kitchen-run_page_kitchenrun_teams th#team_valid,
+div#kr-list-teams > table.kitchen-run_page_kitchenrun_teams th#ext {
+    width: 2.3em;
+}
+
+div#kr-list-teams > table.kitchen-run_page_kitchenrun_teams th#team_course_pref,
+div#kr-list-teams > table.kitchen-run_page_kitchenrun_teams th#team_food_pref {
+    width: 5em;
+}
+
+div#kr-list-teams > table.striped > tbody > tr:nth-child(2n+1) {
+    background-color: #fff;
+}
+
+div#kr-list-teams > table.striped > tbody > tr:nth-child(4n+1),
+div#kr-list-teams > table.striped > tbody > tr:nth-child(4n+2){
+    background-color: #f9f9f9 !important;
+}
+
+div#kr-list-teams > table.striped > tbody > tr.kr-extended-row.display-none {
+    display:none;
+}
+
+div#kr-list-teams > table.striped > tbody > tr.kr-extended-row span.kr-tl-desc {
+    font-weight: bold;
+}
+
+div#kr-list-teams > table.striped > tbody > tr.kr-team-row > td.column-ext {
+    cursor: pointer;
+}
+
+div#kr_table_pairs {
+    width: 100%;
+    overflow-x: auto;
+    overflow-y: hidden;
 }
 table.tl-pairs tr th {
     width: 10em;
@@ -26,14 +64,16 @@ table.tl-pairs tr div.pair-guest1-border{
 
 table.tl-pairs tr div.pair-cell {
     padding: 1em;
-    border: 3px solid aqua;
-    background-color: aqua;
+    border: 2px solid #32373c;
+    background-color: #32373c;
+    color: #fff
 }
 
 table.tl-pairs tr div.pair-cook {
     padding: 1em;
-    background-color: cornflowerblue;
-    border-color: cornflowerblue;
+    background-color: #0073aa;
+    border-color: #0073aa;
+    color: #fff
 }
 
 table.tl-pairs tr div.pair-guest {
@@ -41,15 +81,25 @@ table.tl-pairs tr div.pair-guest {
 }
 
 table.tl-pairs tr div.checked-1 {
-    border: 3px dashed  #121864;
+    border: 2px dashed  #fff;
     cursor: pointer;
 }
 
 table.tl-pairs tr div.checked-2 {
-    border: 3px dashed  #121864;
+    border: 2px dashed  #fff;
     cursor: pointer;
 }
 
 table.tl-pairs span.food-pref {
     float: right;
+}
+
+table.tl-pairs > tbody > tr > td {
+    padding: 10px 20px;
+    width: 5em;
+}
+
+table.tl-pairs > tbody > tr > td > div.card {
+    padding: 0;
+    box-shadow: 5px 5px 10px #0a0a0a;
 }

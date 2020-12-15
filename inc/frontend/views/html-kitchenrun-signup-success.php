@@ -37,7 +37,6 @@ $image_dir = "/wp-content/plugins/iswi-kitchen-run/assets/images/";
 		<li class="kr_active">Contact</li>
 		<li class="kr_active">Address</li>
 		<li class="kr_active">Food</li>
-		<li class="kr_active">Courses</li>
 		<li class="kr_active">Submit</li>
 	</ul>
 

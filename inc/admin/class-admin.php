@@ -2,6 +2,8 @@
 
 namespace KitchenRun\Inc\Admin;
 
+use League\Plates\Engine;
+
 /**
  * The admin-specific functionality of the plugin.
  *
@@ -24,7 +26,7 @@ class Admin {
 	 * @access   private
 	 * @var      string    $plugin_name    The ID of this plugin.
 	 */
-	private $plugin_name;
+	protected $plugin_name;
 
 	/**
 	 * The version of this plugin.
@@ -33,7 +35,7 @@ class Admin {
 	 * @access   private
 	 * @var      string    $version    The current version of this plugin.
 	 */
-	private $version;
+	protected $version;
 
 	/**
 	 * The text domain of this plugin.
@@ -42,7 +44,14 @@ class Admin {
 	 * @access   private
 	 * @var      string    $plugin_text_domain    The text domain of this plugin.
 	 */
-	private $plugin_text_domain;
+	protected $plugin_text_domain;
+
+	/**
+	 * Templating Engine Object, used to create nice templates!
+	 *
+	 * @var Engine Templating Engine
+	 */
+	protected $templates;
 
 	/**
 	 * Initialize the class and set its properties.
@@ -54,10 +63,43 @@ class Admin {
 	 */
 	public function __construct( $plugin_name, $version, $plugin_text_domain ) {
 
-		$this->plugin_name = $plugin_name;
-		$this->version = $version;
+		$this->plugin_name        = $plugin_name;
+		$this->version            = $version;
 		$this->plugin_text_domain = $plugin_text_domain;
+		$this->templates          = new Engine( __DIR__ . '/views' );
+	}
 
+	/**
+	 * Displays Content, use echo to display!
+	 */
+	public function init() {}
+
+	/**
+	 * Checks a wpnonce and returns true if valid, else it refers if referer is set.
+	 * field needs to have
+	 *
+	 * @param   $name       string  Name of checked wpnonce
+	 * @param   $referer    string  referer name, needs to be under views/referer
+	 *
+	 * @return bool
+	 */
+	protected function verify_nonce($name, $field_name = '_wpnonce',  $referer = null) {
+		if (
+			( //check the wpnonce field of GET or POST
+				! isset( $_GET[$field_name] )
+				|| ! wp_verify_nonce( $_GET[$field_name], $name )
+			)&&(
+				! isset($_POST[$field_name])
+				|| ! wp_verify_nonce( $_POST[$field_name], $name)
+			)
+
+		) {
+
+			Admin_Notice::create( 'error', __( 'The WPnonce didn\'t verify please try again!', $this->plugin_text_domain ) );
+			if (isset($referer)) echo $this->templates->render( 'referer/' . $referer ); // render views/referer
+
+			return false;
+		} else return true;
 	}
 
 	/**
@@ -65,7 +107,7 @@ class Admin {
 	 *
 	 * @since    1.0.0
 	 */
-	public function enqueue_styles() {
+	public final function enqueue_styles() {
 
 		/**
 		 * This function is provided for demonstration purposes only.
@@ -88,7 +130,7 @@ class Admin {
 	 *
 	 * @since    1.0.0
 	 */
-	public function enqueue_scripts() {
+	public final function enqueue_scripts() {
 		/**
 		 * This function is provided for demonstration purposes only.
 		 *
@@ -110,7 +152,7 @@ class Admin {
      *
      * @since    1.0.0
      */
-    public function add_plugin_admin_menu() {
+    public final function add_plugin_admin_menu() {
 
 
         /**
@@ -127,10 +169,10 @@ class Admin {
         add_menu_page( //kitchenrun top menu
             __( 'Kitchen Run', $this->plugin_text_domain ),
             __( 'Kitchen Run', $this->plugin_text_domain ),
-            'manage_options',
+            'kitchen_run',
             $this->plugin_name,
             array($event_page_page, 'init'),
-            '/wp-content/plugins/iswi-kitchen-run/assets/images/admin_kitchen_run_16px.png',
+            'data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iaXNvLTg4NTktMSI/Pg0KPCEtLSBHZW5lcmF0b3I6IEFkb2JlIElsbHVzdHJhdG9yIDE5LjAuMCwgU1ZHIEV4cG9ydCBQbHVnLUluIC4gU1ZHIFZlcnNpb246IDYuMDAgQnVpbGQgMCkgIC0tPg0KPHN2ZyB2ZXJzaW9uPSIxLjEiIGlkPSJDYXBhXzEiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgeG1sbnM6eGxpbms9Imh0dHA6Ly93d3cudzMub3JnLzE5OTkveGxpbmsiIHg9IjBweCIgeT0iMHB4Ig0KCSB2aWV3Qm94PSIwIDAgNTEyIDUxMiIgc3R5bGU9ImVuYWJsZS1iYWNrZ3JvdW5kOm5ldyAwIDAgNTEyIDUxMjsiIHhtbDpzcGFjZT0icHJlc2VydmUiPg0KPGc+DQoJPGc+DQoJCTxwYXRoIGQ9Ik0zODQuMDgyLDYwLjA0OGMtOS4wNDIsMC0xNy45NTEsMS4wNi0yNi42MjQsMy4xNkMzMzguNjg3LDI0Ljg3OCwyOTkuNTU2LDAsMjU2LDANCgkJCWMtNDMuNTU2LDAtODIuNjg3LDI0Ljg3OC0xMDEuNDU4LDYzLjIwOGMtOC42NzMtMi4xLTE3LjU4Mi0zLjE2LTI2LjYyNC0zLjE2Yy02Mi4yOTMsMC0xMTIuOTczLDUwLjY3OS0xMTIuOTczLDExMi45NzMNCgkJCWMwLDU3LjIxLDQyLjc0MiwxMDQuNjI0LDk3Ljk3MywxMTEuOTgxdjEzNi45NTFoODUuMzg4di0xNTAuOTZoMzB2MTUwLjk1OWg1NS4zODhWMjcwLjk5M2gzMHYxNTAuOTU5aDg1LjM4OFYyODUuMDAxDQoJCQljNTUuMjMtNy4zNTcsOTcuOTczLTU0Ljc3MSw5Ny45NzMtMTExLjk4QzQ5Ny4wNTUsMTEwLjcyOCw0NDYuMzc2LDYwLjA0OCwzODQuMDgyLDYwLjA0OHoiLz4NCgk8L2c+DQo8L2c+DQo8Zz4NCgk8Zz4NCgkJPHJlY3QgeD0iMTEyLjkyIiB5PSI0NTEuOTUiIHdpZHRoPSIyODYuMTYiIGhlaWdodD0iNjAuMDUiLz4NCgk8L2c+DQo8L2c+DQo8Zz4NCjwvZz4NCjxnPg0KPC9nPg0KPGc+DQo8L2c+DQo8Zz4NCjwvZz4NCjxnPg0KPC9nPg0KPGc+DQo8L2c+DQo8Zz4NCjwvZz4NCjxnPg0KPC9nPg0KPGc+DQo8L2c+DQo8Zz4NCjwvZz4NCjxnPg0KPC9nPg0KPGc+DQo8L2c+DQo8Zz4NCjwvZz4NCjxnPg0KPC9nPg0KPGc+DQo8L2c+DQo8L3N2Zz4NCg==',
             20
         );
 
@@ -138,7 +180,7 @@ class Admin {
             $this->plugin_name,
             __( 'Events', $this->plugin_text_domain ),
             __( 'Events', $this->plugin_text_domain ),
-            'manage_options',
+            'kitchen_run',
             $this->plugin_name,
             array($event_page_page, 'init'),
             20
@@ -149,7 +191,7 @@ class Admin {
             $this->plugin_name,
             __( 'Add Event', $this->plugin_text_domain ),
             __( 'Add Event', $this->plugin_text_domain ),
-            'manage_options',
+            'kitchen_run',
             $this->plugin_name.'_add_event',
             array($event_new, 'init'),
             20
@@ -159,7 +201,7 @@ class Admin {
             $this->plugin_name,
             __( 'Teams', $this->plugin_text_domain ),
             __( 'Teams', $this->plugin_text_domain ),
-            'manage_options',
+            'kitchen_run',
             $this->plugin_name.'_teams',
             array($team_page_page, 'init'),
             20
@@ -170,7 +212,7 @@ class Admin {
             $this->plugin_name,
             __( 'Settings', $this->plugin_text_domain ),
             __( 'Settings', $this->plugin_text_domain ),
-            'manage_options',
+            'kitchen_run',
             $this->plugin_name.'_settings',
             array($settings_page, 'init')
         );
@@ -192,7 +234,7 @@ class Admin {
      *
      * @since    1.0.0
      */
-    public function add_admin_settings() {
+    public final function add_admin_settings() {
 
         $settings_page = new Settings_Page($this->plugin_name, $this->version, $this->plugin_text_domain);
 
@@ -250,13 +292,21 @@ class Admin {
         );
     }
 
-	function kr_start_session() {
+    public final function adjust_roles() {
+        $role = get_role('editor')	;
+        $role->add_cap('kitchen_run', true);
+
+	    $role = get_role('administrator')	;
+	    $role->add_cap('kitchen_run', true);
+    }
+
+	public final function kr_start_session() {
 		if(!session_id()) {
 			session_start();
 		}
 	}
 
-	function kr_stop_session() {
+	public final function kr_stop_session() {
 		session_destroy ();
 	}
 

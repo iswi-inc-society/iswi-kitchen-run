@@ -1451,7 +1451,7 @@ use League\Plates\Template\Template;
 									<th class="small-12 large-12 columns first last">
 										<table>
 											<tr>
-												<th><center data-parsed=""> <img src="ISWI-Logo.png" align="center" class="float-center iswi-logo" width="100" height="200"> </center></th>
+												<th><center data-parsed=""> <img src="https://iswi.org/wp-content/uploads/KitchenRunLogo_Transparent.png" align="center" class="float-center iswi-logo" width="200" height="400"> </center></th>
 												<th class="expander"></th>
 											</tr>
 										</table>
@@ -1467,8 +1467,8 @@ use League\Plates\Template\Template;
 										<table>
 											<tr>
 												<th>
-													<h4 class="text-center">Kitchen Run Informations</h4>
-                                                    <p>Dear <?php echo $team->getMember1(); if ($team->getMember2() != '') echo 'and '.$team->getMember2(); ?>,<br>
+													<h4 class="text-center">Kitchen Run Course Informations</h4>
+                                                    <p>Dear <?php echo $team->getMember1(); if ($team->getMember2() != '') echo ' and '.$team->getMember2(); ?>,<br>
                                                         You registered with your Team <?= $team->getName() ?> at the next Kitchen Run Game on the <b><?= $date ?></b>. Here is the information for the evening:</p>
 												</th>
 												<th class="expander"></th>

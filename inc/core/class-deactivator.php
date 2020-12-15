@@ -28,10 +28,10 @@ class Deactivator {
 	 */
 	public static function deactivate() {
 
-        $database = new Database();
-        $database->kr_team_uninstall();
-        $database->kr_pair_uninstall();
-        $database->kr_event_uninstall();
+        //$database = new Database();
+        //$database->kr_team_uninstall();
+        //$database->kr_pair_uninstall();
+        //$database->kr_event_uninstall();
 	}
 
 }

@@ -41,7 +41,9 @@ use League\Plates\Template\Template;
 
                     <tr class="form-field form-required">
                         <th scope="row"><label for="kr_update_team_name"><?php _e('Team Name', $plugin_text_domain); ?></label></th>
-                        <td><input id="kr_update_team_name" type="text" name="team_name" value="<?php echo $team->getName() ?>" required /></td>
+                        <td>
+                            <input id="kr_update_team_name" type="text" name="team_name" value="<?php echo $team->getName() ?>" required />
+                        </td>
                     </tr>
 
                     <tr class="form-field form-required">
@@ -51,7 +53,7 @@ use League\Plates\Template\Template;
 
                     <tr class="form-field">
                         <th scope="row"><label for="kr_update_team_member_2"><?php _e('Member 2', $plugin_text_domain); ?></label></th>
-                        <td><input id="kr_update_team_member_2" type="text" name="team_member_2" value="<?php echo $team->getMember2() ?>" required /></td>
+                        <td><input id="kr_update_team_member_2" type="text" name="team_member_2" value="<?php echo $team->getMember2() ?>" /></td>
                     </tr>
 
                     <tr class="form-field form-required">
@@ -136,9 +138,9 @@ use League\Plates\Template\Template;
 
 
                     <tr class="form-field form-required">
-                        <th scope="row"><label for="kr_update_team_iswi"><?php _e('ISWI team', $plugin_text_domain); ?></label></th>
+                        <th scope="row"><label for="kr_update_team_valid"><?php _e('Valid', $plugin_text_domain); ?></label></th>
                         <td>
-                                <input type="checkbox" id="kr_update_team_iswi" name="team_iswi" <?php if ($team->getISWI()) echo 'checked'; ?> />
+                                <input type="checkbox" id="kr_update_team_valid" name="team_valid" <?php if ($team->getValid()) echo 'checked'; ?> />
                         </td>
                     </tr>
 

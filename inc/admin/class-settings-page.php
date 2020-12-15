@@ -13,63 +13,8 @@ use League\Plates\Engine;
  * @package KitchenRun\Inc\Admin
  * @since 1.0.0
  */
-class Settings_Page
+class Settings_Page extends Admin
 {
-    /**
-     * The ID of this plugin.
-     *
-     * @since    1.0.0
-     * @access   private
-     * @var      string    $plugin_name    The ID of this plugin.
-     */
-    private $plugin_name;
-
-    /**
-     * The version of this plugin.
-     *
-     * @since    1.0.0
-     * @access   private
-     * @var      string    $version    The current version of this plugin.
-     */
-    private $version;
-
-    /**
-     * The text domain of this plugin.
-     *
-     * @since    1.0.0
-     * @access   private
-     * @var      string    $plugin_text_domain    The text domain of this plugin.
-     */
-    private $plugin_text_domain;
-
-
-    /**
-     * Templating Engine Plates
-     *
-     * @since   1.0.0
-     * @access  private
-     * @var     Engine  $templates
-     */
-    private $templates;
-
-
-    /**
-     * Initialize the class and set its properties.
-     *
-     * @since       1.0.0
-     * @param       string $plugin_name        The name of this plugin.
-     * @param       string $version            The version of this plugin.
-     * @param       string $plugin_text_domain The text domain of this plugin.
-     */
-    public function __construct( $plugin_name, $version, $plugin_text_domain ) {
-
-        $this->plugin_name = $plugin_name;
-        $this->version = $version;
-        $this->plugin_text_domain = $plugin_text_domain;
-
-        $this->templates = new Engine(__DIR__ . '/views');
-    }
-
     /**
      * Initialization Method that is called after the page is chosen.
      * Called by add_plugin_admin_menu() in Class Admin.

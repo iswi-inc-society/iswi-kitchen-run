@@ -46,34 +46,36 @@ use League\Plates\Template\Template;
 
 
     <!-- Table -->
-    <table class="tl-pairs fixed striped widefat">
-        <tbody>
-            <tr id="row-appetizer">
-                <th><?= __('Appetizer', $plugin_text_domain) ?></th>
-                <?php foreach ($pairs as $pair): ?>
-                <?php if($pair->getCourse() == 0): ?>
+    <div id="kr_table_pairs">
+        <table class="tl-pairs">
+            <tbody>
+                <tr id="row-appetizer">
+                    <th><?= __('Appetizer', $plugin_text_domain) ?></th>
+                    <?php foreach ($pairs as $pair): ?>
+                    <?php if($pair->getCourse() == 0): ?>
 
-                    <?php $this->insert('html-pair-cell', ['pair' => $pair, 'course_class' => 'appetizer']) ?>
+                        <?php $this->insert('html-pair-cell', ['pair' => $pair, 'course_class' => 'appetizer']) ?>
 
-                <?php endif; ?>
-                <?php endforeach; ?>
-            </tr>
-            <tr id="row-main-course">
-                <th><?= __('Main Course', $plugin_text_domain) ?></th>
-                <?php foreach ($pairs as $pair): ?>
-                    <?php if($pair->getCourse() == 1): ?>
-                        <?php $this->insert('html-pair-cell', ['pair' => $pair, 'course_class' => 'main-course']) ?>
                     <?php endif; ?>
-                <?php endforeach; ?>
-            </tr>
-            <tr id="row-dessert">
-                <th><?= __('Dessert', $plugin_text_domain) ?></th>
-                <?php foreach ($pairs as $pair): ?>
-                    <?php if($pair->getCourse() == 2): ?>
-                        <?php $this->insert('html-pair-cell', ['pair' => $pair, 'course_class' => 'dessert']) ?>
-                    <?php endif; ?>
-                <?php endforeach; ?>
-            </tr>
-        </tbody>
-    </table>
+                    <?php endforeach; ?>
+                </tr>
+                <tr id="row-main-course">
+                    <th><?= __('Main Course', $plugin_text_domain) ?></th>
+                    <?php foreach ($pairs as $pair): ?>
+                        <?php if($pair->getCourse() == 1): ?>
+                            <?php $this->insert('html-pair-cell', ['pair' => $pair, 'course_class' => 'main-course']) ?>
+                        <?php endif; ?>
+                    <?php endforeach; ?>
+                </tr>
+                <tr id="row-dessert">
+                    <th><?= __('Dessert', $plugin_text_domain) ?></th>
+                    <?php foreach ($pairs as $pair): ?>
+                        <?php if($pair->getCourse() == 2): ?>
+                            <?php $this->insert('html-pair-cell', ['pair' => $pair, 'course_class' => 'dessert']) ?>
+                        <?php endif; ?>
+                    <?php endforeach; ?>
+                </tr>
+            </tbody>
+        </table>
+    </div>
 </div>

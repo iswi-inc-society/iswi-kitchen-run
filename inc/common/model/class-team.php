@@ -246,7 +246,7 @@ class Team
      * @access  private
      * @var     int $valid
      */
-    private $iswi;
+    private $iswi = 0;
 
 
     /**
@@ -1027,7 +1027,7 @@ class Team
         $team->event = $row->event;
         $team->setValid($row->valid);
         $team->setToken($row->token);
-        $team->setISWI($row->token);
+        $team->setISWI($row->iswi);
 
         return $team;
     }

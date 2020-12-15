@@ -11,3 +11,5 @@
 <script type="text/javascript">
     document.location.href="?page=kitchenrun_teams";
 </script>
+
+<?php die(); ?>

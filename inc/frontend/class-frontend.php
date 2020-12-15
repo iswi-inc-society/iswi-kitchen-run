@@ -27,7 +27,7 @@ class Frontend {
 	 * @access   private
 	 * @var      string    $plugin_name    The ID of this plugin.
 	 */
-	private $plugin_name;
+	protected $plugin_name;
 
 	/**
 	 * The version of this plugin.
@@ -36,7 +36,7 @@ class Frontend {
 	 * @access   private
 	 * @var      string    $version    The current version of this plugin.
 	 */
-	private $version;
+	protected $version;
 
 	/**
 	 * The text domain of this plugin.
@@ -45,7 +45,7 @@ class Frontend {
 	 * @access   private
 	 * @var      string    $plugin_text_domain    The text domain of this plugin.
 	 */
-	private $plugin_text_domain;
+	protected $plugin_text_domain;
 
     /**
      * Templating Engine Plates
@@ -54,7 +54,7 @@ class Frontend {
      * @access  private
      * @var     Engine  $templates
      */
-    private $templates;
+    protected $templates;
 
 	/**
 	 * Initialize the class and set its properties.
@@ -79,7 +79,7 @@ class Frontend {
 	 *
 	 * @since    1.0.0
 	 */
-	public function enqueue_styles() {
+	public final function enqueue_styles() {
 
 		/**
 		 * This function is provided for demonstration purposes only.
@@ -102,7 +102,7 @@ class Frontend {
 	 *
 	 * @since    1.0.0
 	 */
-	public function enqueue_scripts() {
+	public final function enqueue_scripts() {
 
 		/**
 		 * This function is provided for demonstration purposes only.
@@ -141,7 +141,7 @@ class Frontend {
      *
      * @TODO    Approve Gutenberg Block
      */
-    function gutenberg_kitchenrun_signup_register_block()
+    public final function gutenberg_kitchenrun_signup_register_block()
     {
         if ( ! function_exists( 'register_block_type' ) ) {
             // Gutenberg is not active.
@@ -166,7 +166,7 @@ class Frontend {
             filemtime( plugin_dir_path( __FILE__ ) . 'css/wp-kitchenrun-editor.css' )
         );
 
-        $signup = new Signup($this->plugin_name, $this->version, $this->plugin_text_domain, true);
+        $signup = new Signup($this->plugin_name, $this->version, $this->plugin_text_domain);
 
         // register the block for editor
         register_block_type( 'kitchenrun/signup', array(

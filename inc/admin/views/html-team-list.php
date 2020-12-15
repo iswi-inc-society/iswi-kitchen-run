@@ -26,11 +26,9 @@ use League\Plates\Template\Template;
     <h1 class="wp-heading-inline"><?= $title ?></h1>
     <a class="page-title-action" href="<?= $table->get_new_team_link() ?>"><?= $this->e($new) ?></a>
 
-    <div id="kr-list-table-events">
-        <div id="kr-post-body">
-            <form id="kr-event-list-form" method="get">
-                <?= $table->display() ?>
-            </form>
-        </div>
+    <div id="kr-list-teams">
+        <form id="kr-form-list-teams" method="get">
+            <?= $table->display() ?>
+        </form>
     </div>
 </div>

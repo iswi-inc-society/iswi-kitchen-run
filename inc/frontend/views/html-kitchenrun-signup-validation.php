@@ -42,7 +42,6 @@ use League\Plates\Template\Template;
         <li class="kr_active">Contact</li>
         <li class="kr_active">Address</li>
         <li class="kr_active">Food</li>
-        <li class="kr_active">Courses</li>
         <li class="kr_active">Submit</li>
     </ul>
 	<?php endif; ?>

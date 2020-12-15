@@ -9,5 +9,10 @@
 ?>
 
 <script type="text/javascript">
-    document.location.href="?success=1";
+    if (window.location.search === "") {
+        document.location.href= window.location.href + "?success=1";
+    } else {
+        document.location.href= window.location.href + "&success=1";
+    }
+
 </script>

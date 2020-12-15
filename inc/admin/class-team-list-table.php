@@ -20,23 +20,6 @@ use KitchenRun\Inc\Libraries\WP_List_Table;
 class Team_List_Table extends WP_List_Table
 {
 
-    /**
-     * The ID of this plugin.
-     *
-     * @since    1.0.0
-     * @access   private
-     * @var      string    $plugin_name    The ID of this plugin.
-     */
-    private $plugin_name;
-
-    /**
-     * The version of this plugin.
-     *
-     * @since    1.0.0
-     * @access   private
-     * @var      string    $version    The current version of this plugin.
-     */
-    private $version;
 
     /**
      * The text domain of this plugin.
@@ -57,6 +40,7 @@ class Team_List_Table extends WP_List_Table
      */
     private $event;
 
+    private $teams_per_page;
 
     /**
      * Initialize the class and set its properties.
@@ -67,10 +51,9 @@ class Team_List_Table extends WP_List_Table
      * @param array  $args
      * @since       1.0.0
      */
-    public function __construct( $plugin_name, $version, $plugin_text_domain, $args = array() ) {
+    public function __construct( $teams_per_page, $plugin_text_domain, $args = array() ) {
 
-        $this->plugin_name = $plugin_name;
-        $this->version = $version;
+        $this->teams_per_page = $teams_per_page;
         $this->plugin_text_domain = $plugin_text_domain;
 
         if (isset($_GET['event'])) { // event set by filter
@@ -78,6 +61,8 @@ class Team_List_Table extends WP_List_Table
         } else { // standard event is the current event
             $this->event = Event::findCurrent();
         }
+
+
 
         parent::__construct($args);
 
@@ -99,12 +84,27 @@ class Team_List_Table extends WP_List_Table
             'team_city'         => __( 'City', $this->plugin_text_domain),
             'team_phone'        => __( 'Telephone', $this->plugin_text_domain),
             'team_email'        => __( 'E-Mail', $this->plugin_text_domain),
-            'team_food_pref'    => __( 'Food Preferences', $this->plugin_text_domain),
-            'team_course_pref'  => __( 'Course Preferences', $this->plugin_text_domain),
+            'team_food_pref'    => __( 'Food', $this->plugin_text_domain),
+            'team_course_pref'  => __( 'Course', $this->plugin_text_domain),
             'team_valid'        => __( 'Valid', $this->plugin_text_domain),
+            'ext'               => ''
         );
         return $table_columns;
     }
+
+	/**
+	 * Get sortable columns. Creates link in the header of the column.
+	 * Sort Algorithm implemented in prepare_items().
+	 *
+	 * @since   1.0.0
+	 * @return  array  Columns that can be sorted.
+	 */
+	protected function get_sortable_columns() {
+		$sortable_columns = array (
+			'team_name' => array('team_name', true),
+		);
+		return $sortable_columns;
+	}
 
     /**
      * Bring the properties of the teams from the database into a form that can be displayed by the table.
@@ -117,6 +117,7 @@ class Team_List_Table extends WP_List_Table
     {
 
         /**
+         * Filter Teams by Team
          * @var Team[] $teams
          */
         if (isset($_GET['event'])) { // event set by filter
@@ -129,7 +130,10 @@ class Team_List_Table extends WP_List_Table
             return false;
         }
 
+
+
         $table_data = array();
+        $table_extended = array();
 
         $image_dir = "/wp-content/plugins/iswi-kitchen-run/assets/images/";
 
@@ -169,11 +173,27 @@ class Team_List_Table extends WP_List_Table
                 'team_email'    => $team->getEmail(),
                 'team_food_pref'=> $food_pref,
                 'team_course_pref' => $course_pref,
-                'team_valid'    => $valid
+                'team_valid'    => $valid,
+                'ext'           => '<span class="dashicons dashicons-arrow-down-alt2 kr_teams_extend"></span>',
+                'extended'      => array(
+	                'team_find_place' => array("desc" => __("Find Place", $this->plugin_text_domain) ,"val" => $team->getFindPlace() != '' ? $team->getFindPlace() : '-'),
+	                'team_food_request' => array("desc" => __("Food Request", $this->plugin_text_domain) ,"val" => $team->getFoodRequest() != '' ? $team->getFoodRequest() : '-'),
+	                'team_comment' => array("desc" => __("Comment", $this->plugin_text_domain) ,"val" => $team->getComments() != '' ? $team->getComments() : '-'),
+                )
             );
         }
 
-        $this->items = $table_data; // save in items -> rows
+	    // set up multiple site table with maximal 10 teams per page
+	    $per_page = $this->teams_per_page;
+	    $this->set_pagination_args( array(
+		    'total_items' => count($teams),                  //WE have to calculate the total number of items
+		    'per_page'    => $per_page                     //WE have to determine how many items to show on a page
+	    ) );
+
+	    $page = isset($_GET['paged']) ? $_GET['paged'] : 1; //what page number are we on?
+
+	    usort($table_data, array($this, "cmp_sort_asc"));
+        $this->items = array_slice($table_data, ($page-1)*$per_page, $per_page); // save in items -> rows
 
         return true;
     }
@@ -315,6 +335,48 @@ class Team_List_Table extends WP_List_Table
             '<label class="screen-reader-text" for="team_'.$item['team_id'].'"></label>'
             . "<input type='checkbox' name='teams[]' id='team_".$item['team_id']." ' value='".$item['team_id']."' />"
         );
+    }
+
+	public function single_row( $item ) {
+
+		echo '<tr class="kr-team-row">';
+		$this->single_row_columns( $item );
+		echo '</tr>';
+
+		//var_dump($item);
+
+		echo '<tr class="kr-extended-row display-none">';
+
+		foreach ($item['extended'] as $key => $item_e) {
+            echo sprintf('
+                <td class="colspanchange %s" colspan="3">
+                    <div class="kr-tl-cell-inner">
+                        <span class="kr-tl-desc">%s</span>
+                        <p class="kr-tl-val">%s</p>
+                    </div>
+                </td>
+            ', $key, $item_e['desc'], $item_e['val']);
+        }
+        echo '<td class="colspanchange" colspan="2"></td>';
+		echo '</tr>';
+
+
+	}
+
+	/**
+	 * Callable sort function to sort the team arrays
+     * @param array $team1
+     * @param array $team2
+     * @return bool
+	 */
+	private function cmp_sort_asc($team1, $team2) {
+		$orderby = ( ! empty( $_GET['orderby'] ) ) ? $_GET['orderby'] : 'team_name';
+		// If no order, default to asc
+		$order = ( ! empty($_GET['order'] ) ) ? $_GET['order'] : 'asc';
+		// Determine sort order
+		$result = strcmp( $team1[$orderby], $team2[$orderby] );
+		// Send final sort direction to usort
+		return ( $order === 'asc' ) ? $result : -$result;
     }
 
 }

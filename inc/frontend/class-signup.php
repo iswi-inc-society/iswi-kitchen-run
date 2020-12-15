@@ -17,44 +17,8 @@ use League\Plates\Engine;
  * @package KitchenRun\Inc\Frontend
  * @since 1.0.0
  */
-class Signup
+class Signup extends Frontend
 {
-    /**
-     * The ID of this plugin.
-     *
-     * @since    1.0.0
-     * @access   private
-     * @var      string    $plugin_name    The ID of this plugin.
-     */
-    private $plugin_name;
-
-    /**
-     * The version of this plugin.
-     *
-     * @since    1.0.0
-     * @access   private
-     * @var      string    $version    The current version of this plugin.
-     */
-    private $version;
-
-    /**
-     * The text domain of this plugin.
-     *
-     * @since    1.0.0
-     * @access   private
-     * @var      string    $plugin_text_domain    The text domain of this plugin.
-     */
-    private $plugin_text_domain;
-
-    /**
-     * Templating Engine Plates
-     *
-     * @since   1.0.0
-     * @access  private
-     * @var     Engine  $templates
-     */
-    private $templates;
-
     /**
      * Team that is signing up
      *
@@ -75,15 +39,18 @@ class Signup
      */
     private $suc = 0;
 
-    /**
-     * Should a confirmation email be sent after registration.
-     *
-     * @since   1.0.0
-     * @access  private
-     * @var     bool
-     */
-    private $confirmation_mail;
+	/**
+	 * Event of the Form
+	 *
+	 * @var Event
+	 */
+    private $event;
 
+	/**
+	 * Error Messages
+	 *
+	 * @var array
+	 */
     private $error_msg = array();
 
     // States
@@ -96,29 +63,11 @@ class Signup
     const VALIDATION = 'VALIDATION';
     const SUBMIT = 'SUBMIT';
  
-    /**
-     * Signup constructor.
-     *
-     * Checks the state of sign up (submitted or not)
-     *
-     * @since 1.0.0
-     * @param       string $plugin_name        The name of this plugin.
-     * @param       string $version            The version of this plugin.
-     * @param       string $plugin_text_domain The text domain of this plugin.
-     * @param       bool   $confirmation_mail  Should a confirmation mail be sent after registration?
-     */
-    public function __construct( $plugin_name, $version, $plugin_text_domain, $confirmation_mail )
-    {
-        $this->plugin_name = $plugin_name;
-        $this->version = $version;
-        $this->plugin_text_domain = $plugin_text_domain;
 
-        $this->confirmation_mail = $confirmation_mail;
-
-        $this->templates = new Engine(__DIR__ . '/views');
-    }
 
     public function init() {
+
+	    $this->event = Event::findCurrent();
 
 
         $state = $this->getState();
@@ -174,7 +123,8 @@ class Signup
 		                'state'                 => $state,
 		                'opening_date'          => $opening_date,
 		                'closing_date'          => $closing_date,
-		                'event_date'            => $event_date
+		                'event_date'            => $event_date,
+		                'errors'             => $this->error_msg,
 	                ));
 
                 default:
@@ -189,9 +139,16 @@ class Signup
         }
     }
 
+	/**
+	 * Get State of Kitchen Run Frontend Element
+	 *
+	 * @return string
+	 */
     public function getState() {
 
-        if ($this->getEvent() == null) {
+	    $event = Event::findCurrent();
+
+        if (!isset($event)) {
             return self::NO_EVENT;
         }
 
@@ -203,7 +160,6 @@ class Signup
             return self::VALIDATION;
         }
 
-        $event = $this->getEvent();
         $opening_date = $event->getOpeningDate()->getTimestamp();
         $closing_date = $event->getClosingDate()->getTimestamp();
         $event_date = $event->getEventDate()->getTimestamp();

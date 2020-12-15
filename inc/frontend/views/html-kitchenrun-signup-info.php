@@ -27,7 +27,7 @@ use League\Plates\Template\Template;
     <?php endforeach ?>
 <?php endif; ?>
 
-<?php if ($state == 'NO EVENT' || $state == 'AFTER_EVENT'): ?>
+<?php if ($state == 'NO_EVENT' || $state == 'AFTER_EVENT'): ?>
     <p class="kr-signup-info">
         There is no upcoming Kitchen Run Event!
     </p>
