@@ -587,8 +587,8 @@ class Team_Page extends Admin
 		    $msg = array();
 		    $errors = 0;
 
-		    $course_length = 3600;
-		    $course_pause = 1800;
+		    $course_length = 3600; // TODO: set in settings
+		    $course_pause = 1800; // TODO: set in settings
 		    $timestamp = $this->event->getEventDate()->getTimestamp();
 
 
@@ -688,7 +688,7 @@ class Team_Page extends Admin
 			    if ($team->getLink() == null) $missing_link = true;
 		    }
 
-		    if ($missing_link) Admin_Notice::create('warning', esc_html__('Not every Team has a Meeting Link, so not every Session will get a Meeting Link!'));
+		    if ($missing_link && $this->event->isOnline()) Admin_Notice::create('warning', esc_html__('Not every Team has a Meeting Link, so not every Session will get a Meeting Link!'));
 
 		    return $this->templates->render('html-send-mails', [ // render views/html-team-delete.php
 			    'title'                 => __('Send Course Information Mails', $this->plugin_text_domain),
