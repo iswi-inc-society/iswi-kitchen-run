@@ -97,9 +97,9 @@ class Event_List_Table extends WP_List_Table
                 'id'            => $event->getId(),
                 'current'       => $event->getCurrent(),
                 'event_name'    => $event->getName(),
-                'opening_date'  => $event->getOpeningDate()->format('d.m.Y H:m'),
-                'closing_date'  => $event->getClosingDate()->format('d.m.Y H:m'),
-                'event_date'    => $event->getEventDate()->format('d.m.Y H:m'),
+                'opening_date'  => $event->getOpeningDate()->format('d.m.Y H:i'),
+                'closing_date'  => $event->getClosingDate()->format('d.m.Y H:i'),
+                'event_date'    => $event->getEventDate()->format('d.m.Y H:i'),
                 'manager'       => $event->getManager()->display_name,
                 'paired'        => $event->getPaired() ? '<img src="'.$image_dir.'checked.png'.'" alt="tick" />' : '<img src="'.$image_dir.'cancel.png'.'" alt="cross" />',
             );

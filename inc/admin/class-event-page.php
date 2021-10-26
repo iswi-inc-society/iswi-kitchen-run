@@ -162,7 +162,7 @@ class Event_Page extends Admin
             'title'         => __('Update Kitchen Run Event', $this->plugin_text_domain),
             'event'         => $event,
             'date_format'   => 'Y-m-d',
-            'hour_format'   => 'H:m',
+            'hour_format'   => 'H:i',
             'event_name'    => __('Event Name', $this->plugin_text_domain),
             'opening_date'  => __('Opening Date', $this->plugin_text_domain),
             'closing_date'  => __('Closing Date', $this->plugin_text_domain),
