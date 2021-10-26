@@ -76,6 +76,13 @@ use League\Plates\Template\Template;
                         <td><input id="kr_update_team_phone" type="text" name="team_phone" value="<?php echo $team->getPhone() ?>" required /></td>
                     </tr>
 
+                    <?php if ($team->getEvent()->isOnline()): ?>
+                    <tr class="form-field">
+                        <th scope="row"><label for="kr_update_team_link"><?php _e('Meeting Link', $plugin_text_domain); ?></label></th>
+                        <td><input id="kr_update_team_link" type="url" name="team_link" value="<?php echo $team->getLink() ?>" /></td>
+                    </tr>
+                    <?php endif; ?>
+
                     <tr class="form-field form-required">
                         <th scope="row"><label><?php _e('Food Preferences', $plugin_text_domain); ?></label></th>
                         <td><fieldset>

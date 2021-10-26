@@ -20,34 +20,32 @@ use League\Plates\Template\Template;
 ?>
 
 <?php $this->insert('html-kitchenrun-signup-info', [
-    'plugin_text_domain' => $plugin_text_domain,
-    'state'         => $state,
-    'opening_date'  => $opening_date,
-    'closing_date'  => $closing_date,
-    'event_date'    => $event_date
+	'plugin_text_domain' => $plugin_text_domain,
+	'state'         => $state,
+	'opening_date'  => $opening_date,
+	'closing_date'  => $closing_date,
+	'event_date'    => $event_date
 ]);
 ?>
 
 <div class="kr_container">
-
-    <h2>Kitchen Run Signup</h2>
 
     <ul class="kr_progressbar">
         <li>Team</li>
         <li>Contact</li>
         <li>Address</li>
         <li>Food</li>
-       <!-- <li>Courses</li> -->
+        <!-- <li>Courses</li> -->
         <li>Submit</li>
     </ul>
 
 	<?php if (isset($errors)): ?>
-	<?php foreach ($errors as $error): ?>
-        <div class="kr_error_msg">
-			<?= $error ?>
-        </div>
-	<?php endforeach ?>
-    <?php endif; ?>
+		<?php foreach ($errors as $error): ?>
+            <div class="kr_error_msg">
+				<?= $error ?>
+            </div>
+		<?php endforeach ?>
+	<?php endif; ?>
 
     <form id="kr_signup" class="kr_signup" action="<?php echo $_SERVER['REQUEST_URI'] ?>" method="post">
 
@@ -76,7 +74,7 @@ use League\Plates\Template\Template;
 
         <fieldset id="kr_tab_2" class="kr_tab">
             <h4 class="kr_step_subtitle">Contact Information</h4>
-            <p class="kr_step_description">The E-Mail Address is needed to send your team the informations for the evening. At the end of the sign up you need to confirm your E-Mail Address.</p>
+            <p class="kr_step_description">The E-Mail Address is needed to send your team the information for the evening. At the end of the sign up you need to confirm your E-Mail Address.</p>
 
             <div class="kr_txtb">
                 <input type="email" name="kr_team_email" value="<?php if (isset($_POST['kr_team_email'])) echo $_POST['kr_team_email'] ?>" required>
@@ -123,7 +121,7 @@ use League\Plates\Template\Template;
 
         <fieldset id="kr_tab_4" class="kr_tab">
             <h4 class="kr_step_subtitle">Food Preferences</h4>
-            <p class="kr_step_description">Please tell us your food preferences, multiple selections are possible. Please use the text field, if you have allergies or something else. The informations will be sent to the cooking team.</p>
+            <p class="kr_step_description">Please tell us your food preferences, multiple selections are possible. Please use the text field, if you have allergies or something else. The information will be sent to the cooking team.</p>
 
             <!-- just needed for verification -->
             <input type="hidden" name="food_pref" id="kr_food_pref">
@@ -171,6 +169,72 @@ use League\Plates\Template\Template;
             <div class="kr_txtb">
                 <textarea name="kr_team_comment"><?php if (isset($_POST['kr_team_comment'])) echo $_POST['kr_team_comment'] ?></textarea>
                 <span data-placeholder="Place for some general comments"></span>
+            </div>
+
+            <div class="kr_acord">
+                <div class="kr_acord_label"><span class="dashicons dashicons-arrow-right"></span>Privacy Agreement</div>
+                <div class="kr_acord_text kr_priv_aggreement">
+                    <h4>Einwilligungserklärung in die Verarbeitung personenbezogener Daten gemäß DSGVO</h4>
+
+                    <p>Hiermit stimme ich der folgenden Verarbeitung meiner personenbezogenen Daten durch den ISWI e.V. zu:</p>
+
+                    <h5>Kategorie und Art der Datenverarbeitung</h5>
+
+                    <p>Folgende personenbezogene Daten werden durch den ISWI e.V. verarbeitet:</p>
+
+                    <ul>
+                        <li>Name, Vorname</li>
+                        <li>Adresse</li>
+                        <li>E-Mail-Adresse</li>
+                        <li>ggf. Allergien und Ernährungspräferenz</li>
+                    </ul>
+
+                    <p>Die Verarbeitung der personenbezogenen Daten durch den ISWI e.V. umfasst:</p>
+
+                    <ul>
+                        <li>Datenerhebung</li>
+                        <li>Datenspeicherung</li>
+                        <li>Weitergabe der zur Durchführung des "Kitchen Run"</li>
+                    </ul>
+
+                    <h5>Besondere Kategorien personenbezogener Daten</h5>
+
+                    <p>Folgende besondere personenbezogene Daten werden durch den ISWI e.V. verarbeitet:</p>
+
+                    <ul><li>Gesundheitsdaten (Allergien)</li></ul>
+
+                    <h5>Zweck der Datenverarbeitung</h5>
+
+                    <p>Diese Daten werden nur zu folgenden Zweck(en) verarbeitet:</p>
+
+                    <ul><li>Durchfürung der Veranstaltung "kitchen-run"</li></ul>
+
+                    <h5>Datensicherheit</h5>
+
+                    <p>Diese Daten werden nur von berechtigten Personen unter Einhaltung einer angemessenen Datensicherheit bearbeitet. Eine automatische Löschung der verarbeiteten Daten erfolgt nach 6 Monaten.</p>
+
+                    <h5>Widerrufsrecht</h5>
+
+                    <p>Der/die Einwilligende hat das Recht, die Einwilligung jederzeit mit Wirkung für die Zukunft ohne Angabe von Gründen zu widerrufen. Ab Zugang der Widerrufserklärung werden die Daten unverzüglich gelöscht insofern keine gesetzlichen Aufbewahrungsfristen entgegenstehen und der Widerruf wirksam ist. Die Wirksamkeit der bis zum Widerruf der Einwilligung getätigten Datenverarbeitung bleibt unberührt.</p>
+
+                    <p>Der Widerruf ist an die folgende E-Mail-Adresse zu richten: info@iswi.org</p>
+
+                    <h5>Weitere Rechte des/der Einwilligenden</h5>
+
+                    <p>Der/die Einwilligende besitzt auch das Recht der Löschung, der Sperrung, der Berichtigung und der Übertragbarkeit der Daten, sowie der Auskunft über die Datenverarbeitung. Die Geltendmachung dieser Rechte ist an folgende E-Mail-Adresse zu richten: info@iswi.org</p>
+
+                    <h5>Folgen der Nichtunterzeichnung</h5>
+
+                    <p>Der/die Unterzeichnende hat außerdem das Recht, allen oder einem der Zwecke dieser Einwilligungserklärung nicht zuzustimmen. Daher sind nur die Zwecke anzukreuzen, denen zugestimmt werden soll.</p>
+
+                    <p>Die Datenverarbeitung ist für den Zweck der Durchführung der Veranstaltung "Kitchen Run" notwendig. Die Nichtzustimmung schließt die Dienste durch den ISWI e.V. aus.</p>
+
+
+                    <h5>Freiwillige Zustimmung</h5>
+
+                    <p>Hiermit versichert der/die Unterzeichnende, der Erhebung und Verarbeitung der personenbezogenen Daten durch den ISWI e.V. zum folgenden Zweck der Durchführung der Veranstaltung des Kitchen-Runs freiwillig zuzustimmen. Eine ordnungsgemäße Belehrung über das Widerrufsrecht fand statt.</p>
+
+                </div>
             </div>
 
             <!-- Fancy Checkboxes -->

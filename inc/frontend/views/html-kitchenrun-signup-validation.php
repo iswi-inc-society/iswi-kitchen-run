@@ -34,8 +34,6 @@ use League\Plates\Template\Template;
 
 <div class="kr_container">
 
-	<h2>Kitchen Run Signup</h2>
-
 	<?php if ($verify_state == 'VALID' || $verify_state == 'SUC'): ?>
     <ul class="kr_progressbar">
         <li class="kr_active">Team</li>

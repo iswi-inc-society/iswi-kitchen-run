@@ -76,7 +76,7 @@ class Event_New extends Admin
 
 				Admin_Notice::create('success', sprintf(esc_html__( 'Successfully created the Event %s', $this->plugin_text_domain ), $event->getName()));
 
-                echo $this->templates->render('html-event-referer'); // js referer
+                echo $this->templates->render('referer/html-event-referer'); // js referer
                 die(); // so it doesn't automatically load the notices
 
             } else { // opening date after closing date

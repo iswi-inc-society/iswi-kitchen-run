@@ -58,7 +58,7 @@ class Database {
         $prefix = $wpdb->prefix;
 
         // sql query find row with id
-        $sql = sprintf("SELECT * FROM %s.%s%s WHERE %s='%s';", $databaseName, $prefix, $table, $column, $value);
+        $sql = sprintf("SELECT * FROM %s%s WHERE %s='%s';", $prefix, $table, $column, $value);
 
         if ($single) { return $wpdb->get_row($sql); } // query for a single row
         else { return $wpdb->get_results($sql); } // query for several rows
@@ -81,7 +81,7 @@ class Database {
         $prefix = $wpdb->prefix;
 
         // sql query find row with id
-        $sql = sprintf("SELECT * FROM %s.%s%s", $databaseName, $prefix, $table);
+        $sql = sprintf("SELECT * FROM %s%s", $prefix, $table);
 
         return $wpdb->get_results($sql);  // query for several rows
 
@@ -168,7 +168,8 @@ class Database {
             dessert tinyint(1) NOT NULL,
             valid tinyint(1) NOT NULL DEFAULT 0,
             token varchar(255) DEFAULT NULL,
-            iswi tinyint(1) NOT NULL DEFAULT 0,'
+            iswi tinyint(1) NOT NULL DEFAULT 0,
+            link varchar(255) NULL,'
         ;
 
         $this->db_install($sql, self::DB_TEAM_NAME); // table creation algorithm
@@ -210,7 +211,8 @@ class Database {
             closing_date datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
             event_date datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
             manager bigint(20) NOT NULL,
-            paired mediumint(9) NOT NULL DEFAULT '0',"
+            paired mediumint(9) NOT NULL DEFAULT '0',
+            online tinyint(1) NOT NULL DEFAULT '0',"
         ;
 
         $this->db_install($sql, self::DB_EVENT_NAME); // table creation algorithm
@@ -282,8 +284,8 @@ class Database {
 
         // sql query
         $sql_f = "CREATE TABLE $table_name ("
-            .$sql.
-            "PRIMARY KEY  (id)
+            .$sql."
+            PRIMARY KEY  (id)
             ) $charset_collate;"
         ;
 

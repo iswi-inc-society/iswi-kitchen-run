@@ -9,6 +9,24 @@
         steps = $("fieldset.kr_tab").length;
         current_progress = $(".kr_progressbar li:first-child");
 
+        // Accordion
+        $('.kr_acord_label').click(function () {
+            var acord_text = $('.kr_acord_text');
+            if (acord_text.hasClass('active'))
+                acord_text.removeClass('active');
+            else
+                acord_text.addClass('active');
+            
+            var dash_icon = $('.kr_acord_label > span.dashicons');
+            
+            if (dash_icon.hasClass("dashicons-arrow-right")) {
+                dash_icon.removeClass("dashicons-arrow-right");
+                dash_icon.addClass("dashicons-arrow-up");
+            } else {
+                dash_icon.removeClass("dashicons-arrow-up");
+                dash_icon.addClass("dashicons-arrow-right");
+            }
+        });
 
         // Check at the beginning if some fields already have content
         $('.kr_txtb input, textarea').each(function (){

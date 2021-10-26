@@ -30,8 +30,6 @@ $image_dir = "/wp-content/plugins/iswi-kitchen-run/assets/images/";
 
 <div class="kr_container">
 
-	<h2>Kitchen Run Signup</h2>
-
 	<ul class="kr_progressbar">
 		<li class="kr_active">Team</li>
 		<li class="kr_active">Contact</li>

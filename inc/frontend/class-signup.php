@@ -215,29 +215,34 @@ class Signup extends Frontend
 
         $this->team = new Team();
 
-        $name = trim($_POST["kr_team_name"]);
-        $member1 = trim($_POST["kr_team_member_1"]);
-        $member2 = trim($_POST["kr_team_member_2"]);
-        $address = trim($_POST["kr_team_address"]);
-        $city = trim($_POST["kr_team_city"]);
-        $phone = trim($_POST["kr_team_phone"]);
-        $email = trim($_POST["kr_team_email"]);
-        $vegan = isset($_POST['kr_team_vegan']) ? true : false;
+        $name = Signup::test_input($_POST["kr_team_name"]);
+        $member1 = Signup::test_input($_POST["kr_team_member_1"]);
+        $member2 = Signup::test_input($_POST["kr_team_member_2"]);
+        $address = Signup::test_input($_POST["kr_team_address"]);
+        $city = Signup::test_input($_POST["kr_team_city"]);
+        $phone = Signup::test_input($_POST["kr_team_phone"]);
+        $email = Signup::test_input($_POST["kr_team_email"]);
+        $vegan = Signup::test_input($_POST['kr_team_vegan']) ? true : false;
         $vegetarian = isset($_POST['kr_team_vegetarian']) ? true : false;
         $halal = isset($_POST['kr_team_halal']) ? true : false;
         $kosher = isset($_POST['kr_team_kosher']) ? true : false;
-        $food_request = trim($_POST['kr_team_food_request']);
-        $find_place = trim($_POST['kr_team_find_place']);
+        $food_request = Signup::test_input($_POST['kr_team_food_request']);
+        $find_place = Signup::test_input($_POST['kr_team_find_place']);
         $appetizer = isset($_POST['kr_team_appetizer']) ? true : false;
         $main_course = isset($_POST['kr_team_main_course']) ? true : false;
         $dessert = isset($_POST['kr_team_dessert']) ? true : false;
-        $comments = trim($_POST['kr_team_comment']);
+        $comments = Signup::test_input($_POST['kr_team_comment']);
         $event = Event::findCurrent();
         
         // check if email is already used
         $team = Team::findByMailAndEvent($email, $event);
         if (isset($team)) {
             $this->error_msg[] = 'E-Mail Address is already used, please choose another one!';
+            $errors++;
+        }
+        
+        if (!isset($_POST['kr_team_privacy_aggreement'])) {
+            $this->error_msg[] = 'You have to confirm that you have read the privacy agreement (see last step)!';
             $errors++;
         }
 
@@ -347,7 +352,7 @@ class Signup extends Frontend
         $message = $this->templates->render('mail/html-confirmation-mail', [
             'plugin_text_domain' => $this->plugin_text_domain,
             'date' => $this->team->getEvent()->getEventDate()->format('d.m.Y'),
-            'time' => $this->team->getEvent()->getEventDate()->format('h:i'),
+            'time' => $this->team->getEvent()->getEventDate()->format('g.i a'),
             'food_preferences' => $food_preferences,
             'courses' => $courses,
             'team' => $this->team,
@@ -380,4 +385,12 @@ class Signup extends Frontend
             'plugin_text_domain'    => $this->plugin_text_domain,
         ]);
     }
+
+
+    private static function test_input($data) {
+        $data = trim($data);
+        $data = stripslashes($data);
+        $data = htmlspecialchars($data);
+        return $data;
+      }
 }

@@ -157,6 +157,11 @@ class Team_Page extends Admin
             $team->setEvent(Event::findbyId($_POST['team_event']));
             $team->setValid(isset($_POST['team_valid']) ? 1 : 0);
             $team->setISWI(0); //TODO: ISWI Dummy Flag
+
+            if (isset($_POST['team_link'])) { // can only be set when event is online
+                $team->setLink();
+            }
+                
             $team->save();
 
             if ($add) Admin_Notice::create('success', sprintf(esc_html__('The Team %s was successfully created', $this->plugin_text_domain), $team->getName()));
@@ -411,27 +416,28 @@ class Team_Page extends Admin
             for ($i = 0; $i < count($g1); ++$i) {
                 if ($g1[$i]['course1']) {
                     if ($course1 < $num_can / 3) { // course is full
-                        $g2[] = $g1[$i]; // add the candidate in the next round
+	                    $output[0][$course1] = $g1[$i]['team'];
+	                    $course1++;
                         continue;
                     }
-                    $output[0][$course1] = $g1[$i]['team'];
-                    $course1++;
+
 
                 } elseif ($g1[$i]['course2']) {
                     if ($course2 < $num_can / 3) { // course is full
-                        $g2[] = $g1[$i];
+	                    $output[1][$course2] = $g1[$i]['team'];
+	                    $course2++;
                         continue; 
                     }
-                    $output[1][$course2] = $g1[$i]['team'];
-                    $course2++;
+
                 } elseif ($g1[$i]['course3']) {
                     if ($course3 < $num_can / 3) { // course is full
-                        $g2[] = $g1[$i];
+	                    $output[2][$course3] = $g1[$i]['team'];
+	                    $course3++;
                         continue;
                     }
-                    $output[2][$course3] = $g1[$i]['team'];
-                    $course3++;
+
                 }
+	            $g2[] = $g1[$i]; // add the candidate in the next round
             }
 
             // Set two choices
@@ -591,6 +597,9 @@ class Team_Page extends Admin
 		    $teams_mail = array();
 		    $i = 0;
 
+		    // boolean to indicate a missing link
+		    $missing_link = false;
+
 		    if (!$this->event->getPaired()) { // check paired status
 			    $errors++;
 			    Admin_Notice::create('error', sprintf(esc_html__('Teams must be paired before sending emails.', $this->plugin_text_domain)));
@@ -620,13 +629,13 @@ class Team_Page extends Admin
 					    'pair3'  => $pair3,
 					    'bcook3' => $bcook3,
 					    'team'   => $team,
-					    'date'   => $this->event->getEventDate()->format( 'd.m.Y' ),
-					    'stime1' => date( 'H:i', $timestamp ),
-					    'etime1' => date( 'H:i', $timestamp + $course_length ),
-					    'stime2' => date( 'H:i', $timestamp + $course_length + $course_pause ),
-					    'etime2' => date( 'H:i', $timestamp + 2 * $course_length + $course_length ),
-					    'stime3' => date( 'H:i', $timestamp + 2 * $course_length + 2 * $course_pause ),
-					    'etime3' => date( 'H:i', $timestamp + 3 * $course_length + 2 * $course_pause ),
+					    'date'   => $this->event->getEventDate()->format( 'F jS, Y' ),
+					    'stime1' => date( 'g.i a', $timestamp ),
+					    'etime1' => date( 'g.i a', $timestamp + $course_length ),
+					    'stime2' => date( 'g.i a', $timestamp + $course_length + $course_pause ),
+					    'etime2' => date( 'g.i a', $timestamp + 2 * $course_length + $course_pause ),
+					    'stime3' => date( 'g.i a', $timestamp + 2 * $course_length + 2 * $course_pause ),
+					    'etime3' => date( 'g.i a', $timestamp + 3 * $course_length + 2 * $course_pause ),
 				    ] );
 
 				    $teams_mail[ $i ]['team']    = $team;
@@ -640,9 +649,10 @@ class Team_Page extends Admin
 		    }
 
 		    if ($errors == 0) { // only send mails when everything went fine
+
 			    $i = 0;
 
-			    $subject = __('Kitchen Run Course Informations ', $this->plugin_text_domain);
+			    $subject = __('Kitchen Run Course Information', $this->plugin_text_domain);
 
 			    $headers = array(
 				    'Content-Type: text/html',
@@ -672,7 +682,13 @@ class Team_Page extends Admin
 
 		    return $this->templates->render('referer/html-team-referer');
 
-	    } else { // delete confirmation form
+	    } else { // confirmation form
+
+	    	foreach($teams as $team) {
+			    if ($team->getLink() == null) $missing_link = true;
+		    }
+
+		    if ($missing_link) Admin_Notice::create('warning', esc_html__('Not every Team has a Meeting Link, so not every Session will get a Meeting Link!'));
 
 		    return $this->templates->render('html-send-mails', [ // render views/html-team-delete.php
 			    'title'                 => __('Send Course Information Mails', $this->plugin_text_domain),

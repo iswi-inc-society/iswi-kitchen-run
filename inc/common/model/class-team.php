@@ -241,12 +241,17 @@ class Team
 
     /**
      * ISWI/Dummy Team flag
-     * 
-     * @since   1.0.0
-     * @access  private
+     *
      * @var     int $valid
      */
     private $iswi = 0;
+
+	/**
+	 * Meeting Link
+	 *
+	 * @var string $link
+	 */
+    private $link;
 
 
     /**
@@ -770,6 +775,14 @@ class Team
         $this->iswi = $iswi;
     }
 
+    public function setLink($link) {
+    	$this->link = $link;
+    }
+
+    public function getLink() {
+    	return $this->link;
+    }
+
     /**
      * Find a Team in the Database through the id.
      *
@@ -950,6 +963,7 @@ class Team
             'valid' => $this->getValid(),
             'token' => $this->getToken(),
             'iswi'  => $this->getISWI(),
+	        'link'  => $this->getLink(),
         );
 
         // Format of each column (%s = String, %d = Number)
@@ -975,6 +989,7 @@ class Team
             '%d',
             '%s',
             '%d',
+	        '%s',
         );
 
 
@@ -1028,6 +1043,7 @@ class Team
         $team->setValid($row->valid);
         $team->setToken($row->token);
         $team->setISWI($row->iswi);
+        $team->setLink($row->link);
 
         return $team;
     }

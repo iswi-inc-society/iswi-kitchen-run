@@ -1467,9 +1467,9 @@ use League\Plates\Template\Template;
 										<table>
 											<tr>
 												<th>
-													<h4 class="text-center">Kitchen Run Course Informations</h4>
+													<h3 class="text-center">Kitchen Run Course Information</h3>
                                                     <p>Dear <?php echo $team->getMember1(); if ($team->getMember2() != '') echo ' and '.$team->getMember2(); ?>,<br>
-                                                        You registered with your Team <?= $team->getName() ?> at the next Kitchen Run Game on the <b><?= $date ?></b>. Here is the information for the evening:</p>
+                                                        You registered with your Team <?= $team->getName() ?> for the next Kitchen Run at <b><?= $date ?></b>. Here is the information for the evening:</p>
 												</th>
 												<th class="expander"></th>
 											</tr>
@@ -1506,7 +1506,8 @@ use League\Plates\Template\Template;
                                         'course'        => 0,
                                         'date'          => $date,
                                         'start_time'    => $stime1,
-                                        'end_time'      => $etime1
+                                        'end_time'      => $etime1,
+	                                    'cook'          => $pair1->getCook(),
                                 ]);
                              } else {
                                 $this->insert('mail/html-pair-course-infos-guest', [
@@ -1545,7 +1546,8 @@ use League\Plates\Template\Template;
 									'course'        => 1,
 									'date'          => $date,
 									'start_time'    => $stime2,
-									'end_time'      => $etime2
+									'end_time'      => $etime2,
+									'cook'          => $pair2->getCook()
 								]);
 							} else {
 								$this->insert('mail/html-pair-course-infos-guest', [
@@ -1584,7 +1586,8 @@ use League\Plates\Template\Template;
 									'course'        => 2,
 									'date'          => $date,
 									'start_time'    => $stime3,
-									'end_time'      => $etime3
+									'end_time'      => $etime3,
+									'cook'          => $pair3->getCook()
 								]);
 							} else {
 								$this->insert('mail/html-pair-course-infos-guest', [
@@ -1603,7 +1606,10 @@ use League\Plates\Template\Template;
                                         <table>
                                             <tr>
                                                 <th>
-                                                    <p>You can contact each team through their contact information if you need to. Please don't answer this email, but contact us via kitchenrun@iswi.org if needed!</p>
+                                                    <p>You can contact each team through their mail address if you need to. Please don't answer this email but contact us via kitchenrun@iswi.org if you have any questions!</p>
+	                                                <p>For any problems during the evening (e.g. finding an address) please contact ISWI phone at +4915903014909.</p>
+	                                                <p><I>Enjoy the evening!</I></p>
+	                                                <p>Your Kitchen Run Team!</p>
 
                                                 </th>
                                                 <th class="expander"></th>

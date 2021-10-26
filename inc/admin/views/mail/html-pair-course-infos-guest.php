@@ -42,9 +42,8 @@ switch($course) {
 			<table>
 				<tr>
 					<th>
-                        <h5><?= $course_name ?>: <b><?= $start_time ?> to <?= $end_time ?></b> </h5>
-                        <h6>Guest Team</h6>
-						<p>The Cooking Team got your teams food preference and food request. Here are all the information you need:
+                        <h4><?= $course_name ?>: <b><?= $start_time ?> to <?= $end_time ?></b> (Guest Team) </h4>
+                        <p>The Cooking Team got your teams food preference and food request. Here is the address for you to pick up the food. Please use your own containers.</p>
 
                             <!--- CALLOUT -->
 						<table class="callout large-12">
@@ -55,6 +54,10 @@ switch($course) {
 										<tr>
 											<td>Team:</td><td><?= $team->getName() ?></td>
 										</tr>
+
+                                        <tr>
+                                            <td>Name:</td><td><?php echo $team->getMember1(); if ($team->getMember2() != '') echo ' and '.$team->getMember2(); ?></td>
+                                        </tr>
 
 										<tr>
 											<td>Contact:</td><td><?= $team->getEmail() ?></td>
@@ -74,7 +77,18 @@ switch($course) {
 							</tr>
 						</table>
 
-						<p>Addentional description of their address: <?= $team->getFindPlace() ?></p>
+
+						<?php if ($team->getEvent()->isOnline()): ?>
+                        <p><b>Meeting Link:</b>
+                            <?php if ($team->getLink() != null): ?>
+                                <a href="<?= $team->getLink()?>">Here</a>
+                            <?php else: ?>
+                                -
+                            <?php endif; ?>
+                        </p>
+						<?php endif; ?>
+
+						<p>Additional description of their address: <?php echo ($team->getFindPlace() != '') ?  $team->getFindPlace() :  '-' ?></p>
 					</th>
 				</tr>
 			</table>

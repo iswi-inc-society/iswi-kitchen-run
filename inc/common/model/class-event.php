@@ -108,6 +108,18 @@ class Event
 
 
     /**
+     * Is the Event going to be online?
+     * '0' -> no
+     * '1' -> yes
+     *
+     * @since   1.0.0
+     * @access  private
+     * @var     int $paired
+     */
+    private $online;
+
+
+    /**
      * Get Event ID.
      *
      * @since   1.0.0
@@ -320,6 +332,16 @@ class Event
         $this->paired = $bool;
     }
 
+    /**
+     * Is the event going to be held online?
+     * 
+     * @since 1.0.0
+     * @return bool
+     */
+    public function isOnline() {
+        return $this->online == 1;
+    }
+
 
     /**
      * Find a Event in the Database through the id.
@@ -455,6 +477,7 @@ class Event
         $event->setEventDate($row->event_date);
         $event->setManager($wp_user);
         $event->setPaired($row->paired);
+        $event->online = $row->online;
 
         return $event;
     }

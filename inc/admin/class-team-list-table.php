@@ -179,6 +179,7 @@ class Team_List_Table extends WP_List_Table
 	                'team_find_place' => array("desc" => __("Find Place", $this->plugin_text_domain) ,"val" => $team->getFindPlace() != '' ? $team->getFindPlace() : '-'),
 	                'team_food_request' => array("desc" => __("Food Request", $this->plugin_text_domain) ,"val" => $team->getFoodRequest() != '' ? $team->getFoodRequest() : '-'),
 	                'team_comment' => array("desc" => __("Comment", $this->plugin_text_domain) ,"val" => $team->getComments() != '' ? $team->getComments() : '-'),
+                    'team_link' => array("desc" => __("Link", $this->plugin_text_domain), "val" => $team->getLink() != null ? $team->getLink() : '-'),
                 )
             );
         }
@@ -345,11 +346,11 @@ class Team_List_Table extends WP_List_Table
 
 		//var_dump($item);
 
-		echo '<tr class="kr-extended-row display-none">';
+		echo '<tr class="kr-extended-row display-none"><td></td>';
 
 		foreach ($item['extended'] as $key => $item_e) {
             echo sprintf('
-                <td class="colspanchange %s" colspan="3">
+                <td class="colspanchange %s" colspan="2">
                     <div class="kr-tl-cell-inner">
                         <span class="kr-tl-desc">%s</span>
                         <p class="kr-tl-val">%s</p>

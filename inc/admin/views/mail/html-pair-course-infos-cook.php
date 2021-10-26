@@ -44,9 +44,8 @@ switch($course) {
 			<table>
 				<tr>
 					<th>
-						<h5><?= $course_name ?>: <b><?= $start_time ?> to <?= $end_time ?></b> </h5>
-                        <h6>Cooking Team</h6>
-						<p>In this course you are the cooking Team. Please consider the food preferences and requests of your guests, especially allergies and co. Have everything ready at their arrival. Here are all information you need:
+						<h4><?= $course_name ?>: <b><?= $start_time ?> to <?= $end_time ?></b> (Cooking Team)</h4>
+                        <p>In this course you are the Cooking Team. Please consider the food preferences and requests of your guests, especially allergies and co. The other Teams will come to your home and pick up the food. Have everything ready at <?= $start_time ?>. Here are all information you need:</p>
 
 							<!--- CALLOUT -->
 						<table class="callout large-12">
@@ -67,7 +66,7 @@ switch($course) {
 										</tr>
 
 										<tr>
-											<td>Food Request:</td><td><?= $team1->getFoodRequest() ?></td>
+											<td>Food Request:</td><td><?php echo ($team1->getFoodRequest() != '') ?  $team1->getFoodRequest() :  '-' ?></td>
 										</tr>
 
 									</table>
@@ -96,14 +95,25 @@ switch($course) {
 										</tr>
 
 										<tr>
-											<td>Food Request:</td><td><?= $team2->getFoodRequest() ?></td>
+											<td>Food Request:</td><td><?php echo ($team2->getFoodRequest() != '') ?  $team2->getFoodRequest() :  '-' ?></td>
 										</tr>
+
 
 									</table>
 								</th>
 								<th class="expander"></th>
 							</tr>
 						</table>
+
+						<?php if ($cook->getEvent()->isOnline()): ?>
+                        <p><b>Meeting Link:</b>
+							<?php if ($cook->getLink() != null): ?>
+                                <a href="<?= $cook->getLink()?>">Here</a>
+							<?php else: ?>
+                                -
+							<?php endif; ?>
+                        </p>
+						<?php endif; ?>
 					</th>
 				</tr>
 			</table>

@@ -5,7 +5,7 @@
 
 /** General Elements **/
 div.kr_container {
-    width: 40em;
+    max-width: 40em;
 }
 
 div.kr_container > h2 {
@@ -155,6 +155,7 @@ form#kr_signup > fieldset.kr_tab input[type="submit"] {
     color: white;
     cursor: pointer;
     text-decoration: none;
+    font-size: 1.2rem;
 }
 
 form#kr_signup > fieldset.kr_tab input.kr_btn_next[type="button"] {
@@ -377,4 +378,27 @@ div.kr_container > div.kr_signup_success img {
 
 div.kr_container > div.kr_signup_success p, .kr_signup_error p {
     text-align: center;
+}
+
+/** Accordion **/
+form#kr_signup > fieldset.kr_tab > div.kr_acord {
+
+}
+
+form#kr_signup > fieldset.kr_tab > div.kr_acord > div.kr_acord_label {
+    cursor: pointer;
+    color: #999;
+    border-bottom: 2px #999 solid;
+    padding: 5px 0;
+}
+
+form#kr_signup > fieldset.kr_tab > div.kr_acord > div.kr_acord_text {
+    display: none;
+    height: 20em;
+    overflow-y: scroll;
+    padding: 1em;
+}
+
+form#kr_signup > fieldset.kr_tab > div.kr_acord > div.kr_acord_text.active {
+    display: block;
 }
