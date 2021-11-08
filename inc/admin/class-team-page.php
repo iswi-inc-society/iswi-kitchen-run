@@ -661,10 +661,13 @@ class Team_Page extends Admin
 			    // Set Kitchen Run E-Mail Settings
 			    $from_mail = get_option('kitchenrun_email');
 			    $from_name = get_option('kitchenrun_email_name');
+                $reply_to = get_option('kitchenrun_contact_email');
 			    if (isset($from_mail) && isset($from_name))
 				    $headers[] = 'From: '.$from_name.' <'.$from_mail.'>';
 			    if (isset($from_mail))
 				    $headers[] = 'From: '.$from_mail;
+                if (isset($reply_to))
+                    $headers[] = 'Reply-To: '.$reply_to;
 
 			    foreach ($teams_mail as $mail) {
 
