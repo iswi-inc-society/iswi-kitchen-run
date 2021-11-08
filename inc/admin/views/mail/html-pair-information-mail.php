@@ -1469,7 +1469,7 @@ use League\Plates\Template\Template;
 												<th>
 													<h3 class="text-center">Kitchen Run Course Information</h3>
                                                     <p>Dear <?php echo $team->getMember1(); if ($team->getMember2() != '') echo ' and '.$team->getMember2(); ?>,<br>
-                                                        You registered with your Team <?= $team->getName() ?> for the next Kitchen Run at <b><?= $date ?></b>. Here is the information for the evening:</p>
+                                                        The fun time with food is happening on <b><?= $date ?></b>. You are one of the enthusiastic groups who have registered for the event. Following is the information for a great evening ahead:</p>
 												</th>
 												<th class="expander"></th>
 											</tr>
@@ -1606,7 +1606,7 @@ use League\Plates\Template\Template;
                                         <table>
                                             <tr>
                                                 <th>
-                                                    <p>You can contact each team through their mail address if you need to. Please don't answer this email but contact us via kitchenrun@iswi.org if you have any questions!</p>
+                                                    <p>You can contact each team via their mail address if you need to. Please don't answer this email but contact us via kitchenrun@iswi.org if you have any questions!</p>
 	                                                <p>For any problems during the evening (e.g. finding an address) please contact ISWI phone at +4915903014909.</p>
 	                                                <p><I>Enjoy the evening!</I></p>
 	                                                <p>Your Kitchen Run Team!</p>

@@ -43,8 +43,14 @@ switch($course) {
 				<tr>
 					<th>
                         <h4><?= $course_name ?>: <b><?= $start_time ?> to <?= $end_time ?></b> (Guest Team) </h4>
-                        <p>The Cooking Team got your teams food preference and food request. Here is the address for you to pick up the food. Please use your own containers.</p>
-
+						<?php if ($course == 0): //Appetizer ?>
+							<p>Always a great dinner starts with a great Appetizer. So to have a great evening, you are set with the team "<?= $team->getName() ?>" and your food preferences are given to them. Given below is the address of your hosts. </p>
+						<?php elseif ($course == 1): // Main Course ?>
+							<p>The soul of any dinner is this, lets have your taste buds experience it. So, you are set with the team "<?= $team->getName() ?>" and your food preferences are given to them. Given below is the address of your hosts.</p>
+						<?php elseif ($course == 2): // Dessert ?>
+							<p>Like Moon for the Night, the Dessert is for Dinner. You are set with the team "<?= $team->getName() ?>" and your food preferences are given to them. Given below is the address of your hosts.</p>
+						<?php endif; ?>
+                        
                             <!--- CALLOUT -->
 						<table class="callout large-12">
 							<tr>

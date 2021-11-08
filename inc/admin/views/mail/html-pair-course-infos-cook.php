@@ -45,7 +45,14 @@ switch($course) {
 				<tr>
 					<th>
 						<h4><?= $course_name ?>: <b><?= $start_time ?> to <?= $end_time ?></b> (Cooking Team)</h4>
-                        <p>In this course you are the Cooking Team. Please consider the food preferences and requests of your guests, especially allergies and co. The other Teams will come to your home and pick up the food. Have everything ready at <?= $start_time ?>. Here are all information you need:</p>
+						<?php if ($course == 0): //Appetizer ?>
+							<p>Always a great dinner starts with a great Appetizer.</p>
+						<?php elseif ($course == 1): // Main Course ?>
+							<p>The soul of any dinner is this, lets have your taste buds experience it.</p>
+						<?php elseif ($course == 2): // Dessert ?>
+							<p>Like Moon for the Night, the Dessert is for Dinner.</p>
+						<?php endif; ?>
+                        <p>Hurray, make your guests dig into your delicious food. You are the cooking team for this delicacy. Kindly take into account the food preferences of the teams, especially allergies and co. Here is the information you need: </p>
 
 							<!--- CALLOUT -->
 						<table class="callout large-12">
