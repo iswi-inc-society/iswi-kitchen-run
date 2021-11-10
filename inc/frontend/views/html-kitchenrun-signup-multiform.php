@@ -47,7 +47,7 @@ use League\Plates\Template\Template;
 		<?php endforeach ?>
 	<?php endif; ?>
 
-    <form id="kr_signup" class="kr_signup" action="<?php echo $_SERVER['REQUEST_URI'] ?>" method="post">
+    <form id="kr_signup" class="kr_signup">
 
         <fieldset id="kr_tab_1" class="kr_tab">
             <h4 class="kr_step_subtitle">Team Information</h4>
@@ -245,7 +245,7 @@ use League\Plates\Template\Template;
 
             <input type="button" name="kr_prev" class="kr_btn_prev" value="Previous" />
 
-            <input type="submit" name="kr_team_submitted" class="kr_btn_submit" value="Submit" />
+            <input type="button" name="kr_team_submitted" class="kr_btn_submit" value="Submit" />
 
         </fieldset>
 
@@ -275,6 +275,13 @@ use League\Plates\Template\Template;
 
             <input type="button" name="kr_next" class="kr_btn_next" value="Next" />
 
+        </fieldset>
+
+        <fieldset id="kr_tab_hidden" class="kr_tab">
+            <div class="kr_signup_success">
+                <img src="email.svg">
+                <p>Your Sign Up was successful. We send you a verification E-Mail with some instructions. For questions, please contact kitchenrun@iswi.org</p>
+            </div>
         </fieldset>
 
     </form>

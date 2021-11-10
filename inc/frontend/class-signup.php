@@ -213,25 +213,30 @@ class Signup extends Frontend
         $errors = 0;
         $err_msg = array();
 
+        check_ajax_referer("kr_signup_submit"); //check the nonce, dies if not valid
+
+        $json = $_POST['form_data'];
+        //$json = json_decode($raw_data);
+
         $this->team = new Team();
 
-        $name = Signup::test_input($_POST["kr_team_name"]);
-        $member1 = Signup::test_input($_POST["kr_team_member_1"]);
-        $member2 = Signup::test_input($_POST["kr_team_member_2"]);
-        $address = Signup::test_input($_POST["kr_team_address"]);
-        $city = Signup::test_input($_POST["kr_team_city"]);
-        $phone = Signup::test_input($_POST["kr_team_phone"]);
-        $email = Signup::test_input($_POST["kr_team_email"]);
-        $vegan = Signup::test_input($_POST['kr_team_vegan']) ? true : false;
-        $vegetarian = isset($_POST['kr_team_vegetarian']) ? true : false;
-        $halal = isset($_POST['kr_team_halal']) ? true : false;
-        $kosher = isset($_POST['kr_team_kosher']) ? true : false;
-        $food_request = Signup::test_input($_POST['kr_team_food_request']);
-        $find_place = Signup::test_input($_POST['kr_team_find_place']);
-        $appetizer = isset($_POST['kr_team_appetizer']) ? true : false;
-        $main_course = isset($_POST['kr_team_main_course']) ? true : false;
-        $dessert = isset($_POST['kr_team_dessert']) ? true : false;
-        $comments = Signup::test_input($_POST['kr_team_comment']);
+        $name = Signup::test_input($json["kr_team_name"]);
+        $member1 = Signup::test_input($json["kr_team_member_1"]);
+        $member2 = Signup::test_input($json["kr_team_member_2"]);
+        $address = Signup::test_input($json["kr_team_address"]);
+        $city = Signup::test_input($json["kr_team_city"]);
+        $phone = Signup::test_input($json["kr_team_phone"]);
+        $email = Signup::test_input($json["kr_team_email"]);
+        $vegan = Signup::test_input($json['kr_team_vegan']) ? true : false;
+        $vegetarian = isset($json['kr_team_vegetarian']) ? true : false;
+        $halal = isset($json['kr_team_halal']) ? true : false;
+        $kosher = isset($json['kr_team_kosher']) ? true : false;
+        $food_request = Signup::test_input($json['kr_team_food_request']);
+        $find_place = Signup::test_input($json['kr_team_find_place']);
+        $appetizer = isset($json['kr_team_appetizer']) ? true : false;
+        $main_course = isset($json['kr_team_main_course']) ? true : false;
+        $dessert = isset($json['kr_team_dessert']) ? true : false;
+        $comments = Signup::test_input($json['kr_team_comment']);
         $event = Event::findCurrent();
         
         // check if email is already used
@@ -241,7 +246,7 @@ class Signup extends Frontend
             $errors++;
         }
         
-        if (!isset($_POST['kr_team_privacy_aggreement'])) {
+        if (!isset($json['kr_team_privacy_aggreement'])) {
             $this->error_msg[] = 'You have to confirm that you have read the privacy agreement (see last step)!';
             $errors++;
         }
@@ -278,10 +283,11 @@ class Signup extends Frontend
 
             $this->sendConfirmationMail();
 
-            return true;
+            wp_send_json_success("Test 123");
         } else {
-            return false;
+            wp_send_json_error($json["kr_team_name"]);
         }
+        die();
 
     }
 

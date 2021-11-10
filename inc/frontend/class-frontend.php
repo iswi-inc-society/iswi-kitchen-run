@@ -120,6 +120,16 @@ class Frontend {
 
 		wp_enqueue_script( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'js/wp-kitchenrun-signup.js', array( 'jquery' ), $this->version, true );
 
+		// add data to jquery objects
+		wp_localize_script(
+			$this->plugin_name,
+			'kr_signup_ajax_obj',
+			array(
+				'ajax_url' => admin_url( 'admin-ajax.php' ),
+				'nonce'    => wp_create_nonce( 'kr_signup_submit' ),
+			)
+		);
+
 	}
 
     /**
@@ -166,8 +176,11 @@ class Frontend {
             filemtime( plugin_dir_path( __FILE__ ) . 'css/wp-kitchenrun-editor.css' )
         );
 
+
+
         $signup = new Signup($this->plugin_name, $this->version, $this->plugin_text_domain);
 
+		
         // register the block for editor
         register_block_type( 'kitchenrun/signup', array(
             'render_callback' => array($signup, 'init'), // rendering for frontend

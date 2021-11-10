@@ -8,6 +8,7 @@
         var current = 1,current_step,next_step,steps,current_progress;
         steps = $("fieldset.kr_tab").length;
         current_progress = $(".kr_progressbar li:first-child");
+        var form = $('#kr_signup');
 
         // Accordion
         $('.kr_acord_label').click(function () {
@@ -33,8 +34,10 @@
             if ($(this).val() != '') $(this).addClass("focus");
         });
 
+
+        // validate the form input -> TODO: use AJAX to validate the email during the step
         $(".kr_btn_next").click(function(){
-            var form = $('#kr_signup');
+            
             form.validate({
                 ignore: ':hidden:not("#kr_food_pref"):not("#kr_course_pref"):not("#kr_privacy_aggreement")', // ignore all hidden fields except these three
                 rules: {
@@ -73,6 +76,7 @@
             });
 
             if (form.valid() === true) {
+
                 current_step = $(this).parent();
                 next_step = $(this).parent().next();
                 next_step.show();
@@ -81,6 +85,27 @@
                 current_progress.addClass("kr_active");
                 current_progress = current_progress.next();
             }
+        });
+
+        // Submit Form via Ajax
+        $(".kr_btn_submit").click(function(){
+            $.post(
+                kr_signup_ajax_obj.ajax_url, 
+                {         //POST request
+                    _ajax_nonce: kr_signup_ajax_obj.nonce,  //nonce
+                    action: "kr_signup_submit",            //action
+                    form_data: ConvertFormToJSON(form)     //data
+                }
+            ).done(function(data) {
+                current_step = $(this).parent();
+                next_step = $(this).parent().prev();
+                next_step.show();
+                current_step.hide();
+                }
+            ).fail(function(data) {
+                alert("Error");
+                }
+            );
         });
 
         $(".kr_btn_prev").click(function(){
@@ -101,5 +126,17 @@
                 $(this).removeClass("focus");
         });
     });
+
+    // converts a form to a JSON
+    function ConvertFormToJSON(form){
+        var array = jQuery(form).serializeArray();
+        var json = {};
+        
+        jQuery.each(array, function() {
+            json[this.name] = this.value || '';
+        });
+        
+        return json;
+    }
 
 })( jQuery );
