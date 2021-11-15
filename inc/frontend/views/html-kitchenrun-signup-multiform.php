@@ -15,6 +15,7 @@ use League\Plates\Template\Template;
  * @var     string      $closing_date           Closing Date String
  * @var     string      $event_date             Event Date String
  * @var     array       $errors                 Errors
+ * @var     string      $email_icon             Path to Email Icon
  */
 
 ?>
@@ -249,6 +250,12 @@ use League\Plates\Template\Template;
 
         </fieldset>
 
+        <fieldset id="kr_tab_6" class="kr_tab kr_signup_success">
+            <h4 class="kr_step_subtitle">Verify E-Mail</h4>
+            <img src="<?= $email_icon ?>">
+            <p>Your Sign Up was successful. We send you a verification E-Mail with some instructions. For questions, please contact kitchenrun@iswi.org</p>
+        </fieldset>
+
         <fieldset id="kr_tab_hidden" class="kr_tab">
             <h4 class="kr_step_subtitle">Course Preferences</h4>
             <p class="kr_step_description">Please use this selection carefully. It is only preference!</p>
@@ -277,12 +284,7 @@ use League\Plates\Template\Template;
 
         </fieldset>
 
-        <fieldset id="kr_tab_hidden" class="kr_tab">
-            <div class="kr_signup_success">
-                <img src="email.svg">
-                <p>Your Sign Up was successful. We send you a verification E-Mail with some instructions. For questions, please contact kitchenrun@iswi.org</p>
-            </div>
-        </fieldset>
+
 
     </form>
 

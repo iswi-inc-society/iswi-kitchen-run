@@ -6,6 +6,7 @@
 /** General Elements **/
 div.kr_container {
     max-width: 40em;
+    margin: auto;
 }
 
 div.kr_container > h2 {
@@ -364,11 +365,11 @@ form#kr_signup > fieldset.kr_tab > p.kr_step_subtitle {
 }
 
 /** Signup Success **/
-div.kr_container > div.kr_signup_success {
+form#kr_signup > fieldset.kr_signup_success {
     margin: 1em 2em 0 2em;
 }
 
-div.kr_container > div.kr_signup_success img {
+form#kr_signup > fieldset.kr_signup_success img {
     width: 10em;
     height: auto;
     margin: auto;
@@ -376,7 +377,7 @@ div.kr_container > div.kr_signup_success img {
     display: block;
 }
 
-div.kr_container > div.kr_signup_success p, .kr_signup_error p {
+form#kr_signup > fieldset.kr_signup_success p, form#kr_signup > fieldset.kr_signup_error p, form#kr_signup > fieldset.kr_signup_success > .kr_step_subtitle {
     text-align: center;
 }
 

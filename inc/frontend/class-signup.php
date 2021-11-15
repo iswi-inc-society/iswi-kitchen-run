@@ -64,7 +64,9 @@ class Signup extends Frontend
     const SUBMIT = 'SUBMIT';
  
 
-
+	/**
+	 * Initialize the Sign-Up Block
+	 */
     public function init() {
 
 	    $this->event = Event::findCurrent();
@@ -73,6 +75,7 @@ class Signup extends Frontend
         $state = $this->getState();
         $message = '';
 
+		// deprected: referer from old form without ajax
         if (isset($_POST['kr_team_submitted'])) {
             if ($this->submit()){
                 return $this->templates->render('html-kitchenrun-success-referer');
@@ -118,13 +121,18 @@ class Signup extends Frontend
 	                ));
 
                 case self::SIGNUP:
+
+					// path to email icon
+					$email_icon = plugin_dir_url(__FILE__) . '../../assets/images/email.svg';
+
 	                return $this->templates->render('html-kitchenrun-signup-multiform', array(
 		                'plugin_text_domain'    => $this->plugin_text_domain,
 		                'state'                 => $state,
 		                'opening_date'          => $opening_date,
 		                'closing_date'          => $closing_date,
 		                'event_date'            => $event_date,
-		                'errors'             => $this->error_msg,
+		                'errors'                => $this->error_msg,
+		                'email_icon'            => $email_icon,
 	                ));
 
                 default:
@@ -285,7 +293,7 @@ class Signup extends Frontend
 
             wp_send_json_success("Test 123");
         } else {
-            wp_send_json_error($json["kr_team_name"]);
+            wp_send_json_error($json["kr_team_name"], 400);
         }
         die();
 
