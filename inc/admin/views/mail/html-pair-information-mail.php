@@ -1606,8 +1606,7 @@ use League\Plates\Template\Template;
                                         <table>
                                             <tr>
                                                 <th>
-                                                    <p>You can contact each team via their mail address if you need to. Please don't answer this email but contact us via kitchenrun@iswi.org if you have any questions!</p>
-	                                                <p>For any problems during the evening (e.g. finding an address) please contact ISWI phone at +4915903014909.</p>
+                                                    <p>You can contact each team via their mail address if you need to. Please don't answer this email but contact us via <?= get_option('kitchenrun_contact_email') ?> if you have any questions!</p>
 	                                                <p><I>Enjoy the evening!</I></p>
 	                                                <p>Your Kitchen Run Team!</p>
 

@@ -1462,7 +1462,7 @@ body.outlook p {
                                   <h4 class="text-center">Thank you for signing up for the next Kitchen Run</h4>
                                   <p class="text-center">You signed up for the next Kitchen Run on the <b><?= $date ?> at <?= $time ?> </b>. Please verify this E-Mail to finish your sign up. If you didn't sign up, please ignore this E-Mail.</p>
 
-                                  <p class="text-center">Here are all the information you send us. Should something change, please let us know via kitchenrun@iswi.org</p>
+                                  <p class="text-center">Here are all the information you send us. Should something change, please let us know via <?= get_option('kitchenrun_contact_email') ?></p>
                                 </th>
                                 <th class="expander"></th>
                               </tr>
