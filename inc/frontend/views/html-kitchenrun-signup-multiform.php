@@ -35,6 +35,7 @@ use League\Plates\Template\Template;
         <li>Contact</li>
         <li>Address</li>
         <li>Food</li>
+        <li>Photos</li>
         <!-- <li>Courses</li> -->
         <li>Submit</li>
     </ul>
@@ -163,8 +164,28 @@ use League\Plates\Template\Template;
         </fieldset>
 
         <fieldset id="kr_tab_5" class="kr_tab">
+            <h4 class="kr_step_subtitle">Photos</h4>
+            <p class="kr_step_description">Do you allow us to share photos with you during the event on the ISWI social media channels?</p>
+
+            <div class="kr_check">
+                <input type="radio" name="kr_team_photos" id="kr_photos_yes" <?php if ($_POST['kr_team_photos'] == "yes") echo "checked" ?> value="yes">
+                <label for="kr_photos_yes" class="kr_label">Yes, we agree that those photos can be shared.</label>
+            </div>
+
+            <div class="kr_check">
+                <input type="radio" name="kr_team_photos" id="kr_photos_no" <?php if ($_POST['kr_team_photos'] == "no") echo "checked" ?> value="no">
+                <label for="kr_photos_no" class="kr_label">No, don't share those photos.</label>
+            </div>
+
+            <input type="button" name="kr_prev" class="kr_btn_prev" value="Previous" />
+
+            <input type="button" name="kr_next" class="kr_btn_next" value="Next" />
+
+        </fieldset>
+
+        <fieldset id="kr_tab_6" class="kr_tab">
             <h4 class="kr_step_subtitle">Submit</h4>
-            <p class="kr_step_description">It is time to submit your kitchen run registration. You will get an verification E-Mail after that!</p>
+            <p class="kr_step_description">It is time to submit your kitchen run registration. <b>You will get an verification E-Mail after that!</b></p>
 
             <div class="kr_txtb">
                 <textarea name="kr_team_comment"><?php if (isset($_POST['kr_team_comment'])) echo $_POST['kr_team_comment'] ?></textarea>

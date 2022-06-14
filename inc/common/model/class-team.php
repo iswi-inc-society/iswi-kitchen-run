@@ -253,6 +253,13 @@ class Team
 	 */
     private $link;
 
+	/**
+	 * Sharing of Photos
+	 *
+	 * @var bool $photos
+	 */
+	private $photos;
+
 
     /**
      * Get Team ID.
@@ -783,6 +790,14 @@ class Team
     	return $this->link;
     }
 
+	public function setPhotosAgreement($agreedToPhotos) {
+		$this->photos = $agreedToPhotos;
+	}
+
+	public function agreedToPhotos() {
+		return $this->photos;
+	}
+
     /**
      * Find a Team in the Database through the id.
      *
@@ -964,6 +979,7 @@ class Team
             'token' => $this->getToken(),
             'iswi'  => $this->getISWI(),
 	        'link'  => $this->getLink(),
+	        'photo_agreement' => $this->agreedToPhotos(),
         );
 
         // Format of each column (%s = String, %d = Number)
@@ -990,6 +1006,7 @@ class Team
             '%s',
             '%d',
 	        '%s',
+	        '%d',
         );
 
 
@@ -1044,6 +1061,7 @@ class Team
         $team->setToken($row->token);
         $team->setISWI($row->iswi);
         $team->setLink($row->link);
+		$team->setPhotosAgreement($row->photo_agreement);
 
         return $team;
     }

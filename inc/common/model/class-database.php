@@ -169,7 +169,8 @@ class Database {
             valid tinyint(1) NOT NULL DEFAULT 0,
             token varchar(255) DEFAULT NULL,
             iswi tinyint(1) NOT NULL DEFAULT 0,
-            link varchar(255) NULL,'
+            link varchar(255) NULL,
+            photo_agreement tinyint(1) NOT NULL,'
         ;
 
         $this->db_install($sql, self::DB_TEAM_NAME); // table creation algorithm

@@ -87,6 +87,7 @@ class Team_List_Table extends WP_List_Table
             'team_food_pref'    => __( 'Food', $this->plugin_text_domain),
             'team_course_pref'  => __( 'Course', $this->plugin_text_domain),
             'team_valid'        => __( 'Valid', $this->plugin_text_domain),
+            'team_photo_agreement'=>__( 'Photos', $this->plugin_text_domain),
             'ext'               => ''
         );
         return $table_columns;
@@ -161,6 +162,10 @@ class Team_List_Table extends WP_List_Table
             if ($team->getValid()) $valid .= '<img src="' . $image_dir . 'checked.png' . '" alt="' . 'valid' . '"/>';
             else $valid .= '<img src="' . $image_dir . 'cancel.png' . '" alt="' . 'not valid' . '"/>';
 
+            $photo_agreement = '';
+	        if ($team->agreedToPhotos()) $photo_agreement .= '<img src="' . $image_dir . 'checked.png' . '" alt="' . 'valid' . '"/>';
+	        else $photo_agreement .= '<img src="' . $image_dir . 'cancel.png' . '" alt="' . 'not valid' . '"/>';
+
             // array with data for the table rows
             $table_data[] = array(
                 'cb'            => '<input type="checkbox" />',
@@ -174,6 +179,7 @@ class Team_List_Table extends WP_List_Table
                 'team_food_pref'=> $food_pref,
                 'team_course_pref' => $course_pref,
                 'team_valid'    => $valid,
+                'team_photo_agreement' => $photo_agreement,
                 'ext'           => '<span class="dashicons dashicons-arrow-down-alt2 kr_teams_extend"></span>',
                 'extended'      => array(
 	                'team_find_place' => array("desc" => __("Find Place", $this->plugin_text_domain) ,"val" => $team->getFindPlace() != '' ? $team->getFindPlace() : '-'),
@@ -245,6 +251,7 @@ class Team_List_Table extends WP_List_Table
             case 'team_food_pref':
             case 'team_course_pref':
             case 'team_valid':
+            case 'team_photo_agreement':
             default:
                 return $item[$column_name];
         }
@@ -358,7 +365,7 @@ class Team_List_Table extends WP_List_Table
                 </td>
             ', $key, $item_e['desc'], $item_e['val']);
         }
-        echo '<td class="colspanchange" colspan="2"></td>';
+        echo '<td class="colspanchange" colspan="3"></td>';
 		echo '</tr>';
 
 

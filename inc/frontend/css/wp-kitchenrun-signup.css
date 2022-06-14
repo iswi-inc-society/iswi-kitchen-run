@@ -30,7 +30,7 @@ div.kr_container > ul.kr_progressbar {
 div.kr_container > ul.kr_progressbar li {
     list-style-type: none;
     float: left;
-    width: 20%;
+    width: 16.5%;
     position: relative;
     text-align: center;
     margin: 0;
@@ -261,7 +261,8 @@ form#kr_signup > fieldset.kr_tab > div.kr_chbox {
     position: relative;
 }
 
-form#kr_signup > fieldset.kr_tab > div.kr_chbox input[type="checkbox"] {
+form#kr_signup > fieldset.kr_tab > div.kr_chbox input[type="checkbox"],
+form#kr_signup > fieldset.kr_tab > div.kr_chbox input[type="radio"]{
     display: none;
 }
 
@@ -294,11 +295,13 @@ form#kr_signup > fieldset.kr_tab > div.kr_chbox label::before {
     transition: all 0.4s cubic-bezier(0.54, 0.01, 0, 1.49);
 }
 
-form#kr_signup > fieldset.kr_tab > div.kr_chbox > input[type="checkbox"]:checked + label {
+form#kr_signup > fieldset.kr_tab > div.kr_chbox > input[type="checkbox"]:checked + label,
+form#kr_signup > fieldset.kr_tab > div.kr_chbox > input[type="radio"]:checked + label{
     border: 2px solid #32bea6ff;
 }
 
-form#kr_signup > fieldset.kr_tab > div.kr_chbox > input[type="checkbox"]:checked + label::before {
+form#kr_signup > fieldset.kr_tab > div.kr_chbox > input[type="checkbox"]:checked + label::before,
+form#kr_signup > fieldset.kr_tab > div.kr_chbox > input[type="radio"]:checked + label::before{
     transform: scale(1) rotate(0deg);
 }
 
@@ -310,7 +313,8 @@ form#kr_signup > fieldset.kr_tab > div.kr_check {
     margin: 1em 0;
 }
 
-form#kr_signup > fieldset.kr_tab > div.kr_check input[type="checkbox"] {
+form#kr_signup > fieldset.kr_tab > div.kr_check input[type="checkbox"],
+form#kr_signup > fieldset.kr_tab > div.kr_check input[type="radio"]{
     display: none;
 }
 
@@ -338,7 +342,8 @@ form#kr_signup > fieldset.kr_tab > div.kr_check label.kr_label::before {
     transition: all 0.4s cubic-bezier(0.54, 0.01, 0, 1.49);
 }
 
-form#kr_signup > fieldset.kr_tab > div.kr_check > input[type="checkbox"]:checked + label::before {
+form#kr_signup > fieldset.kr_tab > div.kr_check > input[type="checkbox"]:checked + label::before,
+form#kr_signup > fieldset.kr_tab > div.kr_check > input[type="radio"]:checked + label::before{
     transform: scale(1) rotate(0deg);
 }
 

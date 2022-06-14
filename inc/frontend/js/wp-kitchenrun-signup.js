@@ -36,7 +36,7 @@
         $(".kr_btn_next").click(function(){
             var form = $('#kr_signup');
             form.validate({
-                ignore: ':hidden:not("#kr_food_pref"):not("#kr_course_pref"):not("#kr_privacy_aggreement")', // ignore all hidden fields except these three
+                ignore: ':hidden:not("#kr_food_pref"):not("#kr_course_pref"):not("#kr_privacy_aggreement"):not("#kr_photos_yes"):not("kr_photos_no")', // ignore all hidden fields except these three
                 rules: {
 
                     //@TODO: Phone Number Validation
@@ -48,19 +48,26 @@
                             else false;
                         }
                     },
-                    course_pref: {
+                    /*course_pref: {
                         required: function () {
                             var boxes = $('.kr_chbox .kr_course');
                             if ($('#kr_tab_5').is(":visible") && boxes.filter(':checked').length == 0) return true;
                             else false;
                         }
-                    },
+                    },*/
                     kr_team_privacy_aggreement: {
                         required: function (){
                             if ($('#kr_tab_6').is(":visible")) return true;
                             else false;
                         },
-                    }
+                    },
+
+                    kr_team_photos: {
+                        required: function (){
+                            if ($('#kr_tab_5').is(":visible") )return true;
+                            else false;
+                        },
+                    },
                 },
                 messages: {
                     food_pref: "Please select at least one preference of food!",

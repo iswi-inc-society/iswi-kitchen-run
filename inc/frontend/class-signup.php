@@ -233,6 +233,7 @@ class Signup extends Frontend
         $dessert = isset($_POST['kr_team_dessert']) ? true : false;
         $comments = Signup::test_input($_POST['kr_team_comment']);
         $event = Event::findCurrent();
+		$photo_agreement = Signup::test_input($_POST['kr_team_photos']) == 'yes' ? true : false;
         
         // check if email is already used
         $team = Team::findByMailAndEvent($email, $event);
@@ -274,6 +275,7 @@ class Signup extends Frontend
             $this->team->setValid(false);
             $this->team->setToken(bin2hex(random_bytes(50)));
             $this->team->setISWI(false);
+			$this->team->setPhotosAgreement($photo_agreement);
             $this->team->save();
 
             $this->sendConfirmationMail();

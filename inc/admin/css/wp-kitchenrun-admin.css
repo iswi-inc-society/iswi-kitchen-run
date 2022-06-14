@@ -18,8 +18,9 @@
  */
 
 div#kr-list-teams > table.kitchen-run_page_kitchenrun_teams th#team_valid,
+div#kr-list-teams > table.kitchen-run_page_kitchenrun_teams th#team_photo_agreement,
 div#kr-list-teams > table.kitchen-run_page_kitchenrun_teams th#ext {
-    width: 2.3em;
+    width: 3.2em;
 }
 
 div#kr-list-teams > table.kitchen-run_page_kitchenrun_teams th#team_course_pref,
