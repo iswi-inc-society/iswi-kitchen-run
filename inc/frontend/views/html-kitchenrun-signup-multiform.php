@@ -165,7 +165,7 @@ use League\Plates\Template\Template;
 
         <fieldset id="kr_tab_5" class="kr_tab">
             <h4 class="kr_step_subtitle">Photos</h4>
-            <p class="kr_step_description">Do you allow us to share photos with you during the event on the ISWI social media channels?</p>
+            <p class="kr_step_description">Do you allow us to take and share photos on which you can be seen during the event? We would like to share these on ISWI social media channels and for future advertisement of ISWI projects on social media, flyers, posters and on webpages.</p>
 
             <div class="kr_check">
                 <input type="radio" name="kr_team_photos" id="kr_photos_yes" <?php if ($_POST['kr_team_photos'] == "yes") echo "checked" ?> value="yes">
